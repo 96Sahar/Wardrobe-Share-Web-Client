@@ -1,3 +1,4 @@
+import "../style/ButtonStyle.css";
 interface ButtonProps {
   children?: React.ReactNode;
   color?: string;
@@ -5,7 +6,9 @@ interface ButtonProps {
 const Button = ({ children, color = "red" }: ButtonProps) => {
   return (
     <div>
-      <button style={{ background: color }}>yufuyvufthjv{children}</button>
+      <button className="ButtonComponent" style={{ background: color }}>
+        yufuyvufthjv{children}
+      </button>
     </div>
   );
 };
