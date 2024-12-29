@@ -6,8 +6,31 @@ import Register from "./Components/Register";
 const MainLoginAndRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);
 
+  // State for login
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  // State for registration
+  const [registrationData, setRegistrationData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleIsLogin = () => {
     setIsLogin((isLogin) => !isLogin);
+  };
+
+  const handleLoginSubmit = () => {
+    console.log("Login Data:", loginData);
+  };
+
+  const handleRegisterSubmit = () => {
+    console.log("Registration Data:", registrationData);
   };
 
   return (
@@ -19,19 +42,33 @@ const MainLoginAndRegistration = () => {
       <div className="w-[2px] h-full bg-slate-700"></div>
 
       {isLogin ? (
-        <>
-          <div className="flex-1 flex flex-col justify-center items-center space-y-4">
-            <Login />
-            <button
-              onClick={handleIsLogin}
-              className="flex flex-col justify-center underline"
-            >
-              Don't have an account yet?
-            </button>
-          </div>
-        </>
+        <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+          <Login
+            loginData={loginData}
+            setLoginData={setLoginData}
+            onSubmit={handleLoginSubmit}
+          />
+          <button
+            onClick={handleIsLogin}
+            className="flex flex-col justify-center underline"
+          >
+            Don't have an account yet?
+          </button>
+        </div>
       ) : (
-        <Register />
+        <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+          <Register
+            registrationData={registrationData}
+            setRegistrationData={setRegistrationData}
+            onSubmit={handleRegisterSubmit}
+          />
+          <button
+            onClick={handleIsLogin}
+            className="flex flex-col justify-center underline"
+          >
+            Already have an account
+          </button>
+        </div>
       )}
     </div>
   );
