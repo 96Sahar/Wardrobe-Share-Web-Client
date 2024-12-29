@@ -1,11 +1,11 @@
+import { RouterProvider } from "react-router-dom";
 import "./style/App.css";
-import Button from "./components/Button";
+import router from "./utils/router";
 
 const App = () => {
   return (
     <>
-      <div>My First Component</div>
-      <Button color="blue" />
+      <RouterProvider router={router} />
     </>
   );
 };
