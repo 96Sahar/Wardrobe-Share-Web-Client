@@ -1,10 +1,17 @@
 import React from "react";
-interface ButtonProps {
-  color: string;
-  children: React.ReactNode;
+interface Button {
+  color?: string;
+  children?: React.ReactNode;
 }
-const Button: React.FC<ButtonProps> = ({ color = "red", children }) => {
-  return <button style={{ backgroundColor: color }}>{children}</button>;
+const Button: React.FC<Button> = ({ color = "white", children }) => {
+  return (
+    <button
+      style={{ backgroundColor: color }}
+      className="border border-black rounded-full px-4 py-2 bg-"
+    >
+      {children}
+    </button>
+  );
 };
 
 export default Button;
