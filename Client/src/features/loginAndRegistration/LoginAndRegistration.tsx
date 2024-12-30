@@ -8,7 +8,7 @@ const MainLoginAndRegistration = () => {
 
   // State for login
   const [loginData, setLoginData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -16,7 +16,7 @@ const MainLoginAndRegistration = () => {
   const [registrationData, setRegistrationData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });

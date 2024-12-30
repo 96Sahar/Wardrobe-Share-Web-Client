@@ -1,17 +1,23 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 interface Button {
   color?: string;
   children?: React.ReactNode;
-  nav?: string;
+  click?: () => void;
+  buttonType?: "button" | "submit" | "reset" | undefined;
 }
-const Button: React.FC<Button> = ({ color = "white", children, nav }) => {
-  const navigate = useNavigate();
+
+const Button: React.FC<Button> = ({
+  color = "white",
+  children,
+  click,
+  buttonType = "button",
+}) => {
   return (
     <button
+      type={buttonType}
       style={{ backgroundColor: color }}
-      className="border border-black rounded-full px-4 py-2 bg-"
-      onClick={nav ? () => navigate(nav) : undefined}
+      className="border border-black rounded-full px-14 py-2"
+      onClick={click}
     >
       {children}
     </button>

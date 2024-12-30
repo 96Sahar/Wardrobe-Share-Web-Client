@@ -5,7 +5,7 @@ interface RegisterProps {
   registrationData: {
     firstName: string;
     lastName: string;
-    email: string;
+    username: string;
     password: string;
     confirmPassword: string;
   };
@@ -13,7 +13,7 @@ interface RegisterProps {
     React.SetStateAction<{
       firstName: string;
       lastName: string;
-      email: string;
+      username: string;
       password: string;
       confirmPassword: string;
     }>
@@ -88,20 +88,20 @@ const Register: React.FC<RegisterProps> = ({
         </div>
 
         <div className="flex flex-col w-full max-w-md">
-          <label htmlFor="email" className="mb-2 text-gray-800 font-medium">
-            Email:
+          <label htmlFor="username" className="mb-2 text-gray-800 font-medium">
+            Username:
           </label>
           <input
             type="text"
-            name="email"
-            id="email"
-            placeholder="Email address"
+            name="username"
+            id="username"
+            placeholder="Username"
             className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
-            value={registrationData.email}
+            value={registrationData.username}
             onChange={(e) =>
               setRegistrationData((prev) => ({
                 ...prev,
-                email: e.target.value,
+                username: e.target.value,
               }))
             }
           />
@@ -150,7 +150,7 @@ const Register: React.FC<RegisterProps> = ({
           />
         </div>
 
-        <Button>Sign up</Button>
+        <Button buttonType="submit">Sign up</Button>
       </form>
     </div>
   );

@@ -2,9 +2,9 @@ import React from "react";
 import Button from "../../../utils/Components/Button";
 
 interface LoginProps {
-  loginData: { email: string; password: string };
+  loginData: { username: string; password: string };
   setLoginData: React.Dispatch<
-    React.SetStateAction<{ email: string; password: string }>
+    React.SetStateAction<{ username: string; password: string }>
   >;
   onSubmit: () => void;
 }
@@ -24,18 +24,18 @@ const Login: React.FC<LoginProps> = ({ loginData, setLoginData, onSubmit }) => {
         }}
       >
         <div className="flex flex-col">
-          <label htmlFor="email" className="mb-2 text-gray-800 font-medium">
-            Email:
+          <label htmlFor="username" className="mb-2 text-gray-800 font-medium">
+            Username:
           </label>
           <input
             type="text"
-            name="email"
-            id="email"
-            placeholder="Email address"
+            name="username"
+            id="username"
+            placeholder="Username"
             className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
-            value={loginData.email}
+            value={loginData.username}
             onChange={(e) =>
-              setLoginData((prev) => ({ ...prev, email: e.target.value }))
+              setLoginData((prev) => ({ ...prev, username: e.target.value }))
             }
           />
         </div>
@@ -57,7 +57,7 @@ const Login: React.FC<LoginProps> = ({ loginData, setLoginData, onSubmit }) => {
           />
         </div>
 
-        <Button>Login</Button>
+        <Button buttonType="submit">Login</Button>
       </form>
     </div>
   );
