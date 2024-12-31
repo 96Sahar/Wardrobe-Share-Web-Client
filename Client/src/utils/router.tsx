@@ -1,15 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import SplashScreen from "../features/SplashScreen/SplashScreen";
-import MainLoginAndRegistration from "../features/mainLogin/MainLoginAndRegistration";
+import MainLoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
+import MainPage from "../features/mainPage/MainPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SplashScreen />,
+    element: <MainLoginAndRegistration />,
   },
   {
-    path: "/mainLogin",
-    element: <MainLoginAndRegistration />,
+    path: "/main",
+    element: <MainPage />,
   },
 ]);
 

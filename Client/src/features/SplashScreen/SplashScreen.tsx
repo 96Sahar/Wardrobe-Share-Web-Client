@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
+import Button from "../../utils/Components/Button";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
+
   return (
     <>
       <div className=" motion-opacity-in-[0%] motion-duration-[2000ms] motion-delay-[10ms] motion-duration-[1333ms]/opacity motion-delay-[0ms]/opacity motion-ease-linear flex flex-col items-center justify-center h-screen motion-scale-in-[0.1] space-y-4">
@@ -25,13 +27,9 @@ const SplashScreen = () => {
           </div>
 
           <span className=" flex item-center mt-10 justify-center">
-            <button
-              onClick={() => {
-                navigate("/mainLogin");
-              }}
-            >
+            <Button buttonType="button" click={() => navigate("/mainLogin")}>
               Continue
-            </button>
+            </Button>
           </span>
         </div>
       </div>
