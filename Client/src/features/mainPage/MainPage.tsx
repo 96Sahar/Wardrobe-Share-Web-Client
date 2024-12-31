@@ -1,83 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../utils/Components/Header";
 import Card from "./Components/Card";
-import DummyJeans from "../../assets/JeansDummyPic.jpg";
-
-const dummyData = [
-  {
-    user: "Sahar Yosef",
-    picture: DummyJeans,
-    description: "Good quality jeans",
-    location: "Tel Aviv",
-    contact: "053-4031211",
-  },
-  {
-    user: "Ori Levi",
-    picture: DummyJeans,
-    description: "Barely used jeans",
-    location: "Jerusalem",
-    contact: "054-6781234",
-  },
-  {
-    user: "Sahar Yosef",
-    picture: DummyJeans,
-    description: "Good quality jeans",
-    location: "Tel Aviv",
-    contact: "053-4031211",
-  },
-  {
-    user: "Ori Levi",
-    picture: DummyJeans,
-    description: "Barely used jeans",
-    location: "Jerusalem",
-    contact: "054-6781234",
-  },
-  {
-    user: "Sahar Yosef",
-    picture: DummyJeans,
-    description: "Good quality jeans",
-    location: "Tel Aviv",
-    contact: "053-4031211",
-  },
-  {
-    user: "Ori Levi",
-    picture: DummyJeans,
-    description: "Barely used jeans",
-    location: "Jerusalem",
-    contact: "054-6781234",
-  },
-  {
-    user: "Sahar Yosef",
-    picture: DummyJeans,
-    description: "Good quality jeans",
-    location: "Tel Aviv",
-    contact: "053-4031211",
-  },
-  {
-    user: "Ori Levi",
-    picture: DummyJeans,
-    description: "Barely used jeans",
-    location: "Jerusalem",
-    contact: "054-6781234",
-  },
-];
+import CardViewModal from "./Components/CardViewModal";
+import dummyData, { CardData } from "./DummyData";
 
 const MainPage: React.FC = () => {
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = (cardData: CardData) => {
+    setSelectedCard(cardData);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCard(null);
+  };
+
   return (
     <div>
       <Header />
       <div className="p-4">
         {dummyData.map((item, index) => (
-          <Card
+          <div
             key={index}
-            picture={item.picture}
-            user={item.user}
-            description={item.description}
-            location={item.location}
-            contact={item.contact}
-          />
+            onClick={() => handleCardClick(item)}
+            className="cursor-pointer"
+          >
+            <Card
+              picture={item.picture}
+              user={item.user}
+              description={item.description}
+              location={item.location}
+              contact={item.contact}
+            />
+          </div>
         ))}
       </div>
+
+      {/* Use CardViewModal for the modal */}
+      {isModalOpen && selectedCard && (
+        <CardViewModal cardDetails={selectedCard} closeModal={closeModal} />
+      )}
     </div>
   );
 };
