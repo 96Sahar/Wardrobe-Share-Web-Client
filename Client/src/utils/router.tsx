@@ -1,15 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
-import MainPage from "../features/mainPage/MainPage";
+import MainLoginAndRegistration from "../features/LoginAndRegistration/LoginAndRegistration";
+import MainPage from "../features/MainPage/MainPage";
+import CreateAPost from "../features/AddPost/CreateAPost";
+import Feed from "../features/Feed/Feed";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/LoginAndRegistration",
     element: <MainLoginAndRegistration />,
   },
   {
-    path: "/main",
+    path: "/",
     element: <MainPage />,
+  },
+  {
+    path: "/CreateAPost",
+    element: <CreateAPost />,
+  },
+  {
+    path: "/Feed",
+    element: <Feed />,
   },
 ]);
 

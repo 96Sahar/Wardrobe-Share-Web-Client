@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../../utils/Components/Header";
+import HeroSearch from "../../utils/Components/HeroSearch";
 import Card from "./Components/Card";
 import CardViewModal from "./Components/CardViewModal";
 import dummyData, { CardData } from "./DummyData";
@@ -21,6 +22,7 @@ const MainPage: React.FC = () => {
   return (
     <div>
       <Header />
+      <HeroSearch />
       <div className="p-4">
         {dummyData.map((item, index) => (
           <div
@@ -39,7 +41,6 @@ const MainPage: React.FC = () => {
         ))}
       </div>
 
-      {/* Use CardViewModal for the modal */}
       {isModalOpen && selectedCard && (
         <CardViewModal cardDetails={selectedCard} closeModal={closeModal} />
       )}

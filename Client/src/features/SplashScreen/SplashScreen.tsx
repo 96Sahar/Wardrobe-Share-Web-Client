@@ -27,7 +27,7 @@ const SplashScreen = () => {
           </div>
 
           <span className=" flex item-center mt-10 justify-center">
-            <Button buttonType="button" click={() => navigate("/mainLogin")}>
+            <Button buttonType="button" onClick={() => navigate("/mainLogin")}>
               Continue
             </Button>
           </span>
