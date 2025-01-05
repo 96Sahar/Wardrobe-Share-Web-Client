@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
-import Button from "../../utils/Components/Button";
+import Button from "../../utils/UtilsComponents/Button";
 
 const SplashScreen = () => {
   const navigate = useNavigate();

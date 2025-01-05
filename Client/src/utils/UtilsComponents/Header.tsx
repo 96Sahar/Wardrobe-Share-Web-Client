@@ -9,7 +9,6 @@ const Header = () => {
     <>
       <header className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 z-50">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-slate-700 rounded-full" />
           <Button onClick={() => navigate("/LoginAndRegistration")}>
             Login
           </Button>

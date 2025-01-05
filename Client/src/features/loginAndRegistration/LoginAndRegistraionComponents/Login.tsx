@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../../utils/Components/Button";
+import Button from "../../../utils/UtilsComponents/Button";
 
 interface LoginProps {
   loginData: { username: string; password: string };

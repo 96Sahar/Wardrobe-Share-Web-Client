@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CardData } from "../DummyData";
-import Button from "../../../utils/Components/Button";
+import Button from "../../../utils/UtilsComponents/Button";
 
 interface CardViewModalProps {
   cardDetails: CardData;

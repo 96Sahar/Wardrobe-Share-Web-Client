@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Header from "../../utils/Components/Header";
-import HeroSearch from "../../utils/Components/HeroSearch";
-import Card from "./Components/Card";
-import CardViewModal from "./Components/CardViewModal";
+import Header from "../../utils/UtilsComponents/Header";
+import HeroSearch from "../../utils/UtilsComponents/HeroSearch";
+import Card from "./MainPageComponents/Card";
+import CardViewModal from "./MainPageComponents/CardViewModal";
 import dummyData, { CardData } from "./DummyData";
 
 const MainPage: React.FC = () => {
