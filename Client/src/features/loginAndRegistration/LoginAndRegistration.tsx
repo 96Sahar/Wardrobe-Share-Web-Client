@@ -1,7 +1,7 @@
 import { useState } from "react";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import Login from "./LoginAndRegistraionComponents/Login";
+import Register from "./LoginAndRegistraionComponents/Register";
 
 const MainLoginAndRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);

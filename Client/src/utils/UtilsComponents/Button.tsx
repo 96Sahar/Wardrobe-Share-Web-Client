@@ -2,14 +2,14 @@ import React from "react";
 interface Button {
   color?: string;
   children?: React.ReactNode;
-  click?: () => void;
+  onClick?: () => void;
   buttonType?: "button" | "submit" | "reset" | undefined;
 }
 
 const Button: React.FC<Button> = ({
   color = "white",
   children,
-  click,
+  onClick,
   buttonType = "button",
 }) => {
   return (
@@ -17,7 +17,7 @@ const Button: React.FC<Button> = ({
       type={buttonType}
       style={{ backgroundColor: color }}
       className="border border-black rounded-full px-14 py-2"
-      onClick={click}
+      onClick={onClick}
     >
       {children}
     </button>
