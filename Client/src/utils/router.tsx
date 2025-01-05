@@ -3,6 +3,7 @@ import MainLoginAndRegistration from "../features/LoginAndRegistration/LoginAndR
 import MainPage from "../features/MainPage/MainPage";
 import CreateAPost from "../features/AddPost/CreateAPost";
 import Feed from "../features/Feed/Feed";
+import Profile from "../features/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/Feed",
     element: <Feed />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
