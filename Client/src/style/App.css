@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #d9dfc6;
+:root {
+  --color-primary: #2a7d7d;
+  --color-secondary: #9ba657;
+  --color-surface: #e9eceb; /* Muted earthy tone */
+}
+
+body {
+  @apply bg-surface text-gray-900 antialiased;
 }

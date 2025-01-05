@@ -16,7 +16,7 @@ const Button: React.FC<Button> = ({
     <button
       type={buttonType}
       style={{ backgroundColor: color }}
-      className="border border-black rounded-full px-14 py-2"
+      className="border border-black rounded-full px-14 py-2 bg-gradient-to-br from-primary to-secondary text-white"
       onClick={onClick}
     >
       {children}

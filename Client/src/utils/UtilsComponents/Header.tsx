@@ -7,13 +7,18 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center p-4 border-b border-slate-700 sticky top-0 z-50">
+      <header className="flex justify-between items-center p-6 border-b-[3px] border-slate-700 sticky top-0 z-50 bg-gray-200 text-primary">
+        <img
+          src={WardrobeLogo}
+          alt="WardrobeLogo"
+          className="h-14 hover:cursor-pointer"
+          onClick={() => navigate("/")}
+        />
         <div className="flex items-center space-x-2">
           <Button onClick={() => navigate("/LoginAndRegistration")}>
             Login
           </Button>
         </div>
-        <img src={WardrobeLogo} alt="WardrobeLogo" className="h-8 w-24" />
       </header>
     </>
   );
