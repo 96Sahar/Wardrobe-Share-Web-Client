@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../utils/UtilsComponents/Header";
 import Goals from "./ProfileComponents/Goals";
 import Sidebar from "./ProfileComponents/SideBar";
+import axios from "axios";
+
+interface Post {
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  phone: string;
+  region: string;
+  city: string;
+}
 
 const Profile: React.FC = () => {
+  useEffect(() => {
+    axios.get<Post[]>("http://localhost:3000/post").then((res) => {
+      console.log(res.data);
+    });
+  }, []);
+
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const customerId = "12345"; // This would typically come from your auth system
-  const followers = 150; // This would typically come from your backend
+  const followers = 150;
 
   const handleLogout = () => {
     setIsLoggedIn(false);

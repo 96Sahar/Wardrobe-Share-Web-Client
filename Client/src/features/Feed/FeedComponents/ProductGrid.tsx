@@ -10,16 +10,17 @@ interface Product {
 }
 
 interface ProductGridProps {
+  category: string;
   products: Product[];
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ category, products }) => {
   return (
     <div className="bg-background py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-primary">Shirts</h2>
-          <Button>View All Shirts</Button>
+          <h2 className="text-2xl font-bold text-primary">{category}</h2>
+          <Button>View All {category}</Button>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {products.map((product) => (
