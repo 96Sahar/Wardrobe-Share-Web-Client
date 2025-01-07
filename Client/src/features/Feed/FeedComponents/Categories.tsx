@@ -4,8 +4,9 @@ import Jeans from "../../../assets/Clothes-Icon/jeans.png";
 import Dress from "../../../assets/Clothes-Icon/dress.png";
 import Jacket from "../../../assets/Clothes-Icon/jacket.png";
 import Pajama from "../../../assets/Clothes-Icon/pajamas.png";
-import Underwear from "../../../assets/Clothes-Icon/underwear.png";
+import Accessories from "../../../assets/Clothes-Icon/bags.png";
 import Bikini from "../../../assets/Clothes-Icon/bikini.png";
+import Button from "../../../utils/UtilsComponents/Button";
 
 interface Category {
   icon: string;
@@ -18,17 +19,18 @@ const categories: Category[] = [
   { icon: Dress, name: "Dresses" },
   { icon: Jacket, name: "Outerwear" },
   { icon: Pajama, name: "Sleepwear" },
-  { icon: Underwear, name: "Underwear" },
   { icon: Bikini, name: "Swimwear" },
+  { icon: Accessories, name: "Accessories" },
 ];
 
 const Categories: React.FC = () => {
   return (
     <div className="bg-surface py-12 px-4 border-b border-slate-700">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-primary mb-8">
-          Browse Categories
-        </h2>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-primary">Browse Categories</h2>
+          <Button>View All Items</Button>
+        </div>
         <div className="flex flex-wrap justify-between items-center gap-4">
           {categories.map((category, index) => (
             <button

@@ -1,17 +1,36 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
 import SearchBarBackground from "../../../assets/SearchBarBackground.jpg";
+
 interface SearchSectionProps {
   onSearch: (query: string) => void;
 }
 
 const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
+
+  const categories = [
+    "Tops (shirts, blouses, T-shirts, tank tops)",
+    "Bottoms (pants, jeans, skirts, shorts)",
+    "Dresses (casual, formal, maxi, mini)",
+    "Outerwear (jackets, coats, cardigans)",
+    "Activewear (leggings, sports bras, tracksuits)",
+    "Sleepwear (pajamas, nightgowns, robes)",
+    "Swimwear (bikinis, one-pieces, trunks)",
+    "Accessories (bags, hats, belts, scarves)",
+  ];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
+    const query = e.target.value.toLowerCase();
     setSearchQuery(query);
     onSearch(query);
+
+    // Filter options based on query and limit to 2 results
+    const filtered = categories
+      .filter((category) => category.toLowerCase().includes(query))
+      .slice(0, 2); // Limit to 2 results
+    setFilteredOptions(filtered);
   };
 
   return (
@@ -41,7 +60,29 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
             className="w-full pl-12 pr-4 py-6 rounded-full bg-white/95 backdrop-blur-sm border-0 shadow-lg focus:ring-2 focus:ring-secondary/50 transition-all"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary/60 w-5 h-5" />
+          {filteredOptions.length > 0 && (
+            <ul
+              className="absolute left-0 top-full mt-2 w-full bg-white/95 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+              style={{
+                zIndex: 20, // Ensures dropdown covers the next component
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              {filteredOptions.map((option, index) => (
+                <li
+                  key={index}
+                  className="p-4 text-gray-800 hover:bg-gray-300 cursor-pointer"
+                >
+                  {option}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
+      </div>
+      {/* Dummy Next Component */}
+      <div className="relative z-0 bg-gray-100 h-[500px] flex items-center justify-center">
+        <p className="text-gray-700">This is the next component below the search section.</p>
       </div>
     </div>
   );
