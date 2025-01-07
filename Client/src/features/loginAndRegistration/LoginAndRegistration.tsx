@@ -2,36 +2,34 @@ import { useState } from "react";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
 import Login from "./LoginAndRegistraionComponents/Login";
 import Register from "./LoginAndRegistraionComponents/Register";
+import { LoginCredentials, AuthResponse } from "../../utils/api";
 
 const MainLoginAndRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);
-
-  // State for login
-  const [loginData, setLoginData] = useState({
+  const [loginData, setLoginData] = useState<LoginCredentials>({
     username: "",
     password: "",
   });
-
-  // State for registration
-  const [registrationData, setRegistrationData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [user, setUser] = useState<AuthResponse | null>(null);
 
   const handleIsLogin = () => {
     setIsLogin((isLogin) => !isLogin);
   };
 
-  const handleLoginSubmit = () => {
-    console.log("Login Data:", loginData);
+  const handleLoginSuccess = (userData: AuthResponse) => {
+    setUser(userData);
+    // You can also store the user data in localStorage or a global state management solution like Redux
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  const handleRegisterSubmit = () => {
-    console.log("Registration Data:", registrationData);
-  };
+  if (user) {
+    return (
+      <div>
+        <h1>Welcome, {user.username}!</h1>
+        {/* Add your authenticated app content here */}
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center h-screen">
@@ -46,7 +44,7 @@ const MainLoginAndRegistration = () => {
           <Login
             loginData={loginData}
             setLoginData={setLoginData}
-            onSubmit={handleLoginSubmit}
+            onLoginSuccess={handleLoginSuccess}
           />
           <button
             onClick={handleIsLogin}
@@ -57,11 +55,7 @@ const MainLoginAndRegistration = () => {
         </div>
       ) : (
         <div className="flex-1 flex flex-col justify-center items-center space-y-4">
-          <Register
-            registrationData={registrationData}
-            setRegistrationData={setRegistrationData}
-            onSubmit={handleRegisterSubmit}
-          />
+          <Register />
           <button
             onClick={handleIsLogin}
             className="flex flex-col justify-center underline"

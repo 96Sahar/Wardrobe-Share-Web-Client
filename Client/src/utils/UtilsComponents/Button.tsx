@@ -1,12 +1,16 @@
 import React from "react";
-interface Button {
+import clsx from "clsx"; // Install using: npm install clsx
+
+interface ButtonProps {
+  className?: string;
   color?: string;
   children?: React.ReactNode;
   onClick?: () => void;
-  buttonType?: "button" | "submit" | "reset" | undefined;
+  buttonType?: "button" | "submit" | "reset";
 }
 
-const Button: React.FC<Button> = ({
+const Button: React.FC<ButtonProps> = ({
+  className,
   color = "white",
   children,
   onClick,
@@ -16,7 +20,10 @@ const Button: React.FC<Button> = ({
     <button
       type={buttonType}
       style={{ backgroundColor: color }}
-      className="border border-black rounded-full px-14 py-2 bg-gradient-to-br from-primary to-secondary text-white"
+      className={clsx(
+        "border border-black rounded-full px-14 py-2 bg-gradient-to-br from-primary to-secondary text-white",
+        className
+      )}
       onClick={onClick}
     >
       {children}

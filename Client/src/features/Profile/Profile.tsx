@@ -35,7 +35,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div>
       <Header />
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
         <ProfilePosts posts={dummyPosts} />

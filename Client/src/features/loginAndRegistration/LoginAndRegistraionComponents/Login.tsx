@@ -1,15 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
+import {
+  login as loginApi,
+  setAuthToken,
+  LoginCredentials,
+  AuthResponse,
+} from "../../../utils/api";
 
 interface LoginProps {
-  loginData: { username: string; password: string };
-  setLoginData: React.Dispatch<
-    React.SetStateAction<{ username: string; password: string }>
-  >;
-  onSubmit: () => void;
+  loginData: LoginCredentials;
+  setLoginData: React.Dispatch<React.SetStateAction<LoginCredentials>>;
+  onLoginSuccess: (userData: AuthResponse) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ loginData, setLoginData, onSubmit }) => {
+const Login: React.FC<LoginProps> = ({
+  loginData,
+  setLoginData,
+  onLoginSuccess,
+}) => {
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoginError(null);
+      const response: AuthResponse = await loginApi(loginData);
+      console.log("Login successful:", response);
+      setAuthToken(response.accessToken);
+      onLoginSuccess(response);
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+      setLoginError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during login"
+      );
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
       <div className="text-center mb-8">
@@ -18,10 +46,7 @@ const Login: React.FC<LoginProps> = ({ loginData, setLoginData, onSubmit }) => {
 
       <form
         className="flex flex-col items-center space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
+        onSubmit={handleSubmit}
       >
         <div className="flex flex-col">
           <label htmlFor="username" className="mb-2 text-gray-800 font-medium">
@@ -58,6 +83,8 @@ const Login: React.FC<LoginProps> = ({ loginData, setLoginData, onSubmit }) => {
         </div>
 
         <Button buttonType="submit">Login</Button>
+
+        {loginError && <div className="text-red-500">{loginError}</div>}
       </form>
     </div>
   );
