@@ -18,7 +18,6 @@ const MainLoginAndRegistration = () => {
 
   const handleLoginSuccess = (userData: AuthResponse) => {
     setUser(userData);
-    // You can also store the user data in localStorage or a global state management solution like Redux
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
@@ -32,38 +31,47 @@ const MainLoginAndRegistration = () => {
   }
 
   return (
-    <div className="flex items-center h-screen">
-      <div className="flex-1 flex justify-center items-center">
-        <img src={WardrobeLogo} alt="WardrobeLogo" className="h-32 w-96" />
+    <div className="flex flex-col md:flex-row items-center justify-center h-screen bg-gray-100">
+      {/* Logo Section */}
+      <div className="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-1 mb-5 md:mb-0">
+        <img
+          src={WardrobeLogo}
+          alt="WardrobeLogo"
+          className="h-16 md:h-32 w-auto"
+        />
       </div>
 
-      <div className="w-[2px] h-full bg-slate-700"></div>
+      {/* Divider (Visible only on Desktop) */}
+      <div className="hidden md:block w-[2px] h-full bg-slate-700"></div>
 
-      {isLogin ? (
-        <div className="flex-1 flex flex-col justify-center items-center space-y-4">
-          <Login
-            loginData={loginData}
-            setLoginData={setLoginData}
-            onLoginSuccess={handleLoginSuccess}
-          />
-          <button
-            onClick={handleIsLogin}
-            className="flex flex-col justify-center underline"
-          >
-            Don't have an account yet?
-          </button>
-        </div>
-      ) : (
-        <div className="flex-1 flex flex-col justify-center items-center space-y-4">
-          <Register />
-          <button
-            onClick={handleIsLogin}
-            className="flex flex-col justify-center underline"
-          >
-            Already have an account
-          </button>
-        </div>
-      )}
+      {/* Login or Registration Section */}
+      <div className="flex flex-col items-center justify-center w-full px-6 md:flex-1">
+        {isLogin ? (
+          <>
+            <Login
+              loginData={loginData}
+              setLoginData={setLoginData}
+              onLoginSuccess={handleLoginSuccess}
+            />
+            <button
+              onClick={handleIsLogin}
+              className="underline text-primary mt-8"
+            >
+              Don't have an account yet?
+            </button>
+          </>
+        ) : (
+          <>
+            <Register />
+            <button
+              onClick={handleIsLogin}
+              className="underline text-primary mt-8"
+            >
+              Already have an account?
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

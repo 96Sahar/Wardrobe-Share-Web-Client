@@ -174,6 +174,9 @@ const CreatePost: React.FC = () => {
             <option value="swimwear">
               Swimwear (bikinis, one-pieces, trunks)
             </option>
+            <option value="accessories">
+              Accessories (bags, hats, belts, scarves)
+            </option>
           </select>
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">Category is required.</p>
