@@ -1,39 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "../../utils/UtilsComponents/Header";
-import Goals from "./ProfileComponents/Goals";
+import ProfilePosts from "./ProfileComponents/ProfilePosts";
 import Sidebar from "./ProfileComponents/SideBar";
+import { Post } from "../../utils/types/post";
+import { UserProfile } from "../../utils/types/profile";
 
 const Profile: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const customerId = "12345"; // This would typically come from your auth system
-  const followers = 150; // This would typically come from your backend
+  const dummyPosts: Post[] = Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    image: "/placeholder.svg",
+    title: `Sustainable Fashion Item ${i + 1}`,
+    description:
+      "A beautiful piece of sustainable clothing ready to be shared.",
+  }));
+
+  const userProfile: UserProfile = {
+    name: "Jane Doe",
+    email: "jane.doe@example.com",
+    avatar: "/placeholder.svg",
+    stats: {
+      posts: 24,
+      followers: 1200,
+    },
+  };
+
+  const handleEditProfile = () => {
+    console.log("Edit profile clicked");
+    // Add your edit profile logic here
+  };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    console.log("Logout clicked");
     // Add your logout logic here
   };
 
-  if (!isLoggedIn) {
-    // Add your login redirect logic here
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <Header />
-      <div className="flex">
-        <main className="flex-1">
-          <Goals />
-          <div className="p-4 space-y-4">
-            <div className="border border-slate-300 rounded-lg p-4 min-h-[200px]">
-              {/* Additional profile content section 1 */}
-            </div>
-            <div className="border border-slate-300 rounded-lg p-4 min-h-[200px]">
-              {/* Additional profile content section 2 */}
-            </div>
-          </div>
-        </main>
-        <Sidebar followers={followers} onLogout={handleLogout} />
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+        <ProfilePosts posts={dummyPosts} />
+        <Sidebar
+          profile={userProfile}
+          onEditProfile={handleEditProfile}
+          onLogout={handleLogout}
+        />
       </div>
     </div>
   );
