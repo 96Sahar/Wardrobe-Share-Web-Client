@@ -17,8 +17,8 @@ const CommentSection = () => {
             </p>
           </div>
           <div className="flex space-x-2 sm:space-x-4">
-            <button className="text-primary text-xs sm:text-sm">Edit</button>
-            <button className="text-red-600 text-xs sm:text-sm">Delete</button>
+            <button className="text-primary text-xs sm:text-sm hover:underline">Edit</button>
+            <button className="text-red-600 text-xs sm:text-sm hover:underline">Delete</button>
           </div>
         </div>
         {/* Comment 2 */}
@@ -31,8 +31,8 @@ const CommentSection = () => {
             </p>
           </div>
           <div className="flex space-x-2 sm:space-x-4">
-            <button className="text-primary text-xs sm:text-sm">Edit</button>
-            <button className="text-red-600 text-xs sm:text-sm">Delete</button>
+            <button className="text-primary text-xs sm:text-sm hover:underline">Edit</button>
+            <button className="text-red-600 text-xs sm:text-sm hover:underline">Delete</button>
           </div>
         </div>
         {/* Add new comment */}
