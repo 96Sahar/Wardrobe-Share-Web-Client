@@ -33,7 +33,7 @@ const MainLoginAndRegistration = () => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center h-screen bg-gray-100">
       {/* Logo Section */}
-      <div className="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-1 mb-5 md:mb-0">
+      <div className="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-1 md:mb-0">
         <img
           src={WardrobeLogo}
           alt="WardrobeLogo"
@@ -55,7 +55,7 @@ const MainLoginAndRegistration = () => {
             />
             <button
               onClick={handleIsLogin}
-              className="underline text-primary mt-8"
+              className="underline text-primary mt-2"
             >
               Don't have an account yet?
             </button>
@@ -65,7 +65,7 @@ const MainLoginAndRegistration = () => {
             <Register />
             <button
               onClick={handleIsLogin}
-              className="underline text-primary mt-8"
+              className="underline text-primary mt-2"
             >
               Already have an account?
             </button>

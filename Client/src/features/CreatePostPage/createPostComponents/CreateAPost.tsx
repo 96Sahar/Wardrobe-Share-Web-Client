@@ -174,6 +174,9 @@ const CreatePost: React.FC = () => {
             <option value="swimwear">
               Swimwear (bikinis, one-pieces, trunks)
             </option>
+            <option value="footwear">
+              Footwear (sneakers, sandals, boots, heels, flats)
+            </option>
             <option value="accessories">
               Accessories (bags, hats, belts, scarves)
             </option>
