@@ -11,6 +11,7 @@ const CreatePost: React.FC = () => {
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | null>(null);
   const [category, setCategory] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [region, setRegion] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [suggestions, setSuggestions] = useState<City[]>([]);
@@ -52,6 +53,7 @@ const CreatePost: React.FC = () => {
       description: !description.trim(),
       image: !image,
       category: !category,
+      phone: !phone.trim() || !/^\+?\d{7,15}$/.test(phone),
       region: !region,
       city: !city.trim(),
     };
@@ -60,7 +62,7 @@ const CreatePost: React.FC = () => {
     if (Object.values(newErrors).some((error) => error)) {
       console.error("Please fill all required fields.");
     } else {
-      console.log({ title, description, image, category, region, city });
+      console.log({ title, description, image, category, phone, region, city });
     }
   };
 
@@ -183,6 +185,25 @@ const CreatePost: React.FC = () => {
           </select>
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">Category is required.</p>
+          )}
+        </div>
+
+        {/* Phone Number */}
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">Phone:</label>
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Enter your phone number"
+            className={`w-full sm:w-3/4 lg:w-1/2 px-4 py-2 text-lg border ${
+              errors.phone ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">
+              Please enter a valid phone number.
+            </p>
           )}
         </div>
 

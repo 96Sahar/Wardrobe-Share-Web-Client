@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart, UserRound } from "lucide-react";
 import Button from "./Button";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
-import heartIcon from "../../assets/heart.png";
-import userIcon from "../../assets/user.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,7 +12,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center p-6 border-b-[3px] border-slate-700 sticky top-0 z-50 bg-gray-200 text-primary">
+      <header className="flex justify-between items-center p-6 border-b-[3px] border-slate-700 sticky top-0 z-50 bg-gray-200 text-black">
         <img
           src={WardrobeLogo}
           alt="WardrobeLogo"
@@ -24,14 +22,23 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-5">
-          <Button onClick={() => navigate("/createPost")}>List your item</Button>
+          <Button onClick={() => navigate("/createPost")}>
+            List your item
+          </Button>
           <div className="items-center cursor-pointer">
-            <img src={heartIcon} alt="heartIcon" className="h-7 inline-flex m-1" />
-            <h2 className="text-xl inline-flex text-black m-1 items-center">Your liked items</h2>
+            <Heart className="h-7 inline-flex m-1" />
+            <h2 className="text-xl inline-flex m-1 items-center">
+              Your liked items
+            </h2>
           </div>
-          <div className="items-center cursor-pointer" onClick={() => navigate("/LoginAndRegistration")}>
-            <img src={userIcon} alt="userIcon" className="h-7 inline-flex m-1" />
-            <h2 className="text-xl inline-flex text-black m-1 items-center">Sign in</h2>
+          <div
+            className="items-center cursor-pointer"
+            onClick={() => navigate("/LoginAndRegistration")}
+          >
+            <UserRound className="h-7 inline-flex m-1" />
+            <h2 className="text-xl inline-flex m-1 items-center">
+              Sign in
+            </h2>
           </div>
         </div>
 
@@ -41,7 +48,11 @@ const Header = () => {
           onClick={toggleMenu}
           aria-label="Toggle Menu"
         >
-          {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          {isMenuOpen ? (
+            <X className="w-7 h-7" />
+          ) : (
+            <Menu className="w-7 h-7" />
+          )}
         </button>
 
         {/* Mobile Menu */}
@@ -55,8 +66,10 @@ const Header = () => {
                   setIsMenuOpen(false);
                 }}
               >
-                <img src={userIcon} alt="userIcon" className="h-7 inline-flex m-1" />
-                <h2 className="text-lg inline-flex text-black m-1 items-center">Sign in</h2>
+                <UserRound className="h-7 inline-flex m-1" />
+                <h2 className="text-lg inline-flex m-1 items-center">
+                  Sign in
+                </h2>
               </div>
               <div
                 className="flex items-center cursor-pointer"
@@ -64,8 +77,8 @@ const Header = () => {
                   setIsMenuOpen(false);
                 }}
               >
-                <img src={heartIcon} alt="heartIcon" className="h-7 inline-flex m-1" />
-                <h2 className="text-lg inline-flex text-black m-1 items-center">
+                <Heart className="h-7 inline-flex m-1" />
+                <h2 className="text-lg inline-flex m-1 items-center">
                   Your liked items
                 </h2>
               </div>
