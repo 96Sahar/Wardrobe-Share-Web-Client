@@ -1,6 +1,7 @@
 export interface Post {
-  id: number;
+  id: string;
   image: string;
   title: string;
   description: string;
+  likes?: number;
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,7 +8,6 @@ import {
   UserData,
   AuthResponse,
 } from "../../../utils/api";
-import { useState } from "react";
 
 const schema = z
   .object({
@@ -77,19 +77,19 @@ const Register = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center px-4 py-4 sm:px-8">
       <div className="text-center mb-8">
-        <h2 className="text-xl font-semibold">Create a new account</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">Create a new account</h2>
       </div>
 
       <form
-        className="flex flex-col items-center space-y-4"
+        className="grid grid-cols-1 gap-6 w-full max-w-lg"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex justify-between space-x-4 w-full max-w-md">
-          <div className="flex flex-col w-1/4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col">
             <label
-              htmlFor="firstName"
+              htmlFor="f_name"
               className="mb-2 text-gray-800 font-medium"
             >
               First Name:
@@ -97,7 +97,6 @@ const Register = () => {
             <input
               {...register("f_name")}
               type="text"
-              name="f_name"
               id="f_name"
               placeholder="First name"
               className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
@@ -107,9 +106,9 @@ const Register = () => {
             )}
           </div>
 
-          <div className="flex flex-col w-1/4">
+          <div className="flex flex-col">
             <label
-              htmlFor="lastName"
+              htmlFor="l_name"
               className="mb-2 text-gray-800 font-medium"
             >
               Last Name:
@@ -117,7 +116,6 @@ const Register = () => {
             <input
               {...register("l_name")}
               type="text"
-              name="l_name"
               id="l_name"
               placeholder="Last name"
               className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
@@ -128,7 +126,7 @@ const Register = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-full max-w-md">
+        <div className="flex flex-col">
           <label htmlFor="username" className="mb-2 text-gray-800 font-medium">
             Username:
           </label>
@@ -137,14 +135,14 @@ const Register = () => {
             type="text"
             id="username"
             placeholder="Username"
-            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
+            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
           />
           {errors.username && (
             <div className="text-red-500">{errors.username.message}</div>
           )}
         </div>
 
-        <div className="flex flex-col w-full max-w-md">
+        <div className="flex flex-col">
           <label htmlFor="email" className="mb-2 text-gray-800 font-medium">
             Email:
           </label>
@@ -153,31 +151,30 @@ const Register = () => {
             type="email"
             id="email"
             placeholder="Email"
-            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
+            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
           />
           {errors.email && (
             <div className="text-red-500">{errors.email.message}</div>
           )}
         </div>
 
-        <div className="flex flex-col w-full max-w-md">
+        <div className="flex flex-col">
           <label htmlFor="password" className="mb-2 text-gray-800 font-medium">
             Password:
           </label>
           <input
             {...register("password")}
             type="password"
-            name="password"
             id="password"
             placeholder="Password"
-            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
+            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
           />
           {errors.password && (
             <div className="text-red-500">{errors.password.message}</div>
           )}
         </div>
 
-        <div className="flex flex-col w-full max-w-md">
+        <div className="flex flex-col">
           <label
             htmlFor="confirm_password"
             className="mb-2 text-gray-800 font-medium"
@@ -187,9 +184,9 @@ const Register = () => {
           <input
             {...register("confirm_password")}
             type="password"
-            name="confirm_password"
+            id="confirm_password"
             placeholder="Confirm password"
-            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
+            className="bg-neutral-100 border border-gray-800 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 placeholder:text-center"
           />
           {errors.confirm_password && (
             <div className="text-red-500">
@@ -199,7 +196,7 @@ const Register = () => {
         </div>
 
         <Button buttonType="submit" className={isSubmitting ? "disabled" : ""}>
-          {isSubmitting ? "Submitting" : "Sign up"}
+          {isSubmitting ? "Submitting..." : "Sign up"}
         </Button>
 
         {registrationError && (

@@ -1,11 +1,11 @@
 import React from "react";
 import { Post } from "../../../utils/types/post";
 
-interface ProfilePosts {
+interface ProfilePostsProps {
   posts: Post[];
 }
 
-const ProfilePosts: React.FC<ProfilePosts> = ({ posts }) => {
+const ProfilePosts: React.FC<ProfilePostsProps> = ({ posts }) => {
   return (
     <div className="flex-1">
       <h1 className="text-2xl font-bold text-primary mb-6">My Posts</h1>
@@ -25,6 +25,23 @@ const ProfilePosts: React.FC<ProfilePosts> = ({ posts }) => {
             <div className="p-4">
               <h3 className="font-medium text-primary mb-2">{post.title}</h3>
               <p className="text-sm text-primary/60">{post.description}</p>
+
+              {/* Likes Counter */}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-sm text-primary/60">
+                  {post.likes} {post.likes === 1 ? "Like" : "Likes"}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end space-x-4 mt-4">
+                <button className="px-3 py-1 text-mid text-white bg-blue-500 rounded hover:bg-blue-600">
+                  Edit
+                </button>
+                <button className="px-3 py-1 text-mid text-white bg-red-500 rounded hover:bg-red-600">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         ))}

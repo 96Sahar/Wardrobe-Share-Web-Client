@@ -1,10 +1,10 @@
 export interface UserProfile {
-  name: string;
+  firstName: string;
+  lastName: string;
+  username: string;
   email: string;
   avatar: string;
-  bio?: string;
   stats: {
     posts: number;
-    followers: number;
   };
 }

@@ -5,6 +5,7 @@ import Dress from "../../../assets/Clothes-Icon/dress.png";
 import Jacket from "../../../assets/Clothes-Icon/jacket.png";
 import Pajama from "../../../assets/Clothes-Icon/pajamas.png";
 import Accessories from "../../../assets/Clothes-Icon/bags.png";
+import Shoes from "../../../assets/Clothes-Icon/shoes.png";
 import Bikini from "../../../assets/Clothes-Icon/bikini.png";
 import Button from "../../../utils/UtilsComponents/Button";
 
@@ -20,6 +21,7 @@ const categories: Category[] = [
   { icon: Jacket, name: "Outerwear" },
   { icon: Pajama, name: "Sleepwear" },
   { icon: Bikini, name: "Swimwear" },
+  { icon: Shoes, name: "Footwear" },
   { icon: Accessories, name: "Accessories" },
 ];
 
@@ -27,24 +29,32 @@ const Categories: React.FC = () => {
   return (
     <div className="bg-surface py-12 px-4 border-b border-slate-700">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-primary">Browse Categories</h2>
-          <Button>View All Items</Button>
+        {/* Header Section */}
+        <div className="flex flex-col justify-between items-center mb-8 space-y-4 sm:flex-row sm:space-y-0">
+          <h2 className="text-xl font-bold text-primary">Browse Categories</h2>
+          <Button className="w-full sm:w-auto text-center">
+            View All Items
+          </Button>
         </div>
-        <div className="flex flex-wrap justify-between items-center gap-4">
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {categories.map((category, index) => (
             <button
               key={index}
-              className="group flex flex-col items-center space-y-3 transition-transform hover:scale-105"
+              className="group flex flex-col items-center space-y-2 sm:space-y-3 transition-transform hover:scale-105"
             >
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:shadow-xl">
+              {/* Icon Container */}
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:shadow-xl">
                 <img
                   src={category.icon}
                   alt={category.name}
                   className="w-8 h-8 object-cover"
                 />
               </div>
-              <span className="text-sm font-medium text-primary/80 group-hover:text-primary">
+
+              {/* Category Name */}
+              <span className="text-xs font-medium text-primary/80 group-hover:text-primary sm:text-sm">
                 {category.name}
               </span>
             </button>

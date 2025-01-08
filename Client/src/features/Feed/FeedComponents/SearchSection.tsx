@@ -18,6 +18,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
     "Activewear (leggings, sports bras, tracksuits)",
     "Sleepwear (pajamas, nightgowns, robes)",
     "Swimwear (bikinis, one-pieces, trunks)",
+    "Footwear (sneakers, sandals, boots, heels, flats)",
     "Accessories (bags, hats, belts, scarves)",
   ];
 
