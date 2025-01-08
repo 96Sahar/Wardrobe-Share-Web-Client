@@ -17,7 +17,7 @@ export const api: AxiosInstance = axios.create({
 
 export const setAuthToken = (token: string): void => {
   if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    api.defaults.headers.common["Authorization"] = `JWT ${token}`;
   } else {
     delete api.defaults.headers.common["Authorization"];
   }

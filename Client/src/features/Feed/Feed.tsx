@@ -3,23 +3,25 @@ import Header from "../../utils/UtilsComponents/Header";
 import SearchSection from "./FeedComponents/SearchSection";
 import Categories from "./FeedComponents/Categories";
 import ProductGrid from "./FeedComponents/ProductGrid";
+import Jeans from "../../assets/JeansDummyPic.jpg";
 
 interface Product {
   id: number;
   name: string;
   image: string;
-  price: number;
+  city: string;
   category: string;
 }
 
 const Feed: React.FC = () => {
+  // Define the dummy products inside the component
   const dummyProducts: Product[] = Array.from({ length: 32 }, (_, i) => ({
     id: i + 1,
     name: `Sustainable ${i % 2 === 0 ? "Cotton" : "Linen"} ${
       ["Shirt", "Pants", "Dress", "Jacket"][i % 4]
     }`,
-    image: "/placeholder.svg",
-    price: 29.99 + i * 10,
+    image: Jeans,
+    city: "New York",
     category: ["Tops", "Bottoms", "Dresses", "Outerwear"][i % 4],
   }));
 
@@ -29,6 +31,7 @@ const Feed: React.FC = () => {
   >({});
 
   useEffect(() => {
+    // Group products by category
     const grouped = filteredProducts.reduce((acc, product) => {
       if (!acc[product.category]) {
         acc[product.category] = [];
@@ -40,6 +43,7 @@ const Feed: React.FC = () => {
   }, [filteredProducts]);
 
   const handleSearch = (query: string) => {
+    // Ensure dummyProducts is used here, declared in the same scope
     const filtered = dummyProducts.filter((product) =>
       product.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -56,6 +60,7 @@ const Feed: React.FC = () => {
           key={category}
           category={category}
           products={products.slice(0, 4)}
+          isCategoryPage={false}
         />
       ))}
     </div>

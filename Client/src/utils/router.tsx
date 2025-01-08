@@ -5,6 +5,7 @@ import Profile from "../features/Profile/Profile";
 import EditProfile from "../features/Profile/EditProfile";
 import CreatePost from "../features/CreatePostPage/app_page";
 import PostPage from "../features/SinglePost/PostPage";
+import CategoryPage from "../features/CategoryPage/categoryPage";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/postPage",
     element: <PostPage />,
+  },
+  {
+    path: "/category",
+    element: <CategoryPage />,
   },
 ]);
 
