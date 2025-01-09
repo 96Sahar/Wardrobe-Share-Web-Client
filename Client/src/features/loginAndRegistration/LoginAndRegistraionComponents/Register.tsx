@@ -82,6 +82,7 @@ const Register = () => {
         <h2 className="text-lg sm:text-xl font-semibold">
           Create a new account
         </h2>
+
       </div>
 
       <form

@@ -39,6 +39,7 @@ const LoginAndRegistration = () => {
       <div className="hidden md:block w-[2px] h-full bg-slate-700"></div>
 
       <div className="flex flex-col items-center justify-center w-full px-6 md:flex-1">
+
         {isLogin ? (
           <>
             <Login

@@ -45,7 +45,7 @@ const Categories: React.FC = () => {
               className="group flex flex-col items-center space-y-2 sm:space-y-3 transition-transform hover:scale-105"
             >
               {/* Icon Container */}
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:shadow-xl">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg transform transition-all duration-300">
                 <img
                   src={category.icon}
                   alt={category.name}
@@ -54,7 +54,7 @@ const Categories: React.FC = () => {
               </div>
 
               {/* Category Name */}
-              <span className="text-xs font-medium text-primary/80 group-hover:text-primary sm:text-sm">
+              <span className="text-xs font-medium text-primary/80 group-hover:text-primary sm:text-sm group-hover:shadow-sm">
                 {category.name}
               </span>
             </button>

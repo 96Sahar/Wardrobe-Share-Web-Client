@@ -13,9 +13,6 @@ const EditProfile: React.FC = () => {
     username: "JaneDoe",
     email: "JaneDoe@gmail.com",
     avatar: userPhoto,
-    stats: {
-      posts: 6,
-    },
   });
 
   const handleInputChange = (
