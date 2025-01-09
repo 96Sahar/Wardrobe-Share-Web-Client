@@ -78,7 +78,7 @@ const Register = () => {
 
   return (
     <div className="flex flex-col justify-center items-center px-4 py-4 sm:px-8">
-      <div className="text-center mb-8">
+      <div className="text-center mb-4">
         <h2 className="text-lg sm:text-xl font-semibold">Create a new account</h2>
       </div>
 

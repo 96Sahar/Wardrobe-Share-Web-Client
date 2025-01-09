@@ -31,9 +31,9 @@ const MainLoginAndRegistration = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen">
       {/* Logo Section */}
-      <div className="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-1 md:mb-0">
+      <div className="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:flex-1 md:mb-0 pt-5">
         <img
           src={WardrobeLogo}
           alt="WardrobeLogo"
@@ -45,7 +45,7 @@ const MainLoginAndRegistration = () => {
       <div className="hidden md:block w-[2px] h-full bg-slate-700"></div>
 
       {/* Login or Registration Section */}
-      <div className="flex flex-col items-center justify-center w-full px-6 md:flex-1">
+      <div className="flex flex-col items-center justify-center w-full px-6 pb-5 md:flex-1">
         {isLogin ? (
           <>
             <Login

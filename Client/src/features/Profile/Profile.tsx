@@ -23,19 +23,11 @@ const Profile: React.FC = () => {
     username: "JaneDoe",
     email: "JaneDoe@gmail.com",
     avatar: userPhoto,
-    stats: {
-      posts: 6,
-    },
   };
 
   const handleEditProfile = () => {
     console.log("Edit profile clicked");
     // Add your edit profile logic here
-  };
-
-  const handleLogout = () => {
-    console.log("Logout clicked");
-    // Add your logout logic here
   };
 
   const onDelete = () => {
@@ -50,7 +42,6 @@ const Profile: React.FC = () => {
         <Sidebar
           profile={userProfile}
           onEditProfile={handleEditProfile}
-          onLogout={handleLogout}
           onDeleteAccount={onDelete}
         />
         <ProfilePosts posts={dummyPosts} />
