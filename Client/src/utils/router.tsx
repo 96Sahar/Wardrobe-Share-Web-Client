@@ -1,41 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
-import MainLoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
+import { Routes, Route } from "react-router-dom";
 import Feed from "../features/Feed/Feed";
+import LoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
+import CategoryPage from "../features/CategoryPage/categoryPage";
+import CreatePost from "../features/CreatePostPage/createPostComponents/CreateAPost";
 import Profile from "../features/Profile/Profile";
 import EditProfile from "../features/Profile/EditProfile";
-import CreatePost from "../features/CreatePostPage/app_page";
-import PostPage from "../features/SinglePost/PostPage";
-import CategoryPage from "../features/CategoryPage/categoryPage";
 
-const router = createBrowserRouter([
-  {
-    path: "/LoginAndRegistration",
-    element: <MainLoginAndRegistration />,
-  },
-  {
-    path: "/",
-    element: <Feed />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/edit",
-    element: <EditProfile />,
-  },
-  {
-    path: "/createPost",
-    element: <CreatePost />,
-  },
-  {
-    path: "/postPage",
-    element: <PostPage />,
-  },
-  {
-    path: "/category",
-    element: <CategoryPage />,
-  },
-]);
+const Router = () => {
+  return (
+    <Routes>
+      <Route index element={<Feed />} />
+      <Route path="/LoginAndRegistration" element={<LoginAndRegistration />} />
+      <Route path="/categoryPage" element={<CategoryPage />} />
+      <Route path="/createPost" element={<CreatePost />} />
+      <Route path="/profilePage" element={<Profile />} />
+      <Route path="/editProfile" element={<EditProfile />} />
+    </Routes>
+  );
+};
 
-export default router;
+export default Router;

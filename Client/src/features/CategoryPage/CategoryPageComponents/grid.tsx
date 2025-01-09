@@ -11,7 +11,7 @@ interface Product {
 }
 
 const Grid: React.FC = () => {
-    const [selectedRegion, setSelectedRegion] = useState("All");
+  const [selectedRegion, setSelectedRegion] = useState("All");
 
   const dummyProd: Product[] = Array.from({ length: 32 }, (_, i) => ({
     id: i + 1,
@@ -23,29 +23,31 @@ const Grid: React.FC = () => {
     category: "Tops",
   }));
 
-    const [filteredProducts] = useState(dummyProd);
-    const [groupedProducts, setGroupedProducts] = useState<
-      Record<string, Product[]>
-    >({});
+  const [filteredProducts] = useState(dummyProd);
+  const [groupedProducts, setGroupedProducts] = useState<
+    Record<string, Product[]>
+  >({});
 
-    useEffect(() => {
-      const grouped = filteredProducts.reduce((acc, product) => {
-        if (!acc[product.category]) {
-          acc[product.category] = [];
-        }
-        acc[product.category].push(product);
-        return acc;
-      }, {} as Record<string, Product[]>);
-      setGroupedProducts(grouped);
-    }, [filteredProducts])
-    ;
+  useEffect(() => {
+    const grouped = filteredProducts.reduce((acc, product) => {
+      if (!acc[product.category]) {
+        acc[product.category] = [];
+      }
+      acc[product.category].push(product);
+      return acc;
+    }, {} as Record<string, Product[]>);
+    setGroupedProducts(grouped);
+  }, [filteredProducts]);
 
-    return (
-      <div className="min-h-screen bg-background">
-              {/* Filter controls */}
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Filter controls */}
       <div className="px-4 mt-6 flex items-center space-x-8 max-w-7xl mx-auto">
         <div>
-          <label htmlFor="region" className="block text-lg font-bold text-primary">
+          <label
+            htmlFor="region"
+            className="block text-lg font-bold text-primary"
+          >
             Filter by Region
           </label>
           <select
@@ -64,16 +66,16 @@ const Grid: React.FC = () => {
           </select>
         </div>
       </div>
-        {Object.entries(groupedProducts).map(([category, products]) => (
-          <ProductGrid
-            key={category}
-            category={category}
-            products={products}
-            isCategoryPage={true}
-            />
-        ))}
-      </div>
-    );
+      {Object.entries(groupedProducts).map(([category, products]) => (
+        <ProductGrid
+          key={category}
+          category={category}
+          products={products}
+          isCategoryPage={true}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default Grid;

@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
 import {
   login as loginApi,
-  setAuthToken,
   LoginCredentials,
   AuthResponse,
-} from "../../../utils/api";
+} from "../../../services/userService";
 
 interface LoginProps {
   loginData: LoginCredentials;
@@ -26,7 +25,6 @@ const Login: React.FC<LoginProps> = ({
       setLoginError(null);
       const response: AuthResponse = await loginApi(loginData);
       console.log("Login successful:", response);
-      setAuthToken(response.accessToken);
       onLoginSuccess(response);
     } catch (error: unknown) {
       console.error("Login error:", error);

@@ -1,27 +1,4 @@
-import axios, { AxiosInstance } from "axios";
-
-class ApiError extends Error {
-  response?: {
-    data?: string;
-  };
-}
-
-const API_URL = "http://localhost:3000"; // Replace with your backend URL
-
-export const api: AxiosInstance = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-export const setAuthToken = (token: string): void => {
-  if (token) {
-    api.defaults.headers.common["Authorization"] = `JWT ${token}`;
-  } else {
-    delete api.defaults.headers.common["Authorization"];
-  }
-};
+import { client, ApiError, setAuthToken } from "./httpClient";
 
 export interface UserData {
   username: string;
@@ -45,7 +22,10 @@ export interface AuthResponse {
 
 export const register = async (userData: UserData): Promise<AuthResponse> => {
   try {
-    const response = await api.post<AuthResponse>("/user/register", userData);
+    const response = await client.post<AuthResponse>(
+      "/user/register",
+      userData
+    );
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {
@@ -59,7 +39,14 @@ export const login = async (
   credentials: LoginCredentials
 ): Promise<AuthResponse> => {
   try {
-    const response = await api.post<AuthResponse>("/user/login", credentials);
+    const response = await client.post<AuthResponse>(
+      "/user/login",
+      credentials
+    );
+    setAuthToken(response.data.accessToken);
+
+    //Add SetCookie
+
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {

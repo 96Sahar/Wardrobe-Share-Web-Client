@@ -1,11 +1,13 @@
-import { RouterProvider } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./style/App.css";
-import router from "./utils/router";
+import Router from "./utils/router";
 
 const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </>
   );
 };
