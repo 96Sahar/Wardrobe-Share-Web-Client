@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "../../../utils/UtilsComponents/Button";
-import React, { useState } from "react";
 
 interface City {
   objectId: string;
@@ -17,35 +18,59 @@ const CreatePost: React.FC = () => {
   const [suggestions, setSuggestions] = useState<City[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [debouncedCity, setDebouncedCity] = useState<string>("");
+  const [isCitySelected, setIsCitySelected] = useState<boolean>(false);
 
-  const fetchCities = async (query: string): Promise<void> => {
-    if (!query) {
-      setSuggestions([]);
-      return;
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedCity(city);
+    }, 300); // 300ms debounce delay
+
+    return () => {
+      clearTimeout(handler); // Cleanup timeout on each re-render
+    };
+  }, [city]);
+
+  useEffect(() => {
+    const fetchCities = async (query: string): Promise<void> => {
+      if (!query || isCitySelected) {
+        setSuggestions([]);
+        return;
+      }
+      setLoading(true);
+
+      const where = JSON.stringify({
+        name: { $regex: `^${query}`, $options: "i" },
+      });
+      try {
+        const response = await axios.get(
+          "https://parseapi.back4app.com/classes/City",
+          {
+            params: {
+              limit: 5,
+              order: "-population",
+              keys: "name",
+              where,
+            },
+            headers: {
+              "X-Parse-Application-Id":
+                "3weosiutAnAaPOxJsZSr2vCMvYe03u6exstY2RE6",
+              "X-Parse-Master-Key": "6OxeLaPRkf89GyFBcbopxOgojfBGO9PXtpQgjyBK",
+            },
+          }
+        );
+        setSuggestions(response.data.results || []);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (debouncedCity) {
+      fetchCities(debouncedCity);
     }
-    setLoading(true);
-    const where = encodeURIComponent(
-      JSON.stringify({ name: { $regex: `^${query}`, $options: "i" } })
-    );
-    try {
-      const response = await fetch(
-        `https://parseapi.back4app.com/classes/City?limit=5&order=-population&keys=name&where=${where}`,
-        {
-          headers: {
-            "X-Parse-Application-Id":
-              "3weosiutAnAaPOxJsZSr2vCMvYe03u6exstY2RE6",
-            "X-Parse-Master-Key": "6OxeLaPRkf89GyFBcbopxOgojfBGO9PXtpQgjyBK",
-          },
-        }
-      );
-      const data = await response.json();
-      setSuggestions(data.results || []);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [debouncedCity, isCitySelected]);
 
   const handleSubmit = (): void => {
     const newErrors: Record<string, boolean> = {
@@ -66,15 +91,17 @@ const CreatePost: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = e.target.value;
-    setCity(value);
-    fetchCities(value);
-  };
-
   const handleSuggestionClick = (suggestion: City): void => {
     setCity(suggestion.name);
-    setSuggestions([]);
+    setIsCitySelected(true); // Mark city as selected
+    setSuggestions([]); // Clear suggestions
+  };
+
+  const handleCityInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setCity(e.target.value);
+    setIsCitySelected(false); // Allow searching again when the user starts typing
   };
 
   return (
@@ -238,7 +265,7 @@ const CreatePost: React.FC = () => {
           <input
             type="text"
             value={city}
-            onChange={handleInputChange}
+            onChange={handleCityInputChange} // Use handleCityInputChange here
             placeholder="Start typing a city name..."
             className={`w-full sm:w-3/4 lg:w-1/2 px-4 py-2 text-lg border ${
               errors.city ? "border-red-500" : "border-gray-300"
