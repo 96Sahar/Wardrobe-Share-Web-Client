@@ -5,7 +5,6 @@ import { Camera, Save, ArrowLeft } from "lucide-react";
 import userPhoto from "../../assets/user.png";
 import { useNavigate } from "react-router-dom";
 
-
 const EditProfile: React.FC = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile>({
@@ -45,8 +44,11 @@ const EditProfile: React.FC = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <button className="mb-6 flex items-center text-primary hover:text-primary/80 transition-colors" onClick={() => navigate("/Profile")}>
-          <ArrowLeft className="w-4 h-4 mr-2"/>
+        <button
+          className="mb-6 flex items-center text-primary hover:text-primary/80 transition-colors"
+          onClick={() => navigate("/Profile")}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Profile
         </button>
         <h1 className="text-2xl font-bold text-primary mb-6">Edit Profile</h1>

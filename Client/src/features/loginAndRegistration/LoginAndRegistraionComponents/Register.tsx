@@ -7,7 +7,7 @@ import {
   register as registerApi,
   UserData,
   AuthResponse,
-} from "../../../utils/api";
+} from "../../../services/userService";
 
 const schema = z
   .object({
@@ -79,7 +79,10 @@ const Register = () => {
   return (
     <div className="flex flex-col justify-center items-center px-4 py-4 sm:px-8">
       <div className="text-center mb-4">
-        <h2 className="text-lg sm:text-xl font-semibold">Create a new account</h2>
+        <h2 className="text-lg sm:text-xl font-semibold">
+          Create a new account
+        </h2>
+
       </div>
 
       <form
@@ -88,10 +91,7 @@ const Register = () => {
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col">
-            <label
-              htmlFor="f_name"
-              className="mb-2 text-gray-800 font-medium"
-            >
+            <label htmlFor="f_name" className="mb-2 text-gray-800 font-medium">
               First Name:
             </label>
             <input
@@ -107,10 +107,7 @@ const Register = () => {
           </div>
 
           <div className="flex flex-col">
-            <label
-              htmlFor="l_name"
-              className="mb-2 text-gray-800 font-medium"
-            >
+            <label htmlFor="l_name" className="mb-2 text-gray-800 font-medium">
               Last Name:
             </label>
             <input
