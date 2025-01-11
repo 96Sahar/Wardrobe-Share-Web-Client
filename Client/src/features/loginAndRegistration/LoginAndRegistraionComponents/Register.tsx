@@ -3,12 +3,8 @@ import Button from "../../../utils/UtilsComponents/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  register as registerApi,
-  UserData,
-  AuthResponse,
-} from "../../../services/userService";
-
+import { register as registerApi } from "../../../services/userService";
+import { UserData, AuthResponse } from "../../../services/interfaceService";
 const schema = z
   .object({
     f_name: z.string().min(2, "First name must be at least 2 characters"),
@@ -82,7 +78,6 @@ const Register = () => {
         <h2 className="text-lg sm:text-xl font-semibold">
           Create a new account
         </h2>
-
       </div>
 
       <form

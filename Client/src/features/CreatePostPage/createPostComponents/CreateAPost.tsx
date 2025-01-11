@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "../../../utils/UtilsComponents/Button";
-
+import { AuthResponse, postData } from "../../../services/interfaceService";
 interface City {
   objectId: string;
   name: string;
@@ -72,24 +72,7 @@ const CreatePost: React.FC = () => {
     }
   }, [debouncedCity, isCitySelected]);
 
-  const handleSubmit = (): void => {
-    const newErrors: Record<string, boolean> = {
-      title: !title.trim(),
-      description: !description.trim(),
-      image: !image,
-      category: !category,
-      phone: !phone.trim() || !/^\+?\d{7,15}$/.test(phone),
-      region: !region,
-      city: !city.trim(),
-    };
-    setErrors(newErrors);
-
-    if (Object.values(newErrors).some((error) => error)) {
-      console.error("Please fill all required fields.");
-    } else {
-      console.log({ title, description, image, category, phone, region, city });
-    }
-  };
+  const handleSubmit = async (data) => {};
 
   const handleSuggestionClick = (suggestion: City): void => {
     setCity(suggestion.name);

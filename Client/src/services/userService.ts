@@ -1,26 +1,9 @@
+import Cookies from "js-cookie";
 import { client, ApiError, setAuthToken } from "./httpClient";
+import { UserData, AuthResponse, LoginCredentials } from "./interfaceService";
+import axios from "axios";
 
-export interface UserData {
-  username: string;
-  password: string;
-  email: string;
-  f_name: string;
-  l_name: string;
-}
-
-export interface LoginCredentials {
-  username: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  username: string;
-  _id: string;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export const register = async (userData: UserData): Promise<AuthResponse> => {
+const register = async (userData: UserData) => {
   try {
     const response = await client.post<AuthResponse>(
       "/user/register",
@@ -28,25 +11,27 @@ export const register = async (userData: UserData): Promise<AuthResponse> => {
     );
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof ApiError && error.response?.data) {
-      throw error.response.data;
+    if (axios.isAxiosError(error) && error.response) {
+      console.error("Server Error:", error.response.data);
+      throw new Error(error.response.data as string);
     }
-    throw "An error occurred during the operation";
+    console.error("Unknown Error:", error);
+    throw new Error("An error occurred during the operation");
   }
 };
-
-export const login = async (
-  credentials: LoginCredentials
-): Promise<AuthResponse> => {
+const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
     const response = await client.post<AuthResponse>(
       "/user/login",
       credentials
     );
+
     setAuthToken(response.data.accessToken);
 
-    //Add SetCookie
-
+    Cookies.set("authToken", response.data.accessToken, {
+      sameSite: "strict",
+    });
+    console.log(response.data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {
@@ -55,3 +40,5 @@ export const login = async (
     throw "An error occurred during the operation";
   }
 };
+
+export { register, login };
