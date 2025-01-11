@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
 import {
-  login as loginApi,
   LoginCredentials,
   AuthResponse,
-} from "../../../services/userService";
+} from "../../../services/interfaceService";
+import { login as loginApi } from "../../../services/userService";
 
 interface LoginProps {
   loginData: LoginCredentials;

@@ -36,9 +36,7 @@ const Header = () => {
             onClick={() => navigate("/LoginAndRegistration")}
           >
             <UserRound className="h-7 inline-flex m-1" />
-            <h2 className="text-xl inline-flex m-1 items-center">
-              Sign in
-            </h2>
+            <h2 className="text-xl inline-flex m-1 items-center">Sign in</h2>
           </div>
         </div>
 
