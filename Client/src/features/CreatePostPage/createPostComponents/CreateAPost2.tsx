@@ -2,13 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "../../../utils/UtilsComponents/Button";
-import { AuthResponse, postData } from "../../../services/interfaceService";
+import { AuthResponse } from "../../../services/interfaceService";
 import { createPost as createPostApi } from "../../../services/postService";
+import { ChangeEvent, useState } from "react";
 
 const schema = z.object({
   title: z.string().min(2, "Title is missing"),
   description: z.string().min(1, "Description is missing"),
-  image: z
+  picture: z
     .any()
     .refine((files) => files?.length === 1, "Please upload a single image."),
   category: z.string().min(0, "Please select a category."),
@@ -20,6 +21,12 @@ const schema = z.object({
 type PostFormFields = z.infer<typeof schema>;
 
 const CreateAPost2 = () => {
+  const [picture, setPicture] = useState<File | null>(null);
+  const handlePicture = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setPicture(e.target.files[0]);
+    }
+  };
   const {
     register,
     handleSubmit,
@@ -30,17 +37,20 @@ const CreateAPost2 = () => {
 
   const onSubmit: SubmitHandler<PostFormFields> = async (data) => {
     try {
-      const postData: postData = {
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        category: data.category,
-        phone: data.phone,
-        region: data.region,
-        city: data.city,
-      };
-      const response: AuthResponse = await createPostApi(postData);
-      console.log("Post has submited successfully:", response);
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("category", data.category);
+      if (picture) {
+        console.log(picture);
+        formData.append("picture", picture);
+      }
+      formData.append("phone", data.phone);
+      formData.append("region", data.region);
+      formData.append("city", data.city);
+
+      const response: AuthResponse = await createPostApi(formData);
+      console.log("Post submitted successfully:", response);
     } catch (error) {
       console.log("Post Creation error:", error);
     }
@@ -94,15 +104,15 @@ const CreateAPost2 = () => {
       <div>
         <label className="block text-gray-800 font-bold mb-1">Image:</label>
         <input
-          {...register("image")}
+          {...register("picture")}
           type="file"
-          accept="image/*"
+          onChange={handlePicture}
           className={`w-full px-4 py-2 text-lg border ${
-            errors.image ? "border-red-500" : "border-gray-300"
+            errors.picture ? "border-red-500" : "border-gray-300"
           } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
         />
-        {errors.image && typeof errors.image.message === "string" && (
-          <p className="text-red-500 text-sm mt-1">{errors.image.message}</p>
+        {errors.picture && typeof errors.picture.message === "string" && (
+          <p className="text-red-500 text-sm mt-1">{errors.picture.message}</p>
         )}
       </div>
 
