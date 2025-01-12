@@ -1,9 +1,9 @@
 import Cookies from "js-cookie";
 import { ApiError, client } from "./httpClient";
-import { AuthResponse, postData } from "./interfaceService";
+import { AuthResponse } from "./interfaceService";
 
-const createPost = async (postData: postData) => {
-  const token = Cookies.get("authToken"); // Ensure you are storing the token securely
+const createPost = async (postData: FormData) => {
+  const token = Cookies.get("authToken");
   if (!token) {
     throw new Error("User is not authenticated");
   }
@@ -11,7 +11,8 @@ const createPost = async (postData: postData) => {
   try {
     const response = await client.post<AuthResponse>("/post", postData, {
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;

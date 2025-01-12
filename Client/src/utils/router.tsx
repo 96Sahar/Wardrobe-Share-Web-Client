@@ -2,10 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import Feed from "../features/Feed/Feed";
 import LoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
 import CategoryPage from "../features/CategoryPage/categoryPage";
-import CreatePost2 from "../features/CreatePostPage/createPostComponents/CreateAPost2";
-import CreatePost from "../features/CreatePostPage/createPostComponents/CreateAPost";
 import Profile from "../features/Profile/Profile";
 import EditProfile from "../features/Profile/EditProfile";
+import CreatePostPage from "../features/CreatePostPage/CreatePostPage";
 
 const Router = () => {
   return (
@@ -15,8 +14,7 @@ const Router = () => {
       <Route path="/categoryPage" element={<CategoryPage />} />
       <Route path="/profilePage" element={<Profile />} />
       <Route path="/editProfile" element={<EditProfile />} />
-      <Route path="/createAPost2" element={<CreatePost2 />} />
-      <Route path="/createAPost" element={<CreatePost />} />
+      <Route path="/CreatePost" element={<CreatePostPage />} />
     </Routes>
   );
 };
