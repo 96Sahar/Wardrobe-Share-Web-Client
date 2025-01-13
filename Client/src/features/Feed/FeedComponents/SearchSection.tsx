@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
 import SearchBarBackground from "../../../assets/SearchBarBackground.jpg";
+import { useNavigate } from "react-router-dom";
 
 interface SearchSectionProps {
   onSearch: (query: string) => void;
 }
 
 const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
 
@@ -23,15 +25,25 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   ];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.toLowerCase();
+    const query = e.target.value;
     setSearchQuery(query);
-    onSearch(query);
+    onSearch(query.toLowerCase());
 
-    // Filter options based on query and limit to 2 results
-    const filtered = categories
-      .filter((category) => category.toLowerCase().includes(query))
-      .slice(0, 2); // Limit to 2 results
-    setFilteredOptions(filtered);
+    if (query) {
+      const filtered = categories
+        .filter((category) =>
+          category.toLowerCase().includes(query.toLowerCase())
+        )
+        .slice(0, 2);
+      setFilteredOptions(filtered);
+    } else {
+      setFilteredOptions([]);
+    }
+  };
+
+  const handleOptionSelect = (option: string) => {
+    const simplifiedCategory = option.split(" ")[0];
+    navigate(`/categoryPage/${simplifiedCategory}`);
   };
 
   return (
@@ -73,6 +85,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
                 <li
                   key={index}
                   className="p-4 text-gray-800 hover:bg-gray-300 cursor-pointer"
+                  onClick={() => handleOptionSelect(option)}
                 >
                   {option}
                 </li>
@@ -83,7 +96,9 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
       </div>
       {/* Dummy Next Component */}
       <div className="relative z-0 bg-gray-100 h-[500px] flex items-center justify-center">
-        <p className="text-gray-700">This is the next component below the search section.</p>
+        <p className="text-gray-700">
+          This is the next component below the search section.
+        </p>
       </div>
     </div>
   );

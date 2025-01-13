@@ -67,7 +67,6 @@ const PostDetails: React.FC<DataProps> = ({ data }) => {
           />
           <p className="ml-4 text-gray-800 font-semibold">{data.user}</p>
         </div>
-
       </div>
     </div>
   );

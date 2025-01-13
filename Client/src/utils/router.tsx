@@ -11,6 +11,7 @@ const Router = () => {
     <Routes>
       <Route index element={<Feed />} />
       <Route path="/LoginAndRegistration" element={<LoginAndRegistration />} />
+      <Route path="/categoryPage/:category" element={<CategoryPage />} />
       <Route path="/categoryPage" element={<CategoryPage />} />
       <Route path="/profilePage" element={<Profile />} />
       <Route path="/editProfile" element={<EditProfile />} />

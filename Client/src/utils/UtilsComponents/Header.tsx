@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X, Heart, UserRound } from "lucide-react";
@@ -9,6 +10,15 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const handleCreatePostNavigation = () => {
+    const token = Cookies.get("authToken");
+
+    // if (!token) {
+
+    // }
+    navigate(token ? "/createPost" : "/loginAndRegistration");
+  };
 
   return (
     <>
@@ -22,7 +32,11 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-5">
-          <Button onClick={() => navigate("/createPost")}>
+          <Button
+            onClick={() => {
+              handleCreatePostNavigation();
+            }}
+          >
             List your item
           </Button>
           <div className="items-center cursor-pointer">
@@ -82,7 +96,7 @@ const Header = () => {
               </div>
               <Button
                 onClick={() => {
-                  navigate("/createPost");
+                  handleCreatePostNavigation();
                   setIsMenuOpen(false);
                 }}
               >
