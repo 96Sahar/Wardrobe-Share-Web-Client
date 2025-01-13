@@ -27,25 +27,41 @@ const LoginAndRegistration = () => {
   const handleLoginSuccess = (userData: AuthResponse) => {
     setUser(userData);
     console.log(userData);
+    const expiresIn = 50 * 60 * 1000;
+    const expiration = new Date(Date.now() + expiresIn).toISOString();
+    Cookies.set("AuthExpiration", expiration);
     Cookies.set("userInfo", JSON.stringify(userData));
+    Cookies.set("authToken", userData.accessToken, {
+      sameSite: "strict",
+    });
+    Cookies.set("refreshToken", userData.refreshToken, {
+      sameSite: "strict",
+    });
   };
 
   const loginWithGoogle = async (authResult: any) => {
     if (authResult["code"]) {
       try {
-        const response: Promise<AxiosResponse> = axios.post("http://localhost:3000/user/googleLogin", {
-          code: authResult["code"],
-        });
+        const response: Promise<AxiosResponse> = axios.post(
+          "http://localhost:3000/user/googleLogin",
+          {
+            code: authResult["code"],
+          }
+        );
         response
-        .then((resolvedResponse) => {
-          const data = {username: resolvedResponse.data.user.username, _id: resolvedResponse.data.user._id, accessToken: resolvedResponse.data.accessToken, refreshToken: resolvedResponse.data.refreshToken};
-          handleLoginSuccess(data);
-        })
-        .catch((error) => {
-          console.error("Error:", error); // Handle any errors
-        });
+          .then((resolvedResponse) => {
+            const data = {
+              username: resolvedResponse.data.user.username,
+              _id: resolvedResponse.data.user._id,
+              accessToken: resolvedResponse.data.accessToken,
+              refreshToken: resolvedResponse.data.refreshToken,
+            };
+            handleLoginSuccess(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error); // Handle any errors
+          });
         toast.success("Google login successful");
-        
       } catch (error) {
         console.error(error);
         toast.error("Google login failed");

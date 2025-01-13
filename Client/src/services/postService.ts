@@ -12,7 +12,7 @@ const createPost = async (postData: FormData) => {
   try {
     const response = await client.post<AuthResponse>("/post", postData, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `JWT ${token}`,
         "Content-Type": "multipart/form-data",
       },
     });
@@ -25,11 +25,14 @@ const createPost = async (postData: FormData) => {
   }
 };
 
-const getAllPost = async (category?: string, user?: string) => {
+const getAllPost = async (category?: string, user?: string, region?: string) => {
   let endpoint = "/post";
   try {
-    if (category) {
-      endpoint = `/post?catagory=${category}`;
+    if (category&&!region) {
+      endpoint = `/post?category=${category}`;
+    }
+    if (category&&region) {
+      endpoint = `/post?category=${category}&region=${region}`;
     }
     if (user) {
       endpoint = `/post?user=${user}`;
