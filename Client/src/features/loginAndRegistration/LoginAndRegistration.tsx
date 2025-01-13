@@ -8,7 +8,9 @@ import {
 } from "../../services/interfaceService";
 import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
-import Googlelogin from "./LoginAndRegistraionComponents/GoogleLogin";
+import GoogleLogin from "./LoginAndRegistraionComponents/GoogleLogin";
+import { toast } from "react-toastify";
+import axios, { AxiosResponse } from "axios";
 
 const LoginAndRegistration = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,7 +26,34 @@ const LoginAndRegistration = () => {
 
   const handleLoginSuccess = (userData: AuthResponse) => {
     setUser(userData);
+    console.log(userData);
     Cookies.set("userInfo", JSON.stringify(userData));
+  };
+
+  const loginWithGoogle = async (authResult: any) => {
+    if (authResult["code"]) {
+      try {
+        const response: Promise<AxiosResponse> = axios.post("http://localhost:3000/user/googleLogin", {
+          code: authResult["code"],
+        });
+        response
+        .then((resolvedResponse) => {
+          const data = {username: resolvedResponse.data.user.username, _id: resolvedResponse.data.user._id, accessToken: resolvedResponse.data.accessToken, refreshToken: resolvedResponse.data.refreshToken};
+          handleLoginSuccess(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error); // Handle any errors
+        });
+        toast.success("Google login successful");
+        
+      } catch (error) {
+        console.error(error);
+        toast.error("Google login failed");
+      }
+    } else {
+      console.error(authResult);
+      toast.error("Google login failed");
+    }
   };
 
   if (user) {
@@ -69,7 +98,7 @@ const LoginAndRegistration = () => {
           </span>
         </div>
 
-        <Googlelogin />
+        <GoogleLogin authResponse={loginWithGoogle} />
       </div>
     </div>
   );

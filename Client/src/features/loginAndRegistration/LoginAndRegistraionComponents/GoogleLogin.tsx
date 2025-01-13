@@ -1,16 +1,15 @@
-import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
+import { FcGoogle } from 'react-icons/fc';
 
+interface GoogleLoginProps {
+	authResponse: (authResult: any) => void;
+}
 
-function GoogleLogin() {
-    const googleLogin = useGoogleLogin({
-        onSuccess: (response) => {
-            console.log("Google login successful", response);
-        },
-        onError: (error) => {
-            console.error("Google login error", error);
-        },
-        flow: "auth-code",
+function GoogleLogin(props: GoogleLoginProps) {
+	const googleLogin = useGoogleLogin({
+		onSuccess: props.authResponse,
+		onError: props.authResponse,
+		flow: 'auth-code',
 	});
 
 
