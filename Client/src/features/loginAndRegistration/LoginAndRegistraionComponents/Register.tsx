@@ -74,14 +74,14 @@ const Register = () => {
 
   return (
     <div className="flex flex-col justify-center items-center px-4 py-4 sm:px-8">
-      <div className="text-center mb-4">
+      <div className="text-center mb-3">
         <h2 className="text-lg sm:text-xl font-semibold">
           Create a new account
         </h2>
       </div>
 
       <form
-        className="grid grid-cols-1 gap-6 w-full max-w-lg"
+        className="grid grid-cols-1 gap-4 w-full max-w-lg"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
