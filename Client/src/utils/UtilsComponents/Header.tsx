@@ -7,6 +7,9 @@ import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
 import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
 import { getUserById as getUserByIdAPI } from "../../services/userService";
+import {logout} from "../../services/userService";
+import {checkToken} from "../../services/httpClient";
+
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserData | null>(null);
@@ -17,25 +20,37 @@ const Header = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const token = Cookies.get("authToken");
-
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleNavigation = (navigation: string) => {
     const checkToken = Cookies.get("authToken");
 
-    if (!checkToken && checkToken === token) {
-      toast.error("Only members can list an item");
+    if (!checkToken) {
+      toast.error("Only members can do that login or register");
       navigate("/loginAndRegistration");
+      return;
     }
 
     navigate(`/${navigation}`);
   };
 
-  const handleLogout = () => {
-    console.log("User logged out");
-    // Add logout logic here
+  const handleLogout = async () => {
+    const refreshToken = Cookies.get("refreshToken");
+    checkToken();
+    if (refreshToken) {
+      try {
+        await logout(refreshToken);
+        window.location.reload(); 
+      } catch (error: unknown) {
+        console.error("Logout error:", error);
+        toast.error(error instanceof Error ? error.message : "An error occurred during logout");
+      }
+    } else {
+      console.error("No refresh token found");
+      toast.error("No refresh token found. Unable to logout.");
+    }
   };
+  
 
   useEffect(() => {
     const id = Cookies.get("userInfo");
@@ -80,7 +95,9 @@ const Header = () => {
           <div
             className="flex items-center cursor-pointer"
             onClick={
-              user ? toggleDropdown : () => handleNavigation("registerPage")
+              user
+                ? toggleDropdown
+                : () => handleNavigation("loginAndRegistration")
             }
           >
             {user ? (
@@ -101,7 +118,7 @@ const Header = () => {
             <div className="absolute right-0 mt-10 bg-white border rounded shadow-lg w-40">
               <button
                 className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                onClick={() => handleNavigation("Profile")}
+                onClick={() => navigate("/Profile")}
               >
                 Profile Settings
               </button>
@@ -132,18 +149,52 @@ const Header = () => {
         {isMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-gray-300 shadow-md z-40 md:hidden">
             <div className="flex flex-col items-center space-y-4 py-4">
+              {/* Profile Section */}
               <div
                 className="flex items-center cursor-pointer"
-                onClick={() => {
-                  navigate("/LoginAndRegistration");
-                  setIsMenuOpen(false);
-                }}
+                onClick={
+                  user
+                    ? toggleDropdown
+                    : () => navigate("/loginAndRegistration")
+                }
               >
-                <UserRound className="h-7 inline-flex m-1" />
+                {user ? (
+                  <img
+                    className="h-7 inline-flex m-1 rounded-full"
+                    src={user.picture}
+                    alt={user.fullname}
+                  />
+                ) : (
+                  <UserRound className="h-7 inline-flex m-1" />
+                )}
                 <h2 className="text-lg inline-flex m-1 items-center">
                   {user ? `${user.fullname}` : "Sign in"}
                 </h2>
               </div>
+
+              {/* Dropdown in Mobile */}
+              {dropdownOpen && user && (
+                <div className="mt-2 bg-white border rounded shadow-lg w-40">
+                  <button
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      navigate("/Profile");
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    Profile Settings
+                  </button>
+                  <button
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      handleLogout();
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => {
