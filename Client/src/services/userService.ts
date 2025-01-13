@@ -19,6 +19,7 @@ const register = async (userData: UserData) => {
     throw new Error("An error occurred during the operation");
   }
 };
+
 const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
     const response = await client.post<AuthResponse>(
@@ -31,7 +32,7 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     Cookies.set("authToken", response.data.accessToken, {
       sameSite: "strict",
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {

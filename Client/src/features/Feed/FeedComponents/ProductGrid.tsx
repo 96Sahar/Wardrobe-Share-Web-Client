@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -14,10 +15,19 @@ interface ProductGridProps {
   isCategoryPage?: boolean;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ category, products, isCategoryPage}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({
+  category,
+  products,
+  isCategoryPage,
+}) => {
+  const navigate = useNavigate();
   const [likedProducts, setLikedProducts] = useState<{
     [key: number]: boolean;
   }>({});
+
+  const handleCategoryClick = (categoryName: string) => {
+    navigate(`/categoryPage/${categoryName}`);
+  };
 
   const handleLike = (productId: number) => {
     setLikedProducts((prev) => ({
@@ -31,7 +41,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({ category, products, isCategor
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold text-primary">{category}</h2>
-          {!isCategoryPage && <Button>View All {category}</Button>}
+          {!isCategoryPage && (
+            <Button onClick={() => handleCategoryClick(category)}>
+              View All {category}
+            </Button>
+          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (

@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { ApiError, client } from "./httpClient";
 import { AuthResponse } from "./interfaceService";
+import axios from "axios";
 
 const createPost = async (postData: FormData) => {
   const token = Cookies.get("authToken");
@@ -24,4 +25,23 @@ const createPost = async (postData: FormData) => {
   }
 };
 
-export { createPost };
+const getAllPost = async (category?: string, user?: string) => {
+  let endpoint = "/post";
+  try {
+    if (category) {
+      endpoint = `/post?catagory=${category}`;
+    }
+    if (user) {
+      endpoint = `/post?user=${user}`;
+    }
+    const response = await client.get(endpoint);
+    return response;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data as string);
+    }
+    throw new Error("Unknown error when trying to get a post");
+  }
+};
+
+export { createPost, getAllPost };
