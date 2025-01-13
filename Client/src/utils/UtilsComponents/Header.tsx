@@ -11,6 +11,11 @@ const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserData | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
   const token = Cookies.get("authToken");
 
@@ -25,6 +30,11 @@ const Header = () => {
     }
 
     navigate(`/${navigation}`);
+  };
+
+  const handleLogout = () => {
+    console.log("User logged out");
+    // Add logout logic here
   };
 
   useEffect(() => {
@@ -68,14 +78,41 @@ const Header = () => {
             </h2>
           </div>
           <div
-            className="items-center cursor-pointer"
-            onClick={() => handleNavigation("profilePage")}
+            className="flex items-center cursor-pointer"
+            onClick={
+              user ? toggleDropdown : () => handleNavigation("registerPage")
+            }
           >
-            <UserRound className="h-7 inline-flex m-1" />
+            {user ? (
+              <img
+                className="h-7 inline-flex m-1 rounded-full"
+                src={user.picture}
+                alt={user.fullname}
+              />
+            ) : (
+              <UserRound className="h-7 inline-flex m-1" />
+            )}
             <h2 className="text-xl inline-flex m-1 items-center">
-              {user ? `${user?.fullname}` : "Sign in"}
+              {user ? `${user.fullname}` : "Sign in"}
             </h2>
           </div>
+
+          {dropdownOpen && user && (
+            <div className="absolute right-0 mt-10 bg-white border rounded shadow-lg w-40">
+              <button
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                onClick={() => handleNavigation("Profile")}
+              >
+                Profile Settings
+              </button>
+              <button
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Burger Menu Icon */}
@@ -104,7 +141,7 @@ const Header = () => {
               >
                 <UserRound className="h-7 inline-flex m-1" />
                 <h2 className="text-lg inline-flex m-1 items-center">
-                  {user ? `${user.f_name}` : "Sign in"}
+                  {user ? `${user.fullname}` : "Sign in"}
                 </h2>
               </div>
               <div
