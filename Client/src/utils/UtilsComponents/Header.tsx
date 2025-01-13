@@ -1,24 +1,44 @@
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X, Heart, UserRound } from "lucide-react";
 import Button from "./Button";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
-
+import { toast } from "react-toastify";
+import { UserData } from "../../services/interfaceService";
+import { getUserById as getUserByIdAPI } from "../../services/userService";
 const Header = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<UserData | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const token = Cookies.get("authToken");
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleCreatePostNavigation = () => {
-    const token = Cookies.get("authToken");
+    const checkToken = Cookies.get("authToken");
 
-    // if (!token) {
-
-    // }
-    navigate(token ? "/createPost" : "/loginAndRegistration");
+    if (!checkToken && checkToken === token) {
+      toast.error("Only members can list an item");
+    }
+    navigate(checkToken ? "/createPost" : "/loginAndRegistration");
   };
+
+  useEffect(() => {
+    const id = Cookies.get("userInfo");
+    if (id) {
+      const parsedId = JSON.parse(id);
+      getUserByIdAPI(parsedId._id)
+        .then((userInfo) => {
+          console.log("Fetched user data:", userInfo); // Add this for debugging
+          setUser(userInfo);
+        })
+        .catch((error) => {
+          console.error("Error fetching user:", error);
+        });
+    }
+  }, []);
 
   return (
     <>
@@ -50,7 +70,9 @@ const Header = () => {
             onClick={() => navigate("/LoginAndRegistration")}
           >
             <UserRound className="h-7 inline-flex m-1" />
-            <h2 className="text-xl inline-flex m-1 items-center">Sign in</h2>
+            <h2 className="text-xl inline-flex m-1 items-center">
+              {user ? `${user?.fullname}` : "Sign in"}
+            </h2>
           </div>
         </div>
 
@@ -80,7 +102,7 @@ const Header = () => {
               >
                 <UserRound className="h-7 inline-flex m-1" />
                 <h2 className="text-lg inline-flex m-1 items-center">
-                  Sign in
+                  {user ? `${user.f_name}` : "Sign in"}
                 </h2>
               </div>
               <div

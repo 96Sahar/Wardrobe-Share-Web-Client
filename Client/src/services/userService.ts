@@ -28,11 +28,13 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     );
 
     setAuthToken(response.data.accessToken);
+    const userInfo = getUserById(response.data._id);
+
+    Cookies.set("userInfo", JSON.stringify(userInfo));
 
     Cookies.set("authToken", response.data.accessToken, {
       sameSite: "strict",
     });
-
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {
@@ -41,5 +43,28 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     throw "An error occurred during the operation";
   }
 };
+const getUserByToken = async (): Promise<AuthResponse> => {
+  try {
+    const response = await client.get<AuthResponse>("/user/auth/settings");
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof ApiError && error.response?.data) {
+      throw error.response.data;
+    }
+  }
+  throw "An error when trying to get user by token";
+};
 
-export { register, login };
+const getUserById = async (userId: string) => {
+  try {
+    const response = await client.get(`/user/${userId}`);
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof ApiError && error.response?.data) {
+      throw error.response.data;
+    }
+    throw "An error when trying to get a user by id";
+  }
+};
+
+export { register, login, getUserById, getUserByToken };
