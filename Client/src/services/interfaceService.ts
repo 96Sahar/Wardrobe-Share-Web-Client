@@ -1,4 +1,5 @@
 interface UserData {
+  fullname?: string;
   username: string;
   password: string;
   email: string;
