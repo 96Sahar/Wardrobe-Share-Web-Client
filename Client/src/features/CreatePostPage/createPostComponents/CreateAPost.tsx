@@ -22,7 +22,7 @@ const schema = z.object({
   category: z.string().min(0, "Please select a category."),
   phone: z.string().min(9, "Phone number must be at least 9 characters."),
   region: z.string().min(0),
-  city: z.string().min(0),
+  city: z.string().min(1, "City is required"),
 });
 
 type PostFormFields = z.infer<typeof schema>;
@@ -42,6 +42,7 @@ const CreateAPost = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<PostFormFields>({
     resolver: zodResolver(schema),
@@ -61,7 +62,7 @@ const CreateAPost = () => {
       formData.append("region", data.region);
       formData.append("city", data.city);
 
-      const response: AuthResponse = await createPostApi(formData);
+      const response: AuthResponse | undefined = await createPostApi(formData);
       console.log("Post submitted successfully:", response);
     } catch (error) {
       console.log("Post Creation error:", error);
@@ -121,6 +122,7 @@ const CreateAPost = () => {
 
   const handleSuggestionClick = (suggestion: City): void => {
     setCity(suggestion.name);
+    setValue("city", suggestion.name); // Update the form value
     setIsCitySelected(true);
     setSuggestions([]);
   };
@@ -129,6 +131,7 @@ const CreateAPost = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
     setCity(e.target.value);
+    setValue("city", e.target.value); // Update the form value
     setIsCitySelected(false);
   };
 
