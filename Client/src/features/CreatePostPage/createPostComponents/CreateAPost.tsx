@@ -137,202 +137,191 @@ const CreateAPost = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col items-center justify-center py-10 px-4 sm:px-8"
     >
-        <div className="rounded-lg p-6 sm:p-8 md:p-10 lg:w-3/4 shadow-2xl w-full max-w-2xl">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-            What is your item?
-          </h1>
-          <h2 className="text-gray-600 mt-2 mb-6 text-base sm:text-lg">
-            Fill in all the details below to upload your item.
-          </h2>
+      <div className="rounded-lg p-6 sm:p-8 md:p-10 lg:w-3/4 shadow-2xl w-full max-w-2xl">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+          What is your item?
+        </h1>
+        <h2 className="text-gray-600 mt-2 mb-6 text-base sm:text-lg">
+          Fill in all the details below to upload your item.
+        </h2>
 
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">Title:</label>
-            <input
-              {...register("title")}
-              type="text"
-              placeholder="For example: Vintage dress"
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.title ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.title.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">
-              Description:
-            </label>
-            <textarea
-              {...register("description")}
-              placeholder="Tell us about the brand, size, condition, etc."
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.description ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
-          
-
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">Image:</label>
-            <input
-              {...register("picture")}
-              type="file"
-              onChange={handlePicture}
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.picture ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.picture && typeof errors.picture.message === "string" && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.picture.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">
-              Category:
-            </label>
-            <select
-              {...register("category")}
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.category ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            >
-              <option value="" disabled>
-                Pick a category
-              </option>
-              <option value="tops">
-                Tops (shirts, blouses, T-shirts, tank tops)
-              </option>
-              <option value="bottoms">
-                Bottoms (pants, jeans, skirts, shorts)
-              </option>
-              <option value="dresses">
-                Dresses (casual, formal, maxi, mini)
-              </option>
-              <option value="outerwear">
-                Outerwear (jackets, coats, cardigans)
-              </option>
-              <option value="activewear">
-                Activewear (leggings, sports bras, tracksuits)
-              </option>
-              <option value="sleepwear">
-                Sleepwear (pajamas, nightgowns, robes)
-              </option>
-              <option value="swimwear">
-                Swimwear (bikinis, one-pieces, trunks)
-              </option>
-              <option value="footwear">
-                Footwear (sneakers, sandals, boots, heels, flats)
-              </option>
-              <option value="accessories">
-                Accessories (bags, hats, belts, scarves)
-              </option>
-            </select>
-            {errors.category && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.category.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">Phone:</label>
-            <input
-              {...register("phone")}
-              type="text"
-              placeholder="Enter your phone number"
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.phone.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-800 font-bold mb-1">
-              Region:
-            </label>
-            <select
-              {...register("region")}
-              className={`w-full px-4 py-2 text-lg border ${
-                errors.region ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            >
-              <option value="" disabled>
-                Pick a region
-              </option>
-              <option value="HaMerkaz">HaMerkaz</option>
-              <option value="Tel Aviv">Tel Aviv</option>
-              <option value="HaDarom">HaDarom</option>
-              <option value="Heifa">Heifa</option>
-              <option value="HaTzafon">HaTzafon</option>
-              <option value="Yerushalayim">Yerushalayim</option>
-            </select>
-            {errors.region && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.region.message}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4 relative">
-            <label className="block text-gray-800 font-bold mb-1">City:</label>
-            <input
-              type="text"
-              value={city}
-              onChange={handleCityInputChange}
-              placeholder="Start typing a city name..."
-              className={`w-full px-4 py-2 text-lg border mb-1 ${
-                errors.city ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {loading && <div className="text-gray-500 mt-2">Loading...</div>}
-            {suggestions.length > 0 && (
-              <ul className="absolute bg-white border border-gray-300 rounded-md mt-1 w-full sm:w-3/4 lg:w-1/2 max-h-48 overflow-y-auto z-10">
-                {suggestions.map((suggestion) => (
-                  <li
-                    key={suggestion.objectId}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    {suggestion.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {errors.city && (
-              <p className="text-red-500 text-sm mt-1">City is required.</p>
-            )}
-          </div>
-
-          <Button
-            buttonType="submit"
-            className={isSubmitting ? "disabled" : "flex mx-auto mt-6"}
-          >
-            {isSubmitting ? "Submitting..." : "Upload item"}
-          </Button>
-
-          {errors.root && (
-            <div className="text-red-500 text-sm mt-8">
-              {errors.root.message}
-            </div>
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">Title:</label>
+          <input
+            {...register("title")}
+            type="text"
+            placeholder="For example: Vintage dress"
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.title ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {errors.title && (
+            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
           )}
         </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">
+            Description:
+          </label>
+          <textarea
+            {...register("description")}
+            placeholder="Tell us about the brand, size, condition, etc."
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.description ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {errors.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.description.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">Image:</label>
+          <input
+            {...register("picture")}
+            type="file"
+            onChange={handlePicture}
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.picture ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {errors.picture && typeof errors.picture.message === "string" && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.picture.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">
+            Category:
+          </label>
+          <select
+            {...register("category")}
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.category ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          >
+            <option value="" disabled>
+              Pick a category
+            </option>
+            <option value="tops">
+              Tops (shirts, blouses, T-shirts, tank tops)
+            </option>
+            <option value="bottoms">
+              Bottoms (pants, jeans, skirts, shorts)
+            </option>
+            <option value="dresses">
+              Dresses (casual, formal, maxi, mini)
+            </option>
+            <option value="outerwear">
+              Outerwear (jackets, coats, cardigans)
+            </option>
+            <option value="activewear">
+              Activewear (leggings, sports bras, tracksuits)
+            </option>
+            <option value="sleepwear">
+              Sleepwear (pajamas, nightgowns, robes)
+            </option>
+            <option value="swimwear">
+              Swimwear (bikinis, one-pieces, trunks)
+            </option>
+            <option value="footwear">
+              Footwear (sneakers, sandals, boots, heels, flats)
+            </option>
+            <option value="accessories">
+              Accessories (bags, hats, belts, scarves)
+            </option>
+          </select>
+          {errors.category && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.category.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">Phone:</label>
+          <input
+            {...register("phone")}
+            type="text"
+            placeholder="Enter your phone number"
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.phone ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-800 font-bold mb-1">Region:</label>
+          <select
+            {...register("region")}
+            className={`w-full px-4 py-2 text-lg border ${
+              errors.region ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          >
+            <option value="" disabled>
+              Pick a region
+            </option>
+            <option value="HaMerkaz">HaMerkaz</option>
+            <option value="Tel Aviv">Tel Aviv</option>
+            <option value="HaDarom">HaDarom</option>
+            <option value="Heifa">Heifa</option>
+            <option value="HaTzafon">HaTzafon</option>
+            <option value="Yerushalayim">Yerushalayim</option>
+          </select>
+          {errors.region && (
+            <p className="text-red-500 text-sm mt-1">{errors.region.message}</p>
+          )}
+        </div>
+
+        <div className="mb-4 relative">
+          <label className="block text-gray-800 font-bold mb-1">City:</label>
+          <input
+            type="text"
+            value={city}
+            onChange={handleCityInputChange}
+            placeholder="Start typing a city name..."
+            className={`w-full px-4 py-2 text-lg border mb-1 ${
+              errors.city ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          />
+          {loading && <div className="text-gray-500 mt-2">Loading...</div>}
+          {suggestions.length > 0 && (
+            <ul className="absolute bg-white border border-gray-300 rounded-md mt-1 w-full sm:w-3/4 lg:w-1/2 max-h-48 overflow-y-auto z-10">
+              {suggestions.map((suggestion) => (
+                <li
+                  key={suggestion.objectId}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          {errors.city && (
+            <p className="text-red-500 text-sm mt-1">City is required.</p>
+          )}
+        </div>
+
+        <Button
+          buttonType="submit"
+          className={isSubmitting ? "disabled" : "flex mx-auto mt-6"}
+        >
+          {isSubmitting ? "Submitting..." : "Upload item"}
+        </Button>
+
+        {errors.root && (
+          <div className="text-red-500 text-sm mt-8">{errors.root.message}</div>
+        )}
+      </div>
     </form>
   );
 };

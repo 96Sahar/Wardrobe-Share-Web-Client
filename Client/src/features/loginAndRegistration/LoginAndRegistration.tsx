@@ -6,6 +6,7 @@ import {
   LoginCredentials,
   AuthResponse,
 } from "../../services/interfaceService";
+import Cookies from "js-cookie";
 import { Navigate } from "react-router-dom";
 import Googlelogin from "./LoginAndRegistraionComponents/GoogleLogin";
 
@@ -23,7 +24,7 @@ const LoginAndRegistration = () => {
 
   const handleLoginSuccess = (userData: AuthResponse) => {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    Cookies.set("userInfo", JSON.stringify(userData));
   };
 
   if (user) {
@@ -50,20 +51,14 @@ const LoginAndRegistration = () => {
               setLoginData={setLoginData}
               onLoginSuccess={handleLoginSuccess}
             />
-            <button
-              onClick={handleIsLogin}
-              className="underline text-primary"
-            >
+            <button onClick={handleIsLogin} className="underline text-primary">
               Don't have an account yet?
             </button>
           </>
         ) : (
           <>
             <Register />
-            <button
-              onClick={handleIsLogin}
-              className="underline text-primary"
-            >
+            <button onClick={handleIsLogin} className="underline text-primary">
               Already have an account?
             </button>
           </>
