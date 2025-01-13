@@ -16,13 +16,15 @@ const Header = () => {
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  const handleCreatePostNavigation = () => {
+  const handleNavigation = (navigation: string) => {
     const checkToken = Cookies.get("authToken");
 
     if (!checkToken && checkToken === token) {
       toast.error("Only members can list an item");
+      navigate("/loginAndRegistration");
     }
-    navigate(checkToken ? "/createPost" : "/loginAndRegistration");
+
+    navigate(`/${navigation}`);
   };
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const Header = () => {
         <div className="hidden md:flex space-x-5">
           <Button
             onClick={() => {
-              handleCreatePostNavigation();
+              handleNavigation("createPost");
             }}
           >
             List your item
@@ -67,7 +69,7 @@ const Header = () => {
           </div>
           <div
             className="items-center cursor-pointer"
-            onClick={() => navigate("/LoginAndRegistration")}
+            onClick={() => handleNavigation("profilePage")}
           >
             <UserRound className="h-7 inline-flex m-1" />
             <h2 className="text-xl inline-flex m-1 items-center">
@@ -118,7 +120,7 @@ const Header = () => {
               </div>
               <Button
                 onClick={() => {
-                  handleCreatePostNavigation();
+                  handleNavigation("createPost");
                   setIsMenuOpen(false);
                 }}
               >

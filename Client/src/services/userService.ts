@@ -58,6 +58,7 @@ const getUserByToken = async (): Promise<AuthResponse> => {
 const getUserById = async (userId: string) => {
   try {
     const response = await client.get(`/user/${userId}`);
+    console.log(response.data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {
