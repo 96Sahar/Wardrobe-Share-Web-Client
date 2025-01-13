@@ -52,8 +52,7 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
 
 const logout = async (refreshToken: string) => {
   try {
-    console.log("Sending refresh token to backend:", refreshToken); 
-    await client.post("/user/logout", { refreshToken }); 
+    await client.post("/user/logout", { refreshToken });
     Cookies.remove("authToken");
     Cookies.remove("refreshToken");
     Cookies.remove("userInfo");
@@ -67,7 +66,6 @@ const logout = async (refreshToken: string) => {
     throw new Error("An error occurred during the operation");
   }
 };
-
 
 const getUserByToken = async (): Promise<AuthResponse> => {
   try {
@@ -84,7 +82,6 @@ const getUserByToken = async (): Promise<AuthResponse> => {
 const getUserById = async (userId: string) => {
   try {
     const response = await client.get(`/user/${userId}`);
-    console.log(response.data);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof ApiError && error.response?.data) {
