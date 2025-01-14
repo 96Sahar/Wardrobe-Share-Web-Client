@@ -7,8 +7,8 @@ import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
 import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
 import { getUserById as getUserByIdAPI } from "../../services/userService";
-import {logout} from "../../services/userService";
-import {checkToken} from "../../services/httpClient";
+import { logout } from "../../services/userService";
+import { checkToken } from "../../services/httpClient";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Header = () => {
     const checkToken = Cookies.get("authToken");
 
     if (!checkToken) {
-      toast.error("Only members can do that login or register");
+      toast.error(`Must be logged in for that action!`);
       navigate("/loginAndRegistration");
       return;
     }
@@ -40,17 +40,20 @@ const Header = () => {
     if (refreshToken) {
       try {
         await logout(refreshToken);
-        window.location.reload(); 
+        window.location.reload();
       } catch (error: unknown) {
         console.error("Logout error:", error);
-        toast.error(error instanceof Error ? error.message : "An error occurred during logout");
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "An error occurred during logout"
+        );
       }
     } else {
       console.error("No refresh token found");
       toast.error("No refresh token found. Unable to logout.");
     }
   };
-  
 
   useEffect(() => {
     const id = Cookies.get("userInfo");

@@ -1,44 +1,122 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Header from "../../utils/UtilsComponents/Header";
-import { UserProfile } from "../../utils/types/profile";
-import { Camera, Save, ArrowLeft } from "lucide-react";
-import userPhoto from "../../assets/user.png";
+import { Camera, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getUserByToken, updateUserProfile } from "../../services/userService";
+import Button from "../../utils/UtilsComponents/Button";
+
+// Zod schema for form validation
+const profileSchema = z.object({
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long.")
+    .regex(/^[a-zA-Z0-9]+$/, "Username can only contain letters and numbers."),
+  f_name: z.string().min(2, "First name must be at least 2 characters."),
+  l_name: z.string().min(2, "Last name must be at least 2 characters."),
+  picture: z.union([z.string(), z.instanceof(File)]).optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const EditProfile: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<UserProfile>({
-    firstName: "Jane",
-    lastName: "Doe",
-    username: "JaneDoe",
-    email: "JaneDoe@gmail.com",
-    avatar: userPhoto,
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      username: "",
+      f_name: "",
+      l_name: "",
+      picture: "",
+    },
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setProfile((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userData = await getUserByToken();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Profile updated:", profile);
-    // Here you would typically send the updated profile to your backend
-    // After successful update, redirect to profile page
+        setValue("username", userData.username);
+        setValue("f_name", userData.f_name);
+        setValue("l_name", userData.l_name);
+        setValue("picture", userData.picture);
+
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching user info:", err);
+        setError("Failed to load user profile.");
+        setLoading(false);
+      }
+    };
+
+    fetchUserInfo();
+  }, [setValue]);
+
+  const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
+    try {
+      const pictureFile =
+        data.picture instanceof File ? data.picture : undefined;
+
+      // Prepare the payload for update
+      const updatePayload: any = {
+        username: data.username,
+        f_name: data.f_name,
+        l_name: data.l_name,
+      };
+
+      if (pictureFile) {
+        updatePayload.picture = pictureFile;
+      }
+
+      const updatedProfile = await updateUserProfile(updatePayload);
+      console.log("Profile updated:", updatedProfile);
+
+      setIsSubmitSuccessful(true);
+      navigate("/Profile");
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      setError("An error occurred while saving your profile.");
+    }
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setValue("picture", file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfile((prev) => ({ ...prev, avatar: reader.result as string }));
+        const img = document.getElementById(
+          "preview-image"
+        ) as HTMLImageElement;
+        if (img) {
+          img.src = reader.result as string;
+        }
       };
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      navigate("/Profile");
+    }
+  }, [isSubmitSuccessful, navigate]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,15 +131,28 @@ const EditProfile: React.FC = () => {
         </button>
         <h1 className="text-2xl font-bold text-primary mb-6">Edit Profile</h1>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-y-6 bg-surface rounded-2xl p-6 shadow-sm max-w-md mx-auto"
         >
           <div className="flex flex-col items-center">
             <div className="relative w-40 h-40 rounded-2xl overflow-hidden mb-6 bg-background">
-              <img
-                src={profile.avatar}
-                alt={profile.firstName}
-                className="w-full h-full object-cover"
+              <Controller
+                name="picture"
+                control={control}
+                render={({ field: { value } }) => (
+                  <img
+                    id="preview-image"
+                    src={
+                      typeof value === "string"
+                        ? value
+                        : value instanceof File
+                        ? URL.createObjectURL(value)
+                        : ""
+                    }
+                    alt="Profile Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               />
               <label
                 htmlFor="avatar-upload"
@@ -87,55 +178,53 @@ const EditProfile: React.FC = () => {
             </label>
             <input
               id="username"
-              name="username"
-              type="text"
-              value={profile.username}
-              onChange={handleInputChange}
-              required
+              {...register("username")}
               className="w-full px-3 py-2 bg-background border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <label
-              htmlFor="firstName"
+              htmlFor="f_name"
               className="block text-sm font-medium text-primary"
             >
-              First name
+              First Name
             </label>
             <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              value={profile.firstName}
-              onChange={handleInputChange}
-              required
+              id="f_name"
+              {...register("f_name")}
               className="w-full px-3 py-2 bg-background border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
+            {errors.f_name && (
+              <p className="text-red-500 text-sm">{errors.f_name.message}</p>
+            )}
           </div>
           <div className="space-y-2">
             <label
-              htmlFor="lastName"
+              htmlFor="l_name"
               className="block text-sm font-medium text-primary"
             >
-              Last name
+              Last Name
             </label>
             <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              value={profile.lastName}
-              onChange={handleInputChange}
-              required
+              id="l_name"
+              {...register("l_name")}
               className="w-full px-3 py-2 bg-background border border-primary/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
+            {errors.l_name && (
+              <p className="text-red-500 text-sm">{errors.l_name.message}</p>
+            )}
           </div>
-          <button
-            type="submit"
-            className="w-full flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            Save Changes
-          </button>
+          <div className="text-center">
+            <Button
+              buttonType="submit"
+              className={isSubmitting ? "disabled" : ""}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
         </form>
       </div>
     </div>
