@@ -68,21 +68,21 @@ const logout = async (refreshToken: string) => {
 };
 
 
-const getUserByToken = async (): Promise<AuthResponse> => {
+const getUserByToken = async () => {
+  checkToken();
+  const token = Cookies.get("authToken");
   try {
-    const token = Cookies.get("authToken"); // or however you're storing the token
-    const response = await client.get<AuthResponse>("/user/auth/settings", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await client.get("/user/auth/settings", {
+      headers: { Authorization: `JWT ${token}` },
     });
+    console.log(response.data);
     return response.data;
   } catch (error: unknown) {
     console.error("Error in getUserByToken:", error);
     if (error instanceof ApiError && error.response?.data) {
       throw error.response.data;
     }
-    throw error;
+    throw "An error occurred during the operation";
   }
 };
 const getUserById = async (userId: string) => {
