@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../utils/UtilsComponents/Button";
 import { useNavigate } from "react-router-dom";
+import { getUserByToken } from "../../../services/userService";
+import { likePost } from "../../../services/postService"; // Assuming the likePost function is available
+import Cookies from "js-cookie";
 
 interface Product {
-  id: number;
-  name: string;
-  image: string;
+  _id: string;
+  picture: string;
+  description: string;
+  title: string;
+  likes: string[];
+  category: string;
+  phone: string;
+  region: string;
   city: string;
+  user: string;
 }
 
 interface ProductGridProps {
@@ -21,26 +30,66 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   isCategoryPage,
 }) => {
   const navigate = useNavigate();
-  const [likedProducts, setLikedProducts] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const [likedProducts, setLikedProducts] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const handleCategoryClick = (categoryName: string) => {
     navigate(`/categoryPage/${categoryName}`);
   };
 
-  const handleLike = (productId: number) => {
-    setLikedProducts((prev) => ({
-      ...prev,
-      [productId]: !prev[productId], // Toggle the like state for the given product
-    }));
+  category = category.charAt(0).toUpperCase() + category.slice(1);
+
+  useEffect(() => {
+    const fetchLikedProducts = async () => {
+      try {
+        const user = await getUserByToken();
+        if (user && user.likedPosts) {
+          // Populate likedProducts as a map for easy lookup
+          const likedPostsMap = user.likedPosts.reduce(
+            (acc: { [key: string]: boolean }, postId: string) => {
+              acc[postId] = true;
+              return acc;
+            },
+            {}
+          );
+          setLikedProducts(likedPostsMap);
+        }
+      } catch (err) {
+        console.error("Error fetching liked products:", err);
+      }
+    };
+
+    fetchLikedProducts();
+  }, [products]);
+
+  const handleLike = async (productId: string) => {
+    try {
+      const token = Cookies.get("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        return;
+      }
+      await likePost(productId);
+      setLikedProducts((prev) => ({
+        ...prev,
+        [productId]: !prev[productId], // Toggle the like status
+      }));
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
   };
+
 
   return (
     <div className="bg-background py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-primary">{category}</h2>
+          {category === "All" ? (
+            <h2 className="text-2xl font-bold text-primary">All Items</h2>
+          ) : (
+            <h2 className="text-2xl font-bold text-primary">{category}</h2>
+          )}
           {!isCategoryPage && (
             <Button onClick={() => handleCategoryClick(category)}>
               View All {category}
@@ -50,31 +99,32 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
-              key={product.id}
+              key={product._id}
               className="group bg-surface rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
             >
               <div className="relative">
                 <div className="aspect-square bg-background rounded-xl overflow-hidden mb-4">
                   <img
-                    src={product.image}
-                    alt={product.name}
+                  // start src with "http://localhost:5173/"
+                    src= {`http://localhost:3000/${product.picture}`}
+                    alt={product.title}
                     className="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                   />
                   {/* Like Button */}
                   <button
-                    onClick={() => handleLike(product.id)}
+                    onClick={() => handleLike(product._id)}
                     className={`absolute top-4 right-4 p-2 rounded-full shadow-md ${
-                      likedProducts[product.id]
+                      likedProducts[product._id]
                         ? "bg-red-500 text-white"
                         : "bg-gray-100 text-gray-800"
                     } hover:bg-red-500 hover:text-white transition-colors`}
                   >
-                    {likedProducts[product.id] ? "❤️" : "🤍"}
+                    {likedProducts[product._id] ? "❤️" : "🤍"}
                   </button>
                 </div>
               </div>
               <h3 className="font-medium text-primary mb-1 group-hover:text-secondary transition-colors">
-                {product.name}
+                {product.title}
               </h3>
               <p className="text-primary/60 font-medium">{product.city}</p>
             </div>

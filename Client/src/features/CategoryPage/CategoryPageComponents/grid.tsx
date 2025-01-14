@@ -1,47 +1,75 @@
 import React, { useEffect, useState } from "react";
 import ProductGrid from "../../Feed/FeedComponents/ProductGrid";
-import Jeans from "../../../assets/JeansDummyPic.jpg";
+import { getAllPost } from "../../../services/postService";
 
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  city: string;
+interface GridProps {
   category: string;
 }
 
-const Grid: React.FC = () => {
+interface Product {
+  _id: string;
+  picture: string;
+  description: string;
+  title: string;
+  likes: string[];
+  category: string;
+  phone: string;
+  region: string;
+  city: string;
+  user: string;
+}
+
+const Grid = ({ category }: GridProps): React.ReactElement => {
   const [selectedRegion, setSelectedRegion] = useState("All");
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const dummyProd: Product[] = Array.from({ length: 32 }, (_, i) => ({
-    id: i + 1,
-    name: `Sustainable ${i % 2 === 0 ? "Cotton" : "Linen"} ${
-      ["Shirt", "Pants", "Dress", "Jacket"][i % 4]
-    }`,
-    image: Jeans,
-    city: "New York",
-    category: "Tops",
-  }));
-
-  const [filteredProducts] = useState(dummyProd);
-  const [groupedProducts, setGroupedProducts] = useState<
-    Record<string, Product[]>
-  >({});
+  // Reset region when category changes
+  useEffect(() => {
+    setSelectedRegion("All"); // Reset region to "All" when category changes
+  }, [category]); // Triggered when the category changes
 
   useEffect(() => {
-    const grouped = filteredProducts.reduce((acc, product) => {
-      if (!acc[product.category]) {
-        acc[product.category] = [];
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await getAllPost(
+          category === "All" ? "" : category,
+          selectedRegion === "All" ? "" : selectedRegion, // Send "All" for region or empty string
+          ""
+        );
+        setFilteredProducts(response.data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+        setError("No products found");
+      } finally {
+        setLoading(false);
       }
-      acc[product.category].push(product);
-      return acc;
-    }, {} as Record<string, Product[]>);
-    setGroupedProducts(grouped);
-  }, [filteredProducts]);
+    };
+
+    fetchProducts();
+  }, [category, selectedRegion]); // Fetch products when either category or region changes
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Filter controls */}
       <div className="px-4 mt-6 flex items-center space-x-8 max-w-7xl mx-auto">
         <div>
           <label
@@ -52,7 +80,7 @@ const Grid: React.FC = () => {
           </label>
           <select
             id="region"
-            className="mt-1 block w-full rounded-md text-lg order-gray-300 shadow-sm focus:border-primary focus:ring-primary p-1"
+            className="mt-1 block w-full rounded-md text-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-1"
             value={selectedRegion}
             onChange={(e) => setSelectedRegion(e.target.value)}
           >
@@ -66,14 +94,19 @@ const Grid: React.FC = () => {
           </select>
         </div>
       </div>
-      {Object.entries(groupedProducts).map(([category, products]) => (
-        <ProductGrid
-          key={category}
-          category={category}
-          products={products}
-          isCategoryPage={true}
-        />
-      ))}
+
+      <div>
+        {filteredProducts.length === 0 ? (
+          <div className="text-center text-xl text-red-500">No products found.</div>
+        ) : (
+          <ProductGrid
+            key={category}
+            category={category}
+            products={filteredProducts}
+            isCategoryPage={true}
+          />
+        )}
+      </div>
     </div>
   );
 };

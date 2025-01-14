@@ -6,23 +6,31 @@ import ProductGrid from "./FeedComponents/ProductGrid";
 import Jeans from "../../assets/JeansDummyPic.jpg";
 
 interface Product {
-  id: number;
-  name: string;
-  image: string;
-  city: string;
+  _id: string;
+  picture: string;
+  description: string;
+  title: string;
+  likes: string[];
   category: string;
+  phone: string;
+  region: string;
+  city: string;
+  user: string;
 }
 
 const Feed: React.FC = () => {
   // Define the dummy products inside the component
   const dummyProducts: Product[] = Array.from({ length: 32 }, (_, i) => ({
-    id: i + 1,
-    name: `Sustainable ${i % 2 === 0 ? "Cotton" : "Linen"} ${
-      ["Shirt", "Pants", "Dress", "Jacket"][i % 4]
-    }`,
-    image: Jeans,
-    city: "New York",
-    category: ["Tops", "Bottoms", "Dresses", "Outerwear"][i % 4],
+    _id: i.toString(),
+    picture: Jeans,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: `Product ${i}`,
+    likes: [],
+    category: i % 2 === 0 ? "Jeans" : "Shirts",
+    phone: "1234567890",
+    region: "Region",
+    city: "City",
+    user: "User",
   }));
 
   const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
@@ -45,7 +53,7 @@ const Feed: React.FC = () => {
   const handleSearch = (query: string) => {
     // Ensure dummyProducts is used here, declared in the same scope
     const filtered = dummyProducts.filter((product) =>
-      product.name.toLowerCase().includes(query.toLowerCase())
+      product.title.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredProducts(filtered);
   };

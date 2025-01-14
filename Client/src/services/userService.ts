@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { client, ApiError, setAuthToken } from "./httpClient";
+import { client, ApiError, setAuthToken, checkToken } from "./httpClient";
 import { UserData, AuthResponse, LoginCredentials } from "./interfaceService";
 import axios from "axios";
 
@@ -66,6 +66,7 @@ const logout = async (refreshToken: string) => {
     throw new Error("An error occurred during the operation");
   }
 };
+
 
 const getUserByToken = async (): Promise<AuthResponse> => {
   try {
