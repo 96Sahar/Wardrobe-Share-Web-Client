@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import Header from "../../utils/UtilsComponents/Header";
 import ProfilePosts from "./ProfileComponents/ProfilePosts";
 import Sidebar from "./ProfileComponents/SideBar";
 import { Post } from "../../utils/types/post";
 import { UserProfile } from "../../utils/types/profile";
-import userPhoto from "../../assets/user.png";
 import itemPhoto from "../../assets/JeansDummyPic.jpg";
-import { getUserById } from "../../services/userService";
+import { getUserByToken } from "../../services/userService";
 import { checkToken } from "../../services/httpClient";
 
 const Profile: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const dummyPosts: Post[] = Array.from({ length: 6 }, (_, i) => ({
     id: i + "1",
@@ -25,29 +25,28 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        setIsLoading(true);
         checkToken();
-        const userInfo = Cookies.get("userInfo");
+        const userData = await getUserByToken();
+        console.log("User data:", userData);
 
-        if (userInfo) {
-          const parsedUserInfo = JSON.parse(userInfo);
-          const userData = await getUserById(parsedUserInfo._id);
-
-          setUserProfile({
-            f_name: userData.f_name,
-            l_name: userData.l_name,
-            username: userData.username,
-            email: userData.email,
-            avatar: userData.picture || userPhoto, // Fallback to default avatar
-          });
-          console.log(userProfile);
-        }
+        setUserProfile({
+          f_name: userData.f_name,
+          l_name: userData.l_name,
+          username: userData.username,
+          email: userData.email,
+          picture: userData.picture,
+        });
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user info:", error);
+        setError("Failed to load user profile. Please try again later.");
+        setIsLoading(false);
       }
     };
 
     fetchUserInfo();
-  }, [userProfile]);
+  }, []);
 
   const handleEditProfile = () => {
     console.log("Edit profile clicked");
@@ -57,8 +56,16 @@ const Profile: React.FC = () => {
     console.log("Delete account clicked");
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   if (!userProfile) {
-    return <div>Loading...</div>; // Display loading while fetching user info
+    return <div>No user profile found.</div>;
   }
 
   return (

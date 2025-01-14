@@ -69,16 +69,21 @@ const logout = async (refreshToken: string) => {
 
 const getUserByToken = async (): Promise<AuthResponse> => {
   try {
-    const response = await client.get<AuthResponse>("/user/auth/settings");
+    const token = Cookies.get("authToken"); // or however you're storing the token
+    const response = await client.get<AuthResponse>("/user/auth/settings", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error: unknown) {
+    console.error("Error in getUserByToken:", error);
     if (error instanceof ApiError && error.response?.data) {
       throw error.response.data;
     }
+    throw error;
   }
-  throw "An error when trying to get user by token";
 };
-
 const getUserById = async (userId: string) => {
   try {
     const response = await client.get(`/user/${userId}`);
@@ -91,4 +96,44 @@ const getUserById = async (userId: string) => {
   }
 };
 
-export { register, login, getUserById, getUserByToken, logout };
+const updateUserProfile = async (
+  userData: Partial<UserData>,
+  picture?: File
+): Promise<AuthResponse> => {
+  try {
+    const token = Cookies.get("authToken");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const formData = new FormData();
+    if (userData.username) formData.append("username", userData.username);
+    if (userData.f_name) formData.append("f_name", userData.f_name);
+    if (userData.l_name) formData.append("l_name", userData.l_name);
+    if (picture) formData.append("picture", picture);
+
+    const response = await client.put<AuthResponse>("/user/update", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    console.error("Error in updateUserProfile:", error);
+    if (error instanceof ApiError && error.response?.data) {
+      throw error.response.data;
+    }
+    throw new Error("An error occurred while updating the user profile");
+  }
+};
+
+export {
+  register,
+  login,
+  getUserById,
+  getUserByToken,
+  logout,
+  updateUserProfile,
+};

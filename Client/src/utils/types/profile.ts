@@ -3,5 +3,5 @@ export interface UserProfile {
   l_name: string;
   username: string;
   email: string;
-  avatar: string;
+  picture: string;
 }
