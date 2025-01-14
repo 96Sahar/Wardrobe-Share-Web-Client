@@ -43,6 +43,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
 
   const handleOptionSelect = (option: string) => {
     const simplifiedCategory = option.split(" ")[0];
+    simplifiedCategory.toLowerCase();
     navigate(`/categoryPage/${simplifiedCategory}`);
   };
 

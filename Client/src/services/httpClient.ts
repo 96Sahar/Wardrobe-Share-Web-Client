@@ -40,6 +40,7 @@ const refreshToken = async (refresh: string): Promise<string> => {
 };
 
 const checkToken = async () => {
+  console.log("Checking token");
   let token = Cookies.get("authToken");
   const storedRefreshToken = Cookies.get("refreshToken"); // Renamed to avoid shadowing
   const expiration = Cookies.get("AuthExpiration");
