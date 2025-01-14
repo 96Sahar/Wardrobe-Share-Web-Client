@@ -29,7 +29,7 @@ const likePost = async (postId: string) => {
     console.log(token); // Debug: Verify the token is correct
     const response = await client.post(
       `/post/${postId}/like`, 
-      null, // No body needed for this request
+      {}, // No body needed for this request
       {
         headers: { Authorization: `JWT ${token}` }, // Correctly set headers here
       }
