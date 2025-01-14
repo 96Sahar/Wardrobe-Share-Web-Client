@@ -1,11 +1,11 @@
 interface UserData {
   fullname?: string;
-  picture?: string;
-  username: string;
-  password: string;
-  email: string;
-  f_name: string;
-  l_name: string;
+  picture?: string | File | unknown;
+  username?: string;
+  password?: string;
+  email?: string;
+  f_name?: string;
+  l_name?: string;
 }
 
 interface LoginCredentials {
@@ -18,6 +18,10 @@ interface AuthResponse {
   _id: string;
   accessToken: string;
   refreshToken: string;
+  f_name: string;
+  l_name: string;
+  email: string;
+  picture: string;
 }
 interface postData {
   title: string;

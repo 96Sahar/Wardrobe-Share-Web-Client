@@ -1,7 +1,7 @@
 export interface UserProfile {
-  firstName: string;
-  lastName: string;
+  f_name: string;
+  l_name: string;
   username: string;
   email: string;
-  avatar: string;
+  picture: string;
 }
