@@ -24,13 +24,16 @@ interface AuthResponse {
   picture?: string;
 }
 interface postData {
-  title: string;
+  _id: string;
+  picture: string;
   description: string;
-  image: string;
+  title: string;
+  likes: string[];
   category: string;
   phone: string;
   region: string;
   city: string;
+  user: string;
 }
 
 export type { UserData, LoginCredentials, AuthResponse, postData };

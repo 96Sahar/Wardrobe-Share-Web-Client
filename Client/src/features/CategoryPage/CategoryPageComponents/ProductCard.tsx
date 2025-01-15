@@ -1,17 +1,8 @@
 import React from "react";
-
-interface PostData {
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  phone: string;
-  region: string;
-  city: string;
-}
+import { postData } from "../../../services/interfaceService";
 
 interface ProductCardProps {
-  post: PostData;
+  post: postData;
   isLiked?: boolean;
   onLikeClick?: () => void;
 }
@@ -45,7 +36,7 @@ const ProductCard = ({
 
       <div className="relative aspect-square overflow-hidden rounded-t-lg">
         <img
-          src={post.image}
+          src={post.picture}
           alt={post.title}
           className="h-full w-full object-cover"
         />

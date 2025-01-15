@@ -3,11 +3,9 @@ import { Search } from "lucide-react";
 import SearchBarBackground from "../../../assets/SearchBarBackground.jpg";
 import { useNavigate } from "react-router-dom";
 
-interface SearchSectionProps {
-  onSearch: (query: string) => void;
-}
 
-const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
+
+const SearchSection: React.FC = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
@@ -27,7 +25,6 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    onSearch(query.toLowerCase());
 
     if (query) {
       const filtered = categories

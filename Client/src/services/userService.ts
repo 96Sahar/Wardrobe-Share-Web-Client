@@ -50,8 +50,10 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   }
 };
 
-const logout = async (refreshToken: string) => {
+const logout = async () => {
   try {
+    await checkToken();
+    const refreshToken = Cookies.get("refreshToken");
     await client.post("/user/logout", { refreshToken });
     Cookies.remove("authToken");
     Cookies.remove("refreshToken");
@@ -69,9 +71,8 @@ const logout = async (refreshToken: string) => {
 
 
 const getUserByToken = async () => {
-  checkToken();
-  const token = Cookies.get("authToken");
   try {
+    const token = await checkToken();
     const response = await client.get("/user/auth/settings", {
       headers: { Authorization: `JWT ${token}` },
     });

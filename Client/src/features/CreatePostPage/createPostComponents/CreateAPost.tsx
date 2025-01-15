@@ -7,6 +7,8 @@ import { createPost as createPostApi } from "../../../services/postService";
 import React from "react";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 interface City {
   objectId: string;
@@ -26,8 +28,11 @@ const schema = z.object({
 });
 
 type PostFormFields = z.infer<typeof schema>;
+;
 
 const CreateAPost = () => {
+  const navigate = useNavigate();
+
   const [city, setCity] = useState<string>("");
   const [suggestions, setSuggestions] = useState<City[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,6 +53,8 @@ const CreateAPost = () => {
     resolver: zodResolver(schema),
   });
 
+  
+
   const onSubmit: SubmitHandler<PostFormFields> = async (data) => {
     try {
       const formData = new FormData();
@@ -55,19 +62,22 @@ const CreateAPost = () => {
       formData.append("description", data.description);
       formData.append("category", data.category);
       if (picture) {
-        console.log(picture);
         formData.append("picture", picture);
       }
       formData.append("phone", data.phone);
       formData.append("region", data.region);
       formData.append("city", data.city);
-
+  
       const response: AuthResponse | undefined = await createPostApi(formData);
       console.log("Post submitted successfully:", response);
+  
+      // Navigate to the feed page
+      navigate("/");
     } catch (error) {
       console.log("Post Creation error:", error);
     }
   };
+  
 
   useEffect(() => {
     const handler = setTimeout(() => {

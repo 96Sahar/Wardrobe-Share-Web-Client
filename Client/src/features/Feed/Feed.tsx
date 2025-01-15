@@ -3,65 +3,48 @@ import Header from "../../utils/UtilsComponents/Header";
 import SearchSection from "./FeedComponents/SearchSection";
 import Categories from "./FeedComponents/Categories";
 import ProductGrid from "./FeedComponents/ProductGrid";
-import Jeans from "../../assets/JeansDummyPic.jpg";
-
-interface Product {
-  _id: string;
-  picture: string;
-  description: string;
-  title: string;
-  likes: string[];
-  category: string;
-  phone: string;
-  region: string;
-  city: string;
-  user: string;
-}
+import { getAllPost } from "../../services/postService";
+import { postData } from "../../services/interfaceService";
 
 const Feed: React.FC = () => {
-  // Define the dummy products inside the component
-  const dummyProducts: Product[] = Array.from({ length: 32 }, (_, i) => ({
-    _id: i.toString(),
-    picture: Jeans,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    title: `Product ${i}`,
-    likes: [],
-    category: i % 2 === 0 ? "Jeans" : "Shirts",
-    phone: "1234567890",
-    region: "Region",
-    city: "City",
-    user: "User",
-  }));
 
-  const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
+  const [filteredProducts, setFilteredProducts] = useState<postData[]>([]);
   const [groupedProducts, setGroupedProducts] = useState<
-    Record<string, Product[]>
+    Record<string, postData[]>
   >({});
 
   useEffect(() => {
-    // Group products by category
-    const grouped = filteredProducts.reduce((acc, product) => {
-      if (!acc[product.category]) {
-        acc[product.category] = [];
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllPost("", "", "");
+        setFilteredProducts(response.data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
       }
-      acc[product.category].push(product);
-      return acc;
-    }, {} as Record<string, Product[]>);
-    setGroupedProducts(grouped);
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const groupedProducts = filteredProducts.reduce(
+      (acc: Record<string, postData[]>, product: postData) => {
+        if (!acc[product.category]) {
+          acc[product.category] = [];
+        }
+        acc[product.category].push(product);
+        return acc;
+      },
+      {}
+    );
+    setGroupedProducts(groupedProducts);
   }, [filteredProducts]);
 
-  const handleSearch = (query: string) => {
-    // Ensure dummyProducts is used here, declared in the same scope
-    const filtered = dummyProducts.filter((product) =>
-      product.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <SearchSection onSearch={handleSearch} />
+      <SearchSection />
       <Categories />
       {Object.entries(groupedProducts).map(([category, products]) => (
         <ProductGrid
