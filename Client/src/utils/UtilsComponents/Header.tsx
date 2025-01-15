@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
 import { getUserById as getUserByIdAPI } from "../../services/userService";
 import { logout } from "../../services/userService";
-import { checkToken } from "../../services/httpClient";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -26,7 +25,9 @@ const Header = () => {
     const checkToken = Cookies.get("authToken");
 
     if (!checkToken) {
-      toast.error(`Must be logged in for that action!`);
+      if (navigation != "loginAndRegistration") {
+        toast.error(`Must be logged in for that action!`);
+      }
       navigate("/loginAndRegistration");
       return;
     }
@@ -35,23 +36,16 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    const refreshToken = Cookies.get("refreshToken");
-    checkToken();
-    if (refreshToken) {
-      try {
-        await logout(refreshToken);
-        window.location.reload();
-      } catch (error: unknown) {
-        console.error("Logout error:", error);
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "An error occurred during logout"
-        );
-      }
-    } else {
-      console.error("No refresh token found");
-      toast.error("No refresh token found. Unable to logout.");
+    try {
+      await logout();
+      window.location.reload();
+    } catch (error: unknown) {
+      console.error("Logout error:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during logout"
+      );
     }
   };
 
@@ -89,7 +83,10 @@ const Header = () => {
           >
             List your item
           </Button>
-          <div className="items-center cursor-pointer">
+          <div
+            className="items-center cursor-pointer"
+            onClick={() => handleNavigation("likedItems")}
+          >
             <Heart className="h-7 inline-flex m-1" />
             <h2 className="text-xl inline-flex m-1 items-center">
               Your liked items

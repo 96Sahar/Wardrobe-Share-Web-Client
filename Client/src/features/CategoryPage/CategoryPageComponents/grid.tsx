@@ -1,27 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ProductGrid from "../../Feed/FeedComponents/ProductGrid";
 import { getAllPost } from "../../../services/postService";
+import { postData } from "../../../services/interfaceService";
 
 interface GridProps {
   category: string;
 }
 
-interface Product {
-  _id: string;
-  picture: string;
-  description: string;
-  title: string;
-  likes: string[];
-  category: string;
-  phone: string;
-  region: string;
-  city: string;
-  user: string;
-}
-
 const Grid = ({ category }: GridProps): React.ReactElement => {
   const [selectedRegion, setSelectedRegion] = useState("All");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<postData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
