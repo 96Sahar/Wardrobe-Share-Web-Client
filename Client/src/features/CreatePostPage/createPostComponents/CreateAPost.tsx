@@ -9,7 +9,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 interface City {
   objectId: string;
   name: string;
@@ -28,8 +27,6 @@ const schema = z.object({
 });
 
 type PostFormFields = z.infer<typeof schema>;
-;
-
 const CreateAPost = () => {
   const navigate = useNavigate();
 
@@ -53,8 +50,6 @@ const CreateAPost = () => {
     resolver: zodResolver(schema),
   });
 
-  
-
   const onSubmit: SubmitHandler<PostFormFields> = async (data) => {
     try {
       const formData = new FormData();
@@ -67,17 +62,16 @@ const CreateAPost = () => {
       formData.append("phone", data.phone);
       formData.append("region", data.region);
       formData.append("city", data.city);
-  
+
       const response: AuthResponse | undefined = await createPostApi(formData);
       console.log("Post submitted successfully:", response);
-  
+
       // Navigate to the feed page
       navigate("/");
     } catch (error) {
       console.log("Post Creation error:", error);
     }
   };
-  
 
   useEffect(() => {
     const handler = setTimeout(() => {

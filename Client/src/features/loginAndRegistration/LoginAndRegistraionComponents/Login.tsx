@@ -79,7 +79,6 @@ const Login: React.FC<LoginProps> = ({
             }
           />
         </div>
-
         <Button buttonType="submit">Login</Button>
 
         {loginError && <div className="text-red-500">{loginError}</div>}

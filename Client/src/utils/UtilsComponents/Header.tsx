@@ -12,6 +12,7 @@ import { logout } from "../../services/userService";
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserData | null>(null);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -38,7 +39,8 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      window.location.reload();
+      toast.success("Logged out see you soon!");
+      setUser(null);
     } catch (error: unknown) {
       console.error("Logout error:", error);
       toast.error(
@@ -101,11 +103,15 @@ const Header = () => {
             }
           >
             {user ? (
-              <img
-                className="h-7 inline-flex m-1 rounded-full"
-                src={user.picture}
-                alt={user.fullname}
-              />
+              user.picture ? (
+                <img
+                  className="h-7 w-7 inline-flex m-1 rounded-full"
+                  src={
+                    user.picture ? "http://localhost:3000/" + user.picture : ""
+                  }
+                  alt={user.fullname}
+                />
+              ) : null
             ) : (
               <UserRound className="h-7 inline-flex m-1" />
             )}
@@ -160,12 +166,12 @@ const Header = () => {
               >
                 {user ? (
                   <img
-                    className="h-7 inline-flex m-1 rounded-full"
+                    className="h-6 inline-flex m-1 rounded-full w-6"
                     src={user.picture}
                     alt={user.fullname}
                   />
                 ) : (
-                  <UserRound className="h-7 inline-flex m-1" />
+                  <UserRound className="h-6 w-7 inline-flex m-1" />
                 )}
                 <h2 className="text-lg inline-flex m-1 items-center">
                   {user ? `${user.fullname}` : "Sign in"}

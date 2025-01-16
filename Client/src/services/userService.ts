@@ -69,7 +69,6 @@ const logout = async () => {
   }
 };
 
-
 const getUserByToken = async () => {
   try {
     const token = await checkToken();
@@ -99,8 +98,7 @@ const getUserById = async (userId: string) => {
 };
 
 const updateUserProfile = async (
-  userData: Partial<UserData>,
-  picture?: File
+  userData: Partial<UserData>
 ): Promise<AuthResponse> => {
   try {
     const token = Cookies.get("authToken");
@@ -112,7 +110,7 @@ const updateUserProfile = async (
     if (userData.username) formData.append("username", userData.username);
     if (userData.f_name) formData.append("f_name", userData.f_name);
     if (userData.l_name) formData.append("l_name", userData.l_name);
-    if (picture) formData.append("picture", picture);
+    if (userData.picture) formData.append("picture", userData.picture);
 
     const response = await client.put<AuthResponse>("/user/update", formData, {
       headers: {

@@ -10,10 +10,7 @@ import Button from "../../utils/UtilsComponents/Button";
 
 // Zod schema for form validation
 const profileSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters long.")
-    .regex(/^[a-zA-Z0-9]+$/, "Username can only contain letters and numbers."),
+  username: z.string().min(3, "Username must be at least 3 characters long."),
   f_name: z.string().min(2, "First name must be at least 2 characters."),
   l_name: z.string().min(2, "Last name must be at least 2 characters."),
   picture: z.union([z.string(), z.instanceof(File)]).optional(),
@@ -67,9 +64,6 @@ const EditProfile: React.FC = () => {
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     try {
-      const pictureFile =
-        data.picture instanceof File ? data.picture : undefined;
-
       // Prepare the payload for update
       const updatePayload: any = {
         username: data.username,
@@ -77,9 +71,11 @@ const EditProfile: React.FC = () => {
         l_name: data.l_name,
       };
 
-      if (pictureFile) {
-        updatePayload.picture = pictureFile;
+      if (data.picture) {
+        updatePayload.picture = data.picture;
       }
+
+      console.log("updatePayload:", updatePayload);
 
       const updatedProfile = await updateUserProfile(updatePayload);
       console.log("Profile updated:", updatedProfile);
@@ -144,7 +140,7 @@ const EditProfile: React.FC = () => {
                     id="preview-image"
                     src={
                       typeof value === "string"
-                        ? value
+                        ? "http://localhost:3000/" + value
                         : value instanceof File
                         ? URL.createObjectURL(value)
                         : ""
