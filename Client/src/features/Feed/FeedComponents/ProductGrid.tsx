@@ -59,7 +59,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     initializeLikedProducts();
   }, [products]);
 
-  const handleLike = async (productId: string) => {
+  const handleLike = async (productId: string, productLikes: string[]) => {
     try {
       const userInfo = Cookies.get("userInfo");
       if (!userInfo) {
@@ -74,6 +74,12 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       if (!userId) {
         console.error("No user ID found in user info");
         return;
+      }
+
+      if (productLikes.includes(userId)) {
+        productLikes.splice(productLikes.indexOf(userId), 1);
+      } else {
+        productLikes.push(userId);
       }
 
       await likePost(productId); // Trigger the API to toggle the like
@@ -92,8 +98,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         <div className="flex justify-between items-center mb-8">
           {category === "All" ? (
             <h2 className="text-2xl font-bold text-primary">All Items</h2>
-          ) : category === "Liked" ? 
-          null : (
+          ) : category === "Liked" ? null : (
             <h2 className="text-2xl font-bold text-primary">{category}</h2>
           )}
 
@@ -107,7 +112,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
           {products.map((product) => (
             <div
               key={product._id}
-              className="group bg-surface rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
+              className="border-2 border-primary group bg-surface rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
               onClick={() => handleCardClick(product)}
             >
               <div className="relative">
@@ -119,10 +124,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                   />
                   {/* Like Button */}
                   <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLike(product._id);
-                      }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(product._id, product.likes);
+                    }}
                     className={`absolute top-4 right-4 p-2 rounded-full shadow-md ${
                       likedProducts[product._id]
                         ? "bg-red-500 text-white"
@@ -136,7 +141,20 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               <h3 className="font-medium text-primary mb-1 group-hover:text-secondary transition-colors">
                 {product.title}
               </h3>
-              <p className="text-primary/60 font-medium">{product.city}</p>
+              <p className="text-primary/60 font-medium">{product.region}</p>
+              {/* Counters */}
+              <div className="flex justify-between items-center mt-2 text-sm text-black">
+                {/* Likes Counter */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-lg">❤️</span>
+                  <span>{product.likes.length}</span>
+                </div>
+                {/* Comments Counter */}
+                <div className="flex items-center space-x-2">
+                  <span>{product.comments.length}</span>
+                  <span className="text-lg">💬</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>

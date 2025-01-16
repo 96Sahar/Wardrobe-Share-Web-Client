@@ -4,12 +4,19 @@ import { AuthResponse } from "./interfaceService";
 const createComment = async (postId: string, content: string) => {
   try {
     const token = await checkToken();
-    const response = await client.post<AuthResponse>("/comment", content, {
-      headers: {
-        Authorization: `JWT ${token}`,
-        "Content-Type": "multipart/form-data",
+    const response = await client.post<AuthResponse>(
+      "/comment",
+      {
+        post: postId,
+        content,
       },
-    });
+      {
+        headers: {
+          Authorization: `JWT ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (error instanceof ApiError && error.response?.data) {
@@ -19,12 +26,14 @@ const createComment = async (postId: string, content: string) => {
   }
 };
 
-const updateComment = async (commentData: string, commentId: string) => {
+
+const updateComment = async (content: string, commentId: string) => {
   try {
     const token = await checkToken();
     const response = await client.put<AuthResponse>(
       `/comment/${commentId}`,
-      commentData,
+
+      { content },
       {
         headers: { Authorization: `JWT ${token}` },
       }

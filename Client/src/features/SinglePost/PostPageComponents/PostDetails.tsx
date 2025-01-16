@@ -13,11 +13,13 @@ interface User {
 
 interface PostProps {
   product: postData;
+  commentsCount: number; 
 }
 
-const PostDetails: React.FC<PostProps> = ({ product }) => {
+const PostDetails: React.FC<PostProps> = ({ product, commentsCount}) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(product.likes.length);
   const [lister, setLister] = useState<User | null>(null);
 
   const handleLike = async (productId: string) => {
@@ -39,6 +41,7 @@ const PostDetails: React.FC<PostProps> = ({ product }) => {
 
       await likePost(productId); // Trigger the API to toggle the like
       setLiked((prev) => !prev); // Toggle the like state
+      setLikesCount((prev) => (liked ? prev - 1 : prev + 1)); // Adjust the like count
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -95,22 +98,30 @@ const PostDetails: React.FC<PostProps> = ({ product }) => {
           className="w-full object-cover h-96"
         />
         <button
-          onClick={()=>handleLike(product._id)}
+          onClick={() => handleLike(product._id)}
           className={`absolute top-4 right-4 p-2 rounded-full shadow-md ${
-            liked
-              ? "bg-red-500 text-white"
-              : "bg-gray-100 text-gray-800"
+            liked ? "bg-red-500 text-white" : "bg-gray-100 text-gray-800"
           } hover:bg-red-500 hover:text-white transition-colors`}
         >
           {liked ? "❤️" : "🤍"}
         </button>
+        <div className="absolute top-4 left-4 flex items-center space-x-6 text-white bg-black bg-opacity-50 p-2 rounded-full px-4">
+          {/* Likes Counter */}
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">❤️</span>
+            <span>{likesCount}</span>
+          </div>
+          {/* Comments Counter */}
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">💬</span>
+            <span>{commentsCount}</span>
+          </div>
+        </div>
       </div>
       {/* Content */}
       <div className="p-6">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          {product.title}
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">{product.title}</h1>
 
         {/* Description */}
         <p className="text-gray-600 font-bold text-lg mb-2">About the item:</p>
@@ -142,9 +153,7 @@ const PostDetails: React.FC<PostProps> = ({ product }) => {
               alt={lister.fullname}
               className="w-12 h-12 rounded-full object-cover"
             />
-            <p className="ml-4 text-gray-800 font-semibold">
-              {lister.fullname}
-            </p>
+            <p className="ml-4 text-gray-800 font-semibold">{lister.fullname}</p>
           </div>
         ) : (
           <p className="text-gray-600 mt-2">Loading lister details...</p>

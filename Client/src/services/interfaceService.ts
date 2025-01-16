@@ -30,6 +30,7 @@ interface postData {
   description: string;
   title: string;
   likes: string[];
+  comments: string[];
   category: string;
   phone: string;
   region: string;

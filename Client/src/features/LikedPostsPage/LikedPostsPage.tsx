@@ -4,22 +4,10 @@ import ProductGrid from "../Feed/FeedComponents/ProductGrid";
 import Cookies from "js-cookie";
 import { getUserByToken } from "../../services/userService";
 import { getPostById } from "../../services/postService"; // New function to fetch a post by ID
-
-interface Product {
-  _id: string;
-  picture: string;
-  description: string;
-  title: string;
-  likes: string[];
-  category: string;
-  phone: string;
-  region: string;
-  city: string;
-  user: string;
-}
+import { postData } from "../../services/interfaceService";
 
 const LikedPostsPage = () => {
-  const [likedPosts, setLikedPosts] = useState<Product[]>([]);
+  const [likedPosts, setLikedPosts] = useState<postData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
