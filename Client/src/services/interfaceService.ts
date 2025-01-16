@@ -6,6 +6,7 @@ interface UserData {
   email?: string;
   f_name?: string;
   l_name?: string;
+  _id?: string;
 }
 
 interface LoginCredentials {

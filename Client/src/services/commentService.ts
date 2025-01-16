@@ -26,11 +26,13 @@ const createComment = async (postId: string, content: string) => {
   }
 };
 
+
 const updateComment = async (content: string, commentId: string) => {
   try {
     const token = await checkToken();
     const response = await client.put<AuthResponse>(
       `/comment/${commentId}`,
+
       { content },
       {
         headers: { Authorization: `JWT ${token}` },

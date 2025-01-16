@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, onDeleteAccount }) => {
         <div className="flex flex-col items-center text-center">
           <div className="w-32 h-32 rounded-full overflow-hidden mb-4 bg-background">
             <img
-              src={profile?.picture}
+              src={"http://localhost:3000/" + profile?.picture}
               alt={profile?.f_name}
               className="w-full h-full object-cover"
             />

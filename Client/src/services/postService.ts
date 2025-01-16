@@ -1,5 +1,5 @@
 import { ApiError, checkToken, client } from "./httpClient";
-import { AuthResponse } from "./interfaceService";
+import { AuthResponse, postData } from "./interfaceService";
 import axios from "axios";
 
 const createPost = async (postData: FormData) => {
@@ -20,11 +20,12 @@ const createPost = async (postData: FormData) => {
   }
 };
 
-const likePost = async (postId: string) => { // Ensure the token is retrieved properly
+const likePost = async (postId: string) => {
+  // Ensure the token is retrieved properly
   try {
     const token = await checkToken();
     const response = await client.post(
-      `/post/${postId}/like`, 
+      `/post/${postId}/like`,
       {}, // No body needed for this request
       {
         headers: { Authorization: `JWT ${token}` }, // Correctly set headers here
@@ -40,7 +41,11 @@ const likePost = async (postId: string) => { // Ensure the token is retrieved pr
   }
 };
 
-const getAllPost = async (category: string, region: string, user: string) => {
+const getAllPost = async (
+  user: string = "",
+  category: string = "",
+  region: string = ""
+) => {
   let endpoint = "/post";
   try {
     if (category && !region) {
@@ -77,4 +82,49 @@ const getPostById = async (postId: string) => {
   }
 };
 
-export { createPost, getAllPost, likePost, getPostById };
+const updatePost = async (postId: string, postData: postData) => {
+  const token = await checkToken();
+  const formData = new FormData();
+  if (postData.title) formData.set("title", postData.title);
+  if (postData.description) formData.set("description", postData.description);
+  if (postData.category) formData.set("category", postData.category);
+  if (postData.picture) formData.set("picture", postData.picture);
+  if (postData.phone) formData.set("phone", postData.phone);
+  if (postData.region) formData.set("region", postData.region);
+  if (postData.city) formData.set("city", postData.city);
+
+  try {
+    const response = await client.put(`/post/${postId}`, formData, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Failed to update post with the error of: ", error);
+  }
+};
+
+const deletePost = async (postId: string) => {
+  const token = await checkToken();
+  try {
+    const response = await client.delete(`/post/${postId}`, {
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Failed to delete post with the error of: ", error);
+  }
+};
+export {
+  createPost,
+  getAllPost,
+  likePost,
+  getPostById,
+  updatePost,
+  deletePost,
+};
