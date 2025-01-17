@@ -36,11 +36,20 @@ const CreateAPost = () => {
   const [debouncedCity, setDebouncedCity] = useState<string>("");
   const [isCitySelected, setIsCitySelected] = useState<boolean>(false);
   const [picture, setPicture] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const handlePicture = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setPicture(e.target.files[0]);
     }
   };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setImagePreview(URL.createObjectURL(file)); // Create and set the image preview
+      handlePicture(e); // Call the original handlePicture to update the form state
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -187,14 +196,29 @@ const CreateAPost = () => {
 
         <div className="mb-4">
           <label className="block text-gray-800 font-bold mb-1">Image:</label>
+
+          {/* File input */}
           <input
             {...register("picture")}
             type="file"
-            onChange={handlePicture}
+            onChange={handleImageChange}
             className={`w-full px-4 py-2 text-lg border ${
               errors.picture ? "border-red-500" : "border-gray-300"
             } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           />
+
+          {/* Image preview */}
+          {imagePreview && (
+            <div className="mt-4 flex justify-center">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-md"
+              />
+            </div>
+          )}
+
+          {/* Error message */}
           {errors.picture && typeof errors.picture.message === "string" && (
             <p className="text-red-500 text-sm mt-1">
               {errors.picture.message}

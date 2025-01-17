@@ -16,7 +16,6 @@ const CategoryPage: React.FC<CategoryPage> = () => {
   return (
     <>
       <Header />
-      {/* Pass a key to force re-render */}
       <Grid key={normalizedCategory} category={normalizedCategory} />
       <Categories />
     </>

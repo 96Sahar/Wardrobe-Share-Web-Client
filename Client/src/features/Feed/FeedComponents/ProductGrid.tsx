@@ -93,7 +93,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   };
 
   return (
-    <div className="bg-background py-12 px-4">
+    <div className="bg-background py-4 md:py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           {category === "All" ? (
