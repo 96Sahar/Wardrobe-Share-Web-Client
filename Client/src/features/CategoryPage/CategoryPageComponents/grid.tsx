@@ -3,42 +3,43 @@ import ProductGrid from "../../Feed/FeedComponents/ProductGrid";
 import { getAllPost } from "../../../services/postService";
 import { postData } from "../../../services/interfaceService";
 
+
+
 interface GridProps {
-  category: string;
+  category:string, 
 }
 
-const Grid = ({ category }: GridProps): React.ReactElement => {
+const Grid = ({ category}: GridProps): React.ReactElement => {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [filteredProducts, setFilteredProducts] = useState<postData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Reset region when category changes
   useEffect(() => {
-    setSelectedRegion("All"); // Reset region to "All" when category changes
-  }, [category]); // Triggered when the category changes
+    setSelectedRegion("All"); 
+  }, [category]); 
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       setError(null);
+      setFilteredProducts([]); 
       try {
         const response = await getAllPost(
-          category === "All" ? "" : category,
-          selectedRegion === "All" ? "" : selectedRegion, // Send "All" for region or empty string
-          ""
+          "", 
+          category === "All" ? "" : category, 
+          selectedRegion === "All" ? "" : selectedRegion
         );
         setFilteredProducts(response.data);
       } catch (err) {
         console.error("Error fetching posts:", err);
-        setError("No products found");
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchProducts();
-  }, [category, selectedRegion]); // Fetch products when either category or region changes
+  }, [category, selectedRegion]); 
 
   if (loading) {
     return (
@@ -85,7 +86,7 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
 
       <div>
         {filteredProducts.length === 0 ? (
-          <div className="text-center text-xl text-red-500">No products found.</div>
+          <div className="text-center text-xl text-primary mt-5 p-3">No products found in this search, search for something else.</div>
         ) : (
           <ProductGrid
             key={category}

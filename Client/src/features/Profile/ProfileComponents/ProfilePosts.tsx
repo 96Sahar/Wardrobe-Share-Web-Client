@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Post } from "../../../utils/types/post";
+import { postData } from "../../../services/interfaceService";
 import Cookies from "js-cookie";
 import { deletePost, getAllPost } from "../../../services/postService";
 import { UserData } from "../../../services/interfaceService";
 import Modal from "../../../utils/UtilsComponents/Modal";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePosts: React.FC<UserData> = () => {
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const navigate = useNavigate();
+  const [userPosts, setUserPosts] = useState<postData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
@@ -29,6 +31,10 @@ const ProfilePosts: React.FC<UserData> = () => {
     setPostToDelete(null);
   };
 
+  const handleCardClick = (product: postData) => {
+    navigate(`/post/${product._id}`, { state: { product } });
+  };
+
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -46,7 +52,6 @@ const ProfilePosts: React.FC<UserData> = () => {
         setLoading(false);
       } catch (error: unknown) {
         console.error("Fetch user posts error: ", error);
-        setError("Failed to fetch user posts.");
         setLoading(false);
       }
     };
@@ -72,6 +77,7 @@ const ProfilePosts: React.FC<UserData> = () => {
               <div
                 key={post._id}
                 className="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                onClick={() => handleCardClick(post)}
               >
                 <div className="aspect-video relative">
                   <img
@@ -88,17 +94,19 @@ const ProfilePosts: React.FC<UserData> = () => {
 
                   <div className="flex items-center justify-between mt-4">
                     <span className="text-sm text-primary/60">
-                      {post.likes} {post.likes === 1 ? "Like" : "Likes"}
+                      {post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-end space-x-4 mt-4">
-                    <button className="px-3 py-1 text-mid text-white bg-blue-500 rounded hover:bg-blue-600">
+                    <button className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-md rounded-lg px-2 py-1 text-center mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
                       Edit
                     </button>
                     <button
-                      className="px-3 py-1 text-mid text-white bg-red-500 rounded hover:bg-red-600"
-                      onClick={() => setPostToDelete(post._id)}
+                      className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 text-md rounded-lg px-2 py-1 text-center mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPostToDelete(post._id)}}
                     >
                       Delete
                     </button>
@@ -108,7 +116,7 @@ const ProfilePosts: React.FC<UserData> = () => {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-primary/60">
+          <p className="text-lg text-primary/60">
             You haven't created any posts yet.
           </p>
         )}

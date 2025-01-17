@@ -20,6 +20,13 @@ const Header = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const formatPictureUrl = (picture: string) => {
+    if (picture.startsWith("uploads\\")) {
+      return `http://localhost:3000/${picture}`;
+    }
+    return picture;
+  };
+
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleNavigation = (navigation: string) => {
@@ -89,7 +96,7 @@ const Header = () => {
             className="items-center cursor-pointer"
             onClick={() => handleNavigation("likedItems")}
           >
-            <Heart className="h-7 inline-flex m-1" />
+            <Heart className="h-7 inline-flex m-1 color-red" />
             <h2 className="text-xl inline-flex m-1 items-center">
               Your liked items
             </h2>
@@ -106,9 +113,7 @@ const Header = () => {
               user.picture ? (
                 <img
                   className="h-7 w-7 inline-flex m-1 rounded-full"
-                  src={
-                    user.picture ? "http://localhost:3000/" + user.picture : ""
-                  }
+                  src={formatPictureUrl(user.picture)}
                   alt={user.fullname}
                 />
               ) : null
@@ -207,7 +212,7 @@ const Header = () => {
                   setIsMenuOpen(false);
                 }}
               >
-                <Heart className="h-7 inline-flex m-1" />
+                <Heart className="h-7 inline-flex m-1"/>
                 <h2 className="text-lg inline-flex m-1 items-center">
                   Your liked items
                 </h2>

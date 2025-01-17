@@ -5,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   profile?: UserProfile;
-  onEditProfile: () => void;
   onDeleteAccount: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ profile, onDeleteAccount }) => {
+  const formatPictureUrl = (picture: string) => {
+    if (picture.startsWith("uploads\\")) {
+      return `http://localhost:3000/${picture}`;
+    }
+    return picture;
+  };
   const navigate = useNavigate();
   return (
     <div className="w-full md:w-80 shrink-0">
@@ -17,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile, onDeleteAccount }) => {
         <div className="flex flex-col items-center text-center">
           <div className="w-32 h-32 rounded-full overflow-hidden mb-4 bg-background">
             <img
-              src={"http://localhost:3000/" + profile?.picture}
+              src={profile?.picture ? formatPictureUrl(profile?.picture) : ""}
               alt={profile?.f_name}
               className="w-full h-full object-cover"
             />
