@@ -12,6 +12,7 @@ const CategoryPage: React.FC<CategoryPage> = () => {
   const { category } = useParams<{ category: string }>();
   const normalizedCategory = category ? category.toLowerCase() : "All";
 
+
   return (
     <>
       <Header />

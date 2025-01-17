@@ -41,6 +41,13 @@ const EditProfile: React.FC = () => {
     },
   });
 
+  const formatPictureUrl = (picture: string) => {
+    if (picture.startsWith("uploads\\")) {
+      return `http://localhost:3000/${picture}`;
+    }
+    return picture;
+  };
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -140,7 +147,7 @@ const EditProfile: React.FC = () => {
                     id="preview-image"
                     src={
                       typeof value === "string"
-                        ? "http://localhost:3000/" + value
+                        ? formatPictureUrl(value)
                         : value instanceof File
                         ? URL.createObjectURL(value)
                         : ""

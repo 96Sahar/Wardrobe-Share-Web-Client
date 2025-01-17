@@ -82,6 +82,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCoun
     fetchComments();
   }, [postId]);
 
+  const formatPictureUrl = (picture: string) => {
+    if (picture.startsWith("uploads\\")) {
+      return `http://localhost:3000/${picture}`;
+    }
+    return picture;
+  };
+
 
   const handleAddComment = async () => {
     try {
@@ -176,7 +183,7 @@ const handleDeleteComment = async (commentId: string) => {
             className="flex items-start sm:items-center space-x-3 sm:space-x-4"
           >
             <img
-              src={comment.picture || icon}
+              src={formatPictureUrl(comment.picture || icon)} // Add default icon              
               alt={comment.fullname}
               className="w-10 h-10 rounded-full"
             />
@@ -237,7 +244,7 @@ const handleDeleteComment = async (commentId: string) => {
         {userData && (
           <div className="flex items-center space-x-4">
             <img
-              src={userData.picture || icon}
+              src={formatPictureUrl(userData.picture || icon)}
               alt="User"
               className="w-12 h-12 rounded-full"
             />
