@@ -170,11 +170,13 @@ const Header = () => {
                 }
               >
                 {user ? (
-                  <img
-                    className="h-6 inline-flex m-1 rounded-full w-6"
-                    src={user.picture}
-                    alt={user.fullname}
-                  />
+                  user.picture ? (
+                    <img
+                      className="h-7 w-7 inline-flex m-1 rounded-full"
+                      src={formatPictureUrl(user.picture)}
+                      alt={user.fullname}
+                    />
+                  ) : null
                 ) : (
                   <UserRound className="h-6 w-7 inline-flex m-1" />
                 )}
@@ -212,7 +214,7 @@ const Header = () => {
                   setIsMenuOpen(false);
                 }}
               >
-                <Heart className="h-7 inline-flex m-1"/>
+                <Heart className="h-7 inline-flex m-1" />
                 <h2 className="text-lg inline-flex m-1 items-center">
                   Your liked items
                 </h2>

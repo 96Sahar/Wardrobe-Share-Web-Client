@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductGrid from "../../Feed/FeedComponents/ProductGrid";
 import { getAllPost } from "../../../services/postService";
 import { postData } from "../../../services/interfaceService";
+import LoadingSpinner from "../../../utils/UtilsComponents/LoadingSpinner";
 
 
 
@@ -43,9 +44,7 @@ const Grid = ({ category}: GridProps): React.ReactElement => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        Loading...
-      </div>
+      <LoadingSpinner />
     );
   }
 

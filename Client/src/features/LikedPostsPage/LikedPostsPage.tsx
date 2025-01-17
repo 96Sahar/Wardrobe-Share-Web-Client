@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { getUserByToken } from "../../services/userService";
 import { getPostById } from "../../services/postService"; // New function to fetch a post by ID
 import { postData } from "../../services/interfaceService";
+import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
 const LikedPostsPage = () => {
   const [likedPosts, setLikedPosts] = useState<postData[]>([]);
@@ -37,14 +38,14 @@ const LikedPostsPage = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading liked posts...</p>;
+    return <LoadingSpinner />;
   }
 
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
-      <div className="max-w-7xl mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-6 text-primary">Liked Posts</h1>
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold text-primary">Liked Posts:</h1>
         {likedPosts.length > 0 ? (
           <ProductGrid
             category="Liked"
