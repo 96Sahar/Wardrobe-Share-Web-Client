@@ -1,5 +1,5 @@
 import Header from "../../utils/UtilsComponents/Header";
-import CreatePost from "./createPostComponents/CreateAPost";
+import CreatePost from "./createPostComponents/CreateOrEditPost";
 
 const CreatePostPage = () => {
   return (

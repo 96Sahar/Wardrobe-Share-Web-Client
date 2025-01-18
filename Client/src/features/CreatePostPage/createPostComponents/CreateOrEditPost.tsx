@@ -3,11 +3,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import Button from "../../../utils/UtilsComponents/Button";
 import { AuthResponse } from "../../../services/interfaceService";
-import { createPost as createPostApi } from "../../../services/postService";
+import {
+  createPost as createPostApi,
+  updatePost as updatePostApi,
+  getPostById as getPostApi,
+} from "../../../services/postService";
 import React from "react";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface City {
   objectId: string;
@@ -27,8 +32,14 @@ const schema = z.object({
 });
 
 type PostFormFields = z.infer<typeof schema>;
-const CreateAPost = () => {
+
+const CreateOrEditPost = () => {
+  // Inside CreateOrEditPost
   const navigate = useNavigate();
+
+  // Inside CreateOrEditPost
+  const { postId } = useParams();
+  console.log(postId);
 
   const [city, setCity] = useState<string>("");
   const [suggestions, setSuggestions] = useState<City[]>([]);
@@ -37,18 +48,6 @@ const CreateAPost = () => {
   const [isCitySelected, setIsCitySelected] = useState<boolean>(false);
   const [picture, setPicture] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const handlePicture = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setPicture(e.target.files[0]);
-    }
-  };
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      setImagePreview(URL.createObjectURL(file)); // Create and set the image preview
-      handlePicture(e); // Call the original handlePicture to update the form state
-    }
-  };
 
   const {
     register,
@@ -58,6 +57,49 @@ const CreateAPost = () => {
   } = useForm<PostFormFields>({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      console.log(postId);
+      if (postId) {
+        console.log("postId in CreateOrEditPost component: ", postId);
+        try {
+          const postData = await getPostApi(postId);
+          console.log("Post Data: ", postData);
+          setValue("title", postData.title);
+          setValue("description", postData.description);
+          setValue("category", postData.category);
+          setValue("phone", postData.phone);
+          setValue("region", postData.region);
+          setCity(postData.city);
+          setValue("city", postData.city);
+          if (postData.picture) {
+            console.log("postData picture: ", postData.picture);
+            setImagePreview("http://localhost:3000/" + postData.picture);
+            setValue("picture", postData.picture);
+          }
+        } catch (error) {
+          console.error("Error fetching post data:", error);
+        }
+      }
+    };
+
+    fetchPostData();
+  }, [postId, setValue]);
+
+  const handlePicture = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setPicture(e.target.files[0]);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setImagePreview(URL.createObjectURL(file));
+      handlePicture(e);
+    }
+  };
 
   const onSubmit: SubmitHandler<PostFormFields> = async (data) => {
     try {
@@ -72,23 +114,28 @@ const CreateAPost = () => {
       formData.append("region", data.region);
       formData.append("city", data.city);
 
-      const response: AuthResponse | undefined = await createPostApi(formData);
-      console.log("Post submitted successfully:", response);
+      let response: AuthResponse | undefined;
+      if (postId) {
+        response = await updatePostApi(postId, formData);
+        console.log("Post updated successfully:", response);
+      } else {
+        response = await createPostApi(formData);
+        console.log("Post created successfully:", response);
+      }
 
-      // Navigate to the feed page
       navigate("/");
     } catch (error) {
-      console.log("Post Creation error:", error);
+      console.log("Post Creation/Edit error:", error);
     }
   };
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedCity(city);
-    }, 300); // 300ms debounce delay
+    }, 300);
 
     return () => {
-      clearTimeout(handler); // Cleanup timeout on each re-render
+      clearTimeout(handler);
     };
   }, [city]);
 
@@ -135,7 +182,7 @@ const CreateAPost = () => {
 
   const handleSuggestionClick = (suggestion: City): void => {
     setCity(suggestion.name);
-    setValue("city", suggestion.name); // Update the form value
+    setValue("city", suggestion.name);
     setIsCitySelected(true);
     setSuggestions([]);
   };
@@ -144,7 +191,7 @@ const CreateAPost = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
     setCity(e.target.value);
-    setValue("city", e.target.value); // Update the form value
+    setValue("city", e.target.value);
     setIsCitySelected(false);
   };
 
@@ -155,10 +202,12 @@ const CreateAPost = () => {
     >
       <div className="rounded-lg p-6 sm:p-8 md:p-10 lg:w-3/4 shadow-2xl w-full max-w-2xl">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          What is your item?
+          {postId ? "Edit your item" : "What is your item?"}
         </h1>
         <h2 className="text-gray-600 mt-2 mb-6 text-base sm:text-lg">
-          Fill in all the details below to upload your item.
+          {postId
+            ? "Update the details of your item."
+            : "Fill in all the details below to upload your item."}
         </h2>
 
         <div className="mb-4">
@@ -196,8 +245,6 @@ const CreateAPost = () => {
 
         <div className="mb-4">
           <label className="block text-gray-800 font-bold mb-1">Image:</label>
-
-          {/* File input */}
           <input
             {...register("picture")}
             type="file"
@@ -206,19 +253,15 @@ const CreateAPost = () => {
               errors.picture ? "border-red-500" : "border-gray-300"
             } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
           />
-
-          {/* Image preview */}
           {imagePreview && (
             <div className="mt-4 flex justify-center">
               <img
-                src={imagePreview}
+                src={imagePreview || "/placeholder.svg"}
                 alt="Preview"
                 className="w-32 h-32 object-cover rounded-md"
               />
             </div>
           )}
-
-          {/* Error message */}
           {errors.picture && typeof errors.picture.message === "string" && (
             <p className="text-red-500 text-sm mt-1">
               {errors.picture.message}
@@ -346,7 +389,11 @@ const CreateAPost = () => {
           buttonType="submit"
           className={isSubmitting ? "disabled" : "flex mx-auto mt-6"}
         >
-          {isSubmitting ? "Submitting..." : "Upload item"}
+          {isSubmitting
+            ? "Submitting..."
+            : postId
+            ? "Update item"
+            : "Upload item"}
         </Button>
 
         {errors.root && (
@@ -357,4 +404,4 @@ const CreateAPost = () => {
   );
 };
 
-export default CreateAPost;
+export default CreateOrEditPost;

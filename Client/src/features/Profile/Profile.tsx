@@ -17,7 +17,6 @@ const Profile: React.FC = () => {
         setIsLoading(true);
         checkToken();
         const userData = await getUserByToken();
-        console.log("User data:", userData);
 
         setUserProfile({
           f_name: userData.f_name,
@@ -37,10 +36,6 @@ const Profile: React.FC = () => {
     fetchUserInfo();
   }, []);
 
-  const onDelete = () => {
-    console.log("Delete account clicked");
-  };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -57,11 +52,8 @@ const Profile: React.FC = () => {
     <div>
       <Header />
       <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
-        <Sidebar
-          profile={userProfile}
-          onDeleteAccount={onDelete}
-        />
-        <ProfilePosts/>
+        <Sidebar profile={userProfile} />
+        <ProfilePosts />
       </div>
     </div>
   );

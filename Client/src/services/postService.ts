@@ -1,5 +1,5 @@
 import { ApiError, checkToken, client } from "./httpClient";
-import { AuthResponse, postData } from "./interfaceService";
+import { AuthResponse } from "./interfaceService";
 import axios from "axios";
 
 const createPost = async (postData: FormData) => {
@@ -82,19 +82,11 @@ const getPostById = async (postId: string) => {
   }
 };
 
-const updatePost = async (postId: string, postData: postData) => {
+const updatePost = async (postId: string, postData: FormData) => {
   const token = await checkToken();
-  const formData = new FormData();
-  if (postData.title) formData.set("title", postData.title);
-  if (postData.description) formData.set("description", postData.description);
-  if (postData.category) formData.set("category", postData.category);
-  if (postData.picture) formData.set("picture", postData.picture);
-  if (postData.phone) formData.set("phone", postData.phone);
-  if (postData.region) formData.set("region", postData.region);
-  if (postData.city) formData.set("city", postData.city);
 
   try {
-    const response = await client.put(`/post/${postId}`, formData, {
+    const response = await client.put(`/post/${postId}`, postData, {
       headers: {
         Authorization: `JWT ${token}`,
         "Content-Type": "multipart/form-data",
@@ -103,9 +95,9 @@ const updatePost = async (postId: string, postData: postData) => {
     return response.data;
   } catch (error) {
     console.log("Failed to update post with the error of: ", error);
+    throw error; // Re-throw the error so it can be handled by the caller
   }
 };
-
 const deletePost = async (postId: string) => {
   const token = await checkToken();
   try {

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { register as registerApi } from "../../../services/userService";
 import { UserData, AuthResponse } from "../../../services/interfaceService";
+import { toast } from "react-toastify";
 const schema = z
   .object({
     f_name: z.string().min(2, "First name must be at least 2 characters"),
@@ -61,9 +62,13 @@ const Register = () => {
       };
       const response: AuthResponse = await registerApi(userData);
       console.log("Registration successful:", response);
+      toast.success("User Created!");
       setRegistrationSuccess(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error: unknown) {
-      console.error("Registration error:", error);
+      toast.error("Registration failed");
       setRegistrationError(
         error instanceof Error
           ? error.message
@@ -192,7 +197,9 @@ const Register = () => {
         </Button>
 
         {registrationError && (
-          <div className="text-red-500">{registrationError}</div>
+          <div className="text-red-500 text-center text-xl">
+            {registrationError}
+          </div>
         )}
         {registrationSuccess && (
           <div className="text-green-500">
