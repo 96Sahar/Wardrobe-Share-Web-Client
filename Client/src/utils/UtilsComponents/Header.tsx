@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
 import { getUserById as getUserByIdAPI } from "../../services/userService";
 import { logout } from "../../services/userService";
+import userPlaceholder from "../../assets/user.png"; // Renamed to avoid conflict with state
 
 const Header = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Header = () => {
     const checkToken = Cookies.get("authToken");
 
     if (!checkToken) {
-      if (navigation != "loginAndRegistration") {
+      if (navigation !== "loginAndRegistration") {
         toast.error(`Must be logged in for that action!`);
       }
       navigate("/loginAndRegistration");
@@ -109,13 +110,15 @@ const Header = () => {
             }
           >
             {user ? (
-              user.picture ? (
-                <img
-                  className="h-7 w-7 inline-flex m-1 rounded-full"
-                  src={formatPictureUrl(user.picture)}
-                  alt={user.fullname}
-                />
-              ) : null
+              <img
+                className="h-7 w-7 inline-flex m-1 rounded-full"
+                src={
+                  user.picture
+                    ? formatPictureUrl(user.picture)
+                    : userPlaceholder
+                }
+                alt={user.fullname}
+              />
             ) : (
               <UserRound className="h-7 inline-flex m-1" />
             )}
@@ -168,17 +171,15 @@ const Header = () => {
                     : () => navigate("/loginAndRegistration")
                 }
               >
-                {user ? (
-                  user.picture ? (
-                    <img
-                      className="h-7 w-7 inline-flex m-1 rounded-full"
-                      src={formatPictureUrl(user.picture)}
-                      alt={user.fullname}
-                    />
-                  ) : null
-                ) : (
-                  <UserRound className="h-6 w-7 inline-flex m-1" />
-                )}
+                <img
+                  className="h-7 w-7 inline-flex m-1 rounded-full"
+                  src={
+                    user?.picture
+                      ? formatPictureUrl(user.picture)
+                      : userPlaceholder
+                  }
+                  alt={user ? user.fullname : "User"}
+                />
                 <h2 className="text-lg inline-flex m-1 items-center">
                   {user ? `${user.fullname}` : "Sign in"}
                 </h2>

@@ -66,7 +66,7 @@ const Register = () => {
       setRegistrationSuccess(true);
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1500);
     } catch (error: unknown) {
       toast.error("Registration failed");
       setRegistrationError(

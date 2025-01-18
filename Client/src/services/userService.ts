@@ -42,11 +42,11 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
       sameSite: "strict",
     });
     return response.data;
-  } catch (error: unknown) {
-    if (error instanceof ApiError && error.response?.data) {
-      throw error.response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data;
     }
-    throw "An error occurred during the operation";
+    throw error;
   }
 };
 
@@ -99,32 +99,31 @@ const getUserById = async (userId: string) => {
 const updateUserProfile = async (
   userData: Partial<UserData>
 ): Promise<AuthResponse> => {
+  const token = Cookies.get("authToken");
+  if (!token) {
+    throw new Error("No authentication token found");
+  }
+
+  const formData = new FormData();
+  if (userData.username) formData.append("username", userData.username);
+  if (userData.f_name) formData.append("f_name", userData.f_name);
+  if (userData.l_name) formData.append("l_name", userData.l_name);
+  if (userData.picture) formData.append("picture", userData.picture);
+
   try {
-    const token = Cookies.get("authToken");
-    if (!token) {
-      throw new Error("No authentication token found");
-    }
-
-    const formData = new FormData();
-    if (userData.username) formData.append("username", userData.username);
-    if (userData.f_name) formData.append("f_name", userData.f_name);
-    if (userData.l_name) formData.append("l_name", userData.l_name);
-    if (userData.picture) formData.append("picture", userData.picture);
-
     const response = await client.put<AuthResponse>("/user/update", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
       },
     });
-
     return response.data;
-  } catch (error: unknown) {
-    console.error("Error in updateUserProfile:", error);
-    if (error instanceof ApiError && error.response?.data) {
-      throw error.response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data;
     }
-    throw new Error("An error occurred while updating the user profile");
+
+    throw error;
   }
 };
 
