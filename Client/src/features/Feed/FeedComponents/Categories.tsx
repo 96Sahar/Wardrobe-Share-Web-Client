@@ -14,8 +14,6 @@ interface Category {
   name: string;
 }
 
-
-
 const categories: Category[] = [
   { icon: Shirt, name: "Tops" },
   { icon: Jeans, name: "Bottoms" },

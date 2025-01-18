@@ -64,7 +64,6 @@ const Header = () => {
       const parsedId = JSON.parse(id);
       getUserByIdAPI(parsedId._id)
         .then((userInfo) => {
-          console.log("Fetched user data:", userInfo); // Add this for debugging
           setUser(userInfo);
         })
         .catch((error) => {

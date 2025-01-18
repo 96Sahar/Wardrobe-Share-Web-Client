@@ -5,6 +5,7 @@ import {
   AuthResponse,
 } from "../../../services/interfaceService";
 import { login as loginApi } from "../../../services/userService";
+import { toast } from "react-toastify";
 
 interface LoginProps {
   loginData: LoginCredentials;
@@ -25,9 +26,11 @@ const Login: React.FC<LoginProps> = ({
       setLoginError(null);
       const response: AuthResponse = await loginApi(loginData);
       console.log("Login successful:", response);
+      toast.success("Logged in");
       onLoginSuccess(response);
     } catch (error: unknown) {
       console.error("Login error:", error);
+      toast.error("Login failed");
       setLoginError(
         error instanceof Error
           ? error.message

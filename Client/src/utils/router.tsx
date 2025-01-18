@@ -18,7 +18,7 @@ const Router = () => {
       <Route path="/categoryPage" element={<CategoryPage />} />
       <Route path="/Profile" element={<Profile />} />
       <Route path="/editProfile" element={<EditProfile />} />
-      <Route path="/CreatePost" element={<CreatePostPage />} />
+      <Route path="/CreatePost/:postId?" element={<CreatePostPage />} />
       <Route path="/post/:postId" element={<PostPage />} />
     </Routes>
   );

@@ -14,6 +14,13 @@ const ProfilePosts: React.FC<UserData> = () => {
   const [error, setError] = useState<string | null>(null);
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
+  const handleEditPost = (postId: string, event: React.MouseEvent) => {
+    console.log("postId in handleEditPost", postId);
+    event.stopPropagation();
+
+    navigate(`/CreatePost/${postId}`, { state: { postId } });
+  };
+
   const handleDeletePost = async (postId: string) => {
     try {
       const response = await deletePost(postId);
@@ -94,19 +101,25 @@ const ProfilePosts: React.FC<UserData> = () => {
 
                   <div className="flex items-center justify-between mt-4">
                     <span className="text-sm text-primary/60">
-                      {post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+                      {post.likes.length}{" "}
+                      {post.likes.length === 1 ? "Like" : "Likes"}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-end space-x-4 mt-4">
-                    <button className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-md rounded-lg px-2 py-1 text-center mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                    <button
+                      className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-md rounded-lg px-2 py-1 text-center mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                      onClick={(e) => handleEditPost(post._id, e)}
+                    >
                       Edit
                     </button>
                     <button
                       className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 text-md rounded-lg px-2 py-1 text-center mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setPostToDelete(post._id)}}
+                        console.log("postId: ", post._id);
+                        setPostToDelete(post._id);
+                      }}
                     >
                       Delete
                     </button>

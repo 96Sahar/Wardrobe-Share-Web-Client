@@ -75,7 +75,6 @@ const getUserByToken = async () => {
     const response = await client.get("/user/auth/settings", {
       headers: { Authorization: `JWT ${token}` },
     });
-    console.log(response.data);
     return response.data;
   } catch (error: unknown) {
     console.error("Error in getUserByToken:", error);
@@ -129,6 +128,22 @@ const updateUserProfile = async (
   }
 };
 
+const deleteUser = async () => {
+  const token = checkToken();
+  if (!token) {
+    throw new Error("User is not authenticated!");
+  }
+  const refreshToken = Cookies.get("refreshToken");
+  try {
+    const response = await client.delete("/user/delete", {
+      headers: { Authorization: `JWT ${refreshToken}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   register,
   login,
@@ -136,4 +151,5 @@ export {
   getUserByToken,
   logout,
   updateUserProfile,
+  deleteUser,
 };

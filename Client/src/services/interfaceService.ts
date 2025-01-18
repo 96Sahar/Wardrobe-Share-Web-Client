@@ -25,7 +25,7 @@ interface AuthResponse {
   picture?: string;
 }
 interface postData {
-  _id: string;
+  postId: string;
   picture: string;
   description: string;
   title: string;
@@ -35,7 +35,7 @@ interface postData {
   phone: string;
   region: string;
   city: string;
-  user: string;
+  userId: string;
 }
 
 export type { UserData, LoginCredentials, AuthResponse, postData };
