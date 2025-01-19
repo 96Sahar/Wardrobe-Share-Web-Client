@@ -27,7 +27,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   };
 
   const handleCardClick = (product: postData) => {
-    navigate(`/post/${product._id}`, { state: { product } });
+    navigate(`/post/${product._id}`);
   };
 
   category = category.charAt(0).toUpperCase() + category.slice(1);
@@ -108,7 +108,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
             </Button>
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
               key={product._id}

@@ -13,10 +13,10 @@ interface User {
 
 interface PostProps {
   product: postData;
-  commentsCount: number; 
+  commentsCount: number;
 }
 
-const PostDetails: React.FC<PostProps> = ({ product, commentsCount}) => {
+const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(product.likes.length);
@@ -121,7 +121,9 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount}) => {
       {/* Content */}
       <div className="p-6">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">{product.title}</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          {product.title}
+        </h1>
 
         {/* Description */}
         <p className="text-gray-600 font-bold text-lg mb-2">About the item:</p>
@@ -131,16 +133,18 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount}) => {
         <p className="text-gray-600 font-bold text-lg mb-2">Item details:</p>
         <div className="space-y-4 text-gray-700 text-base">
           <p>
-            <span className="font-bold">Category:</span> {product.category}
+            <span className="font-bold">Category:</span>{"  "}
+            {product.category.charAt(0).toUpperCase() +
+              product.category.slice(1)}
           </p>
           <p>
-            <span className="font-bold">Phone:</span> {product.phone}
+            <span className="font-bold">Phone:</span>  {product.phone}
           </p>
           <p>
-            <span className="font-bold">Region:</span> {product.region}
+            <span className="font-bold">Region:</span>  {product.region}
           </p>
           <p>
-            <span className="font-bold">City:</span> {product.city}
+            <span className="font-bold">City:</span>  {product.city}
           </p>
         </div>
 
@@ -153,7 +157,9 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount}) => {
               alt={lister.fullname}
               className="w-12 h-12 rounded-full object-cover"
             />
-            <p className="ml-4 text-gray-800 font-semibold">{lister.fullname}</p>
+            <p className="ml-4 text-gray-800 font-semibold">
+              {lister.fullname}
+            </p>
           </div>
         ) : (
           <p className="text-gray-600 mt-2">Loading lister details...</p>
