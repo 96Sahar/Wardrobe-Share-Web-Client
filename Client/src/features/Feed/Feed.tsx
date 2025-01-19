@@ -3,57 +3,55 @@ import Header from "../../utils/UtilsComponents/Header";
 import SearchSection from "./FeedComponents/SearchSection";
 import Categories from "./FeedComponents/Categories";
 import ProductGrid from "./FeedComponents/ProductGrid";
-import { getAllPost } from "../../services/postService";
+import { getFeedPosts } from "../../services/postService";
 import { postData } from "../../services/interfaceService";
 
 const Feed: React.FC = () => {
-
-  const [filteredProducts, setFilteredProducts] = useState<postData[]>([]);
   const [groupedProducts, setGroupedProducts] = useState<
     Record<string, postData[]>
   >({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getAllPost("", "", "");
-        setFilteredProducts(response.data);
+        setLoading(true);
+        const response = await getFeedPosts(); // Backend already returns grouped data
+        setGroupedProducts(response);
+        setError(null);
       } catch (err) {
         console.error("Error fetching posts:", err);
+        setError("Failed to load posts. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const groupedProducts = filteredProducts.reduce(
-      (acc: Record<string, postData[]>, product: postData) => {
-        if (!acc[product.category]) {
-          acc[product.category] = [];
-        }
-        acc[product.category].push(product);
-        return acc;
-      },
-      {}
-    );
-    setGroupedProducts(groupedProducts);
-  }, [filteredProducts]);
-
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <SearchSection />
       <Categories />
-      {Object.entries(groupedProducts).map(([category, products]) => (
-        <ProductGrid
-          key={category}
-          category={category}
-          products={products.slice(0, 4)}
-          isCategoryPage={false}
-        />
-      ))}
+      {loading ? (
+        <div className="text-center text-lg text-primary mt-5 p-3">
+          Loading posts...
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500 mt-5 p-3">{error}</div>
+      ) : (
+        Object.entries(groupedProducts).map(([category, products]) => (
+          <ProductGrid
+            key={category}
+            category={category}
+            products={products} // Backend already limits to 4 posts
+            isCategoryPage={false}
+          />
+        ))
+      )}
     </div>
   );
 };

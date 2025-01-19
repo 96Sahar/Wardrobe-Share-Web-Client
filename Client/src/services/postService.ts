@@ -41,27 +41,40 @@ const likePost = async (postId: string) => {
   }
 };
 
+const getFeedPosts = async () => {
+  try {
+    const response = await client.get(`/post/feed`);
+    return response.data;
+  } catch (error) {
+    if (error instanceof ApiError && error.response?.data) {
+      throw error.response.data;
+    }
+    throw "An error occurred during the operation";
+  }
+};
+
 const getAllPost = async (
   user: string = "",
   category: string = "",
-  region: string = ""
+  region: string = "",
+  page: number = 1,
+  limit: number = 20
 ) => {
-  let endpoint = "/post";
+  let endpoint = `/post?page=${page}&limit=${limit}`;
+
   try {
-    if (category && !region) {
-      endpoint = `/post?category=${category}`;
+    if (category) {
+      endpoint += `&category=${category}`;
     }
-    if (category && region) {
-      endpoint = `/post?category=${category}&region=${region}`;
-    }
-    if (!category && region) {
-      endpoint = `/post?region=${region}`;
+    if (region) {
+      endpoint += `&region=${region}`;
     }
     if (user) {
-      endpoint = `/post?user=${user}`;
+      endpoint += `&user=${user}`;
     }
+
     const response = await client.get(endpoint);
-    return response;
+    return response.data; // Adjust to match new response format
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data as string);
@@ -69,6 +82,7 @@ const getAllPost = async (
     throw new Error("Unknown error when trying to get a post");
   }
 };
+
 
 const getPostById = async (postId: string) => {
   try {
@@ -119,4 +133,5 @@ export {
   getPostById,
   updatePost,
   deletePost,
+  getFeedPosts,
 };

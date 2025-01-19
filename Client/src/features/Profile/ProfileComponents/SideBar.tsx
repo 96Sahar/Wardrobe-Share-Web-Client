@@ -4,6 +4,7 @@ import { UserProfile } from "../../../utils/types/profile";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../../services/userService";
 import Modal from "../../../utils/UtilsComponents/Modal";
+import icon from "../../../assets/user.png";
 
 interface SidebarProps {
   profile?: UserProfile;
@@ -41,9 +42,11 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="flex items-center justify-center w-full h-full text-center">
-                  Missing profile picture
-                </div>
+                <img
+                  src={icon}
+                  alt={profile?.f_name}
+                  className="w-full h-full object-cover"
+                />
               )}
             </div>
             <h2 className="text-xl font-bold text-primary mb-3">

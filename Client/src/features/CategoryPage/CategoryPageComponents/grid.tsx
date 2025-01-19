@@ -4,49 +4,85 @@ import { getAllPost } from "../../../services/postService";
 import { postData } from "../../../services/interfaceService";
 import LoadingSpinner from "../../../utils/UtilsComponents/LoadingSpinner";
 
-
-
 interface GridProps {
-  category:string, 
+  category: string;
 }
 
-const Grid = ({ category}: GridProps): React.ReactElement => {
+const Grid = ({ category }: GridProps): React.ReactElement => {
   const [selectedRegion, setSelectedRegion] = useState("All");
-  const [filteredProducts, setFilteredProducts] = useState<postData[]>([]);
+  const [products, setProducts] = useState<postData[]>([]);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [noResults, setNoResults] = useState(false); // Track no results state
+  const [error, setError] = useState<string | null>(null); // Track error state
 
   useEffect(() => {
-    setSelectedRegion("All"); 
-  }, [category]); 
+    // Reset state on category or region change
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
+    setNoResults(false);
+    setError(null);
+  }, [category, selectedRegion]);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if(noResults) return; // Don't fetch if no results
       setLoading(true);
       setError(null);
-      setFilteredProducts([]); 
+
       try {
         const response = await getAllPost(
-          "", 
-          category === "All" ? "" : category, 
-          selectedRegion === "All" ? "" : selectedRegion
+          "",
+          category === "All" ? "" : category,
+          selectedRegion === "All" ? "" : selectedRegion,
+          page,
+          20
         );
-        setFilteredProducts(response.data);
+        const newProducts = response.data;
+
+        if (newProducts.length === 0 && page === 1) {
+          // No results on the first page
+          setNoResults(true);
+        } else if (newProducts.length > 0) {
+          setProducts((prev) => {
+            const uniqueProducts = newProducts.filter(
+              (product: postData) => !prev.some((p) => p._id === product._id)
+            );
+            return [...prev, ...uniqueProducts];
+          });
+          setNoResults(false); // Reset noResults if we get data
+        }
+
+        if (newProducts.length < 20) setHasMore(false); // No more pages
       } catch (err) {
+        setNoResults(true);
         console.error("Error fetching posts:", err);
       } finally {
         setLoading(false);
       }
     };
-  
-    fetchProducts();
-  }, [category, selectedRegion]); 
 
-  if (loading) {
-    return (
-      <LoadingSpinner />
-    );
-  }
+    fetchProducts();
+  }, [category, selectedRegion, page]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 100
+    ) {
+      if (!loading && hasMore && !noResults && !error) {
+        setPage((prevPage) => prevPage + 1); // Load the next page
+      }
+    }
+  };
+
+  useEffect(() => {
+    if(noResults) return; 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMore, noResults, error]);
 
   if (error) {
     return (
@@ -70,7 +106,14 @@ const Grid = ({ category}: GridProps): React.ReactElement => {
             id="region"
             className="mt-1 block w-full rounded-md text-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-1"
             value={selectedRegion}
-            onChange={(e) => setSelectedRegion(e.target.value)}
+            onChange={(e) => {
+              setSelectedRegion(e.target.value);
+              setProducts([]);
+              setPage(1);
+              setHasMore(true);
+              setNoResults(false);
+              setError(null);
+            }}
           >
             <option value="All">All Regions</option>
             <option value="HaMerkaz">HaMerkaz</option>
@@ -84,15 +127,27 @@ const Grid = ({ category}: GridProps): React.ReactElement => {
       </div>
 
       <div>
-        {filteredProducts.length === 0 ? (
-          <div className="text-center text-xl text-primary mt-5 p-3">No products found in this search, search for something else.</div>
+        {noResults ? (
+          <div className="text-center text-xl text-primary mt-5 p-3">
+            No items fit this search. Try a different filter or category.
+          </div>
+        ) : products.length === 0 && !loading ? (
+          <div className="text-center text-xl text-primary mt-5 p-3">
+            No products found in this search, search for something else.
+          </div>
         ) : (
           <ProductGrid
             key={category}
             category={category}
-            products={filteredProducts}
+            products={products}
             isCategoryPage={true}
           />
+        )}
+        {loading && <LoadingSpinner />}
+        {!hasMore && !noResults && (
+          <div className="text-center text-lg text-primary mt-5 p-3">
+            No more products to load.
+          </div>
         )}
       </div>
     </div>

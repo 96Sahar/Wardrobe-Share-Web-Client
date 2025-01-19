@@ -35,7 +35,7 @@ const LikedPostsPage = () => {
     };
 
     fetchLikedPosts();
-  }, []);
+  }, [likedPosts]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -53,7 +53,7 @@ const LikedPostsPage = () => {
             isCategoryPage={true}
           />
         ) : (
-          <p className="text-center text-primary/60">
+          <p className="text-center text-primary/60 mt-6 text-lg"> 
             You have no liked posts yet.
           </p>
         )}
