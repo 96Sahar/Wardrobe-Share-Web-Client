@@ -32,9 +32,11 @@ const Login: React.FC<LoginProps> = ({
       console.error("Login error:", error);
       toast.error("Login failed");
       setLoginError(
-        error instanceof Error
+        typeof error === "string"
+          ? error
+          : error instanceof Error
           ? error.message
-          : "An error occurred during login"
+          : "An error occurred during edit"
       );
     }
   };

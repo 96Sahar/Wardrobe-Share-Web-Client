@@ -7,21 +7,34 @@ import { Camera, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getUserByToken, updateUserProfile } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
+import { toast } from "react-toastify";
+import userIcon from "../../assets/user.png";
 
-// Zod schema for form validation
+// Updated Zod schema to require picture
 const profileSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters long."),
   f_name: z.string().min(2, "First name must be at least 2 characters."),
   l_name: z.string().min(2, "Last name must be at least 2 characters."),
-  picture: z.union([z.string(), z.instanceof(File)]).optional(),
+  picture: z.union([z.string(), z.instanceof(File), z.null()]).refine(
+    (val) =>
+      val !== null && // Prevent null values
+      ((typeof val === "string" && val.trim().length > 0) ||
+        val instanceof File),
+    {
+      message: "An image is required",
+    }
+  ),
 });
 
+console.log("userIcon: ", userIcon);
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const EditProfile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -70,28 +83,65 @@ const EditProfile: React.FC = () => {
   }, [setValue]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
-    try {
-      // Prepare the payload for update
-      const updatePayload: any = {
-        username: data.username,
-        f_name: data.f_name,
-        l_name: data.l_name,
-      };
+    setImageError(null);
 
-      if (data.picture) {
-        updatePayload.picture = data.picture;
+    // Check if picture is empty or undefined
+    if (
+      !data.picture ||
+      (typeof data.picture === "string" && !data.picture.trim())
+    ) {
+      setImageError("Profile picture is required");
+      return;
+    }
+
+    try {
+      // Create FormData if we have a File object
+      if (data.picture instanceof File) {
+        const formData = new FormData();
+        formData.append("picture", data.picture);
+        // First upload the image and get back the URL
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const { imageUrl } = await uploadResponse.json();
+
+        // Now update the profile with the image URL
+        const updatePayload = {
+          username: data.username,
+          f_name: data.f_name,
+          l_name: data.l_name,
+          picture: imageUrl, // Use the URL from the upload response
+        };
+
+        const updatedProfile = await updateUserProfile(updatePayload);
+        console.log("Profile updated:", updatedProfile);
+      } else {
+        // If it's already a string (URL), just use it directly
+        const updatePayload = {
+          username: data.username,
+          f_name: data.f_name,
+          l_name: data.l_name,
+          picture: data.picture,
+        };
+
+        const updatedProfile = await updateUserProfile(updatePayload);
+        console.log("Profile updated:", updatedProfile);
       }
 
-      console.log("updatePayload:", updatePayload);
-
-      const updatedProfile = await updateUserProfile(updatePayload);
-      console.log("Profile updated:", updatedProfile);
-
       setIsSubmitSuccessful(true);
+      toast.success("User Updated!");
       navigate("/Profile");
-    } catch (err) {
-      console.error("Error saving profile:", err);
-      setError("An error occurred while saving your profile.");
+    } catch (error: unknown) {
+      console.log("error: ", error);
+      toast.error("An error occurred during edit");
+      setUpdateError(
+        typeof error === "string"
+          ? error
+          : error instanceof Error
+          ? error.message
+          : "An error occurred during edit"
+      );
     }
   };
 
@@ -99,6 +149,7 @@ const EditProfile: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       setValue("picture", file);
+      setImageError(null); // Clear any existing image error
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = document.getElementById(
@@ -146,13 +197,12 @@ const EditProfile: React.FC = () => {
                   <img
                     id="preview-image"
                     src={
-                      typeof value === "string"
-                        ? formatPictureUrl(value)
+                      value && typeof value === "string" && value.trim()
+                        ? formatPictureUrl(value) // Use the existing picture URL
                         : value instanceof File
-                        ? URL.createObjectURL(value)
-                        : ""
+                        ? URL.createObjectURL(value) // Show the uploaded file
+                        : userIcon // Use the default user icon when no picture is set
                     }
-                    alt="Profile Avatar"
                     className="w-full h-full object-cover"
                   />
                 )}
@@ -171,6 +221,11 @@ const EditProfile: React.FC = () => {
                 />
               </label>
             </div>
+            {(imageError || errors.picture) && (
+              <p className="text-red-500 text-sm mb-4">
+                {imageError || errors.picture?.message}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
             <label
@@ -227,6 +282,7 @@ const EditProfile: React.FC = () => {
             >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
+            {updateError && <div className="text-red-500">{updateError}</div>}
           </div>
         </form>
       </div>
