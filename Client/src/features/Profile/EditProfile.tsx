@@ -9,6 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { getUserByToken, updateUserProfile } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
 
+import { toast } from "react-toastify";
+import userIcon from "../../assets/user.png";
+import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
+
+
 // Zod schema for form validation
 const profileSchema = z.object({
   username: z
@@ -121,7 +126,7 @@ const EditProfile: React.FC = () => {
     }
   }, [isSubmitSuccessful, navigate]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (

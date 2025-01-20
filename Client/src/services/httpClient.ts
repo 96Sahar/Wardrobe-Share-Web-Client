@@ -24,8 +24,8 @@ const setAuthToken = (token: string): void => {
   }
 };
 
-const refreshToken = async (refresh: string): Promise<string> => {
-  const response = await client.post("/user/refresh", { refreshToken: refresh });
+const refreshToken = async (refreshToken: string): Promise<string> => {
+  const response = await client.post("/user/refresh", { refreshToken });
   const expiresIn = 50 * 60 * 1000;
   const expiration = new Date(Date.now() + expiresIn).toISOString();
   Cookies.set("AuthExpiration", expiration);
@@ -39,7 +39,7 @@ const refreshToken = async (refresh: string): Promise<string> => {
   return response.data.accessToken;
 };
 
-const checkToken = async () => {
+const checkToken = async (): Promise<string> => {
   let token = Cookies.get("authToken");
   const storedRefreshToken = Cookies.get("refreshToken"); // Renamed to avoid shadowing
   const expiration = Cookies.get("AuthExpiration");

@@ -48,6 +48,7 @@ const Header = () => {
     try {
       await logout();
       toast.success("Logged out see you soon!");
+      navigate("/");
       setUser(null);
     } catch (error: unknown) {
       console.error("Logout error:", error);
@@ -211,6 +212,7 @@ const Header = () => {
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => {
+                  handleNavigation("likedItems");
                   setIsMenuOpen(false);
                 }}
               >
