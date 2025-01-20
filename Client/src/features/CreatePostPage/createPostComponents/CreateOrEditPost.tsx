@@ -22,9 +22,12 @@ interface City {
 const schema = z.object({
   title: z.string().min(2, "Title is missing"),
   description: z.string().min(1, "Description is missing"),
-  picture: z
-    .any()
-    .refine((files) => files?.length === 1, "Please upload a single image."),
+  picture: z.union([
+    z.string(), // For existing image URL when editing
+    z
+      .any()
+      .refine((files) => files?.length === 1, "Please upload a single image."),
+  ]),
   category: z.string().min(0, "Please select a category."),
   phone: z.string().min(9, "Phone number must be at least 9 characters."),
   region: z.string().min(0),
@@ -74,9 +77,8 @@ const CreateOrEditPost = () => {
           setCity(postData.city);
           setValue("city", postData.city);
           if (postData.picture) {
-            console.log("postData picture: ", postData.picture);
             setImagePreview("http://localhost:3000/" + postData.picture);
-            setValue("picture", postData.picture);
+            setValue("picture", postData.picture); // Keep this for internal use
           }
         } catch (error) {
           console.error("Error fetching post data:", error);
@@ -387,7 +389,9 @@ const CreateOrEditPost = () => {
 
         <Button
           buttonType="submit"
-          className={isSubmitting ? "disabled" : "flex mx-auto mt-6"}
+          className={
+            isSubmitting ? "disabled flex mx-auto mt-6" : "flex mx-auto mt-6"
+          }
         >
           {isSubmitting
             ? "Submitting..."

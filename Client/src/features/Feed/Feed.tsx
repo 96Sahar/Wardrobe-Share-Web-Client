@@ -5,6 +5,7 @@ import Categories from "./FeedComponents/Categories";
 import ProductGrid from "./FeedComponents/ProductGrid";
 import { getFeedPosts } from "../../services/postService";
 import { postData } from "../../services/interfaceService";
+import ChatBot from "../Chatbot/ChatBot";
 
 const Feed: React.FC = () => {
   const [groupedProducts, setGroupedProducts] = useState<
@@ -52,6 +53,7 @@ const Feed: React.FC = () => {
           />
         ))
       )}
+      <ChatBot />
     </div>
   );
 };

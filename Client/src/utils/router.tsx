@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import Feed from "../features/Feed/Feed";
 import LoginAndRegistration from "../features/loginAndRegistration/LoginAndRegistration";
 import CategoryPage from "../features/CategoryPage/categoryPage";
 import Profile from "../features/Profile/Profile";
@@ -7,6 +6,7 @@ import EditProfile from "../features/Profile/EditProfile";
 import CreatePostPage from "../features/CreatePostPage/CreatePostPage";
 import LikedPostsPage from "../features/LikedPostsPage/LikedPostsPage";
 import PostPage from "../features/SinglePost/PostPage";
+import Feed from "../features/Feed/Feed";
 
 const Router = () => {
   return (

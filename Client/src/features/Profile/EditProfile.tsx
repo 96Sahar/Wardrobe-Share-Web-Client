@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import type React from "react";
+import { useState, useEffect } from "react";
+import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Header from "../../utils/UtilsComponents/Header";
@@ -7,24 +8,21 @@ import { Camera, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getUserByToken, updateUserProfile } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
+
 import { toast } from "react-toastify";
 import userIcon from "../../assets/user.png";
 import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
-// Updated Zod schema to require picture
+
+// Zod schema for form validation
 const profileSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long."),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters long.")
+    .regex(/^[a-zA-Z0-9]+$/, "Username can only contain letters and numbers."),
   f_name: z.string().min(2, "First name must be at least 2 characters."),
   l_name: z.string().min(2, "Last name must be at least 2 characters."),
-  picture: z.union([z.string(), z.instanceof(File), z.null()]).refine(
-    (val) =>
-      val !== null && // Prevent null values
-      ((typeof val === "string" && val.trim().length > 0) ||
-        val instanceof File),
-    {
-      message: "An image is required",
-    }
-  ),
+  picture: z.union([z.string(), z.instanceof(File)]).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -33,8 +31,6 @@ const EditProfile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
-  const [updateError, setUpdateError] = useState<string | null>(null);
-  const [imageError, setImageError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -50,16 +46,9 @@ const EditProfile: React.FC = () => {
       username: "",
       f_name: "",
       l_name: "",
-      picture: "",
+      picture: undefined,
     },
   });
-
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `http://localhost:3000/${picture}`;
-    }
-    return picture;
-  };
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -83,73 +72,41 @@ const EditProfile: React.FC = () => {
   }, [setValue]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
-    setImageError(null);
-
-    // Check if picture is empty or undefined
-    if (
-      !data.picture ||
-      (typeof data.picture === "string" && !data.picture.trim())
-    ) {
-      setImageError("Profile picture is required");
-      return;
-    }
+    console.log("Form data:", data); // Debug log
 
     try {
-      // Create FormData if we have a File object
+      const updatePayload: Record<string, any> = {
+        username: data.username,
+        f_name: data.f_name,
+        l_name: data.l_name,
+      };
+
       if (data.picture instanceof File) {
-        const formData = new FormData();
-        formData.append("picture", data.picture);
-        // First upload the image and get back the URL
-        const uploadResponse = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const { imageUrl } = await uploadResponse.json();
-
-        // Now update the profile with the image URL
-        const updatePayload = {
-          username: data.username,
-          f_name: data.f_name,
-          l_name: data.l_name,
-          picture: imageUrl, // Use the URL from the upload response
-        };
-
-        const updatedProfile = await updateUserProfile(updatePayload);
-        console.log("Profile updated:", updatedProfile);
-      } else {
-        // If it's already a string (URL), just use it directly
-        const updatePayload = {
-          username: data.username,
-          f_name: data.f_name,
-          l_name: data.l_name,
-          picture: data.picture,
-        };
-
-        const updatedProfile = await updateUserProfile(updatePayload);
-        console.log("Profile updated:", updatedProfile);
+        updatePayload.picture = data.picture;
+      } else if (typeof data.picture === "string" && data.picture !== "") {
+        updatePayload.picture = data.picture; // Use existing image
       }
 
+      console.log("updatePayload:", updatePayload);
+      const updatedProfile = await updateUserProfile(updatePayload);
+      console.log("Profile updated:", updatedProfile);
+
       setIsSubmitSuccessful(true);
-      toast.success("User Updated!");
-      navigate("/Profile");
-    } catch (error: unknown) {
-      console.log("error: ", error);
-      toast.error("An error occurred during edit");
-      setUpdateError(
-        typeof error === "string"
-          ? error
-          : error instanceof Error
-          ? error.message
-          : "An error occurred during edit"
-      );
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      setError("An error occurred while saving your profile.");
     }
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB limit
+        setError("Image file is too large. Please choose an image under 5MB.");
+        return;
+      }
       setValue("picture", file);
-      setImageError(null); // Clear any existing image error
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = document.getElementById(
@@ -197,12 +154,13 @@ const EditProfile: React.FC = () => {
                   <img
                     id="preview-image"
                     src={
-                      value && typeof value === "string" && value.trim()
-                        ? formatPictureUrl(value) // Use the existing picture URL
-                        : value instanceof File
-                        ? URL.createObjectURL(value) // Show the uploaded file
-                        : userIcon // Use the default user icon when no picture is set
+                      value instanceof File
+                        ? URL.createObjectURL(value)
+                        : value
+                        ? `http://localhost:3000/${value}`
+                        : "/default-avatar.png"
                     }
+                    alt="Profile Avatar"
                     className="w-full h-full object-cover"
                   />
                 )}
@@ -221,11 +179,6 @@ const EditProfile: React.FC = () => {
                 />
               </label>
             </div>
-            {(imageError || errors.picture) && (
-              <p className="text-red-500 text-sm mb-4">
-                {imageError || errors.picture?.message}
-              </p>
-            )}
           </div>
           <div className="space-y-2">
             <label
@@ -282,7 +235,6 @@ const EditProfile: React.FC = () => {
             >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
-            {updateError && <div className="text-red-500">{updateError}</div>}
           </div>
         </form>
       </div>
