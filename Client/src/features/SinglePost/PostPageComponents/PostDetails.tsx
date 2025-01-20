@@ -133,18 +133,19 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
         <p className="text-gray-600 font-bold text-lg mb-2">Item details:</p>
         <div className="space-y-4 text-gray-700 text-base">
           <p>
-            <span className="font-bold">Category:</span>{"  "}
+            <span className="font-bold">Category:</span>
+            {"  "}
             {product.category.charAt(0).toUpperCase() +
               product.category.slice(1)}
           </p>
           <p>
-            <span className="font-bold">Phone:</span>  {product.phone}
+            <span className="font-bold">Phone:</span> {product.phone}
           </p>
           <p>
-            <span className="font-bold">Region:</span>  {product.region}
+            <span className="font-bold">Region:</span> {product.region}
           </p>
           <p>
-            <span className="font-bold">City:</span>  {product.city}
+            <span className="font-bold">City:</span> {product.city}
           </p>
         </div>
 
