@@ -16,6 +16,12 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   buttonType = "button",
 }) => {
+  const handleClick = () => {
+    if (onClick) {
+      console.log("Button clicked"); // Log when button is clicked
+      onClick(); // Call the original onClick handler
+    }
+  };
   return (
     <button
       type={buttonType}
@@ -24,7 +30,7 @@ const Button: React.FC<ButtonProps> = ({
         "border border-black rounded-full px-14 py-2 bg-gradient-to-br from-primary to-secondary text-white",
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {children}
     </button>
