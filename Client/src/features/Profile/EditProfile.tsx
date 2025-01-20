@@ -8,13 +8,9 @@ import { Camera, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getUserByToken, updateUserProfile } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
-
-import { toast } from "react-toastify";
-import userIcon from "../../assets/user.png";
 import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
+import user from "../../assets/user.png";
 
-
-// Zod schema for form validation
 const profileSchema = z.object({
   username: z
     .string()
@@ -54,11 +50,11 @@ const EditProfile: React.FC = () => {
     const fetchUserInfo = async () => {
       try {
         const userData = await getUserByToken();
-
+        console.log(userData);
         setValue("username", userData.username);
         setValue("f_name", userData.f_name);
         setValue("l_name", userData.l_name);
-        setValue("picture", userData.picture);
+        setValue("picture", userData.picture || " ");
 
         setLoading(false);
       } catch (err) {
@@ -72,8 +68,7 @@ const EditProfile: React.FC = () => {
   }, [setValue]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
-    console.log("Form data:", data); // Debug log
-
+    console.log("Form data:", data);
     try {
       const updatePayload: Record<string, any> = {
         username: data.username,
@@ -84,7 +79,7 @@ const EditProfile: React.FC = () => {
       if (data.picture instanceof File) {
         updatePayload.picture = data.picture;
       } else if (typeof data.picture === "string" && data.picture !== "") {
-        updatePayload.picture = data.picture; // Use existing image
+        updatePayload.picture = data.picture;
       }
 
       console.log("updatePayload:", updatePayload);
@@ -92,9 +87,15 @@ const EditProfile: React.FC = () => {
       console.log("Profile updated:", updatedProfile);
 
       setIsSubmitSuccessful(true);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error saving profile:", err);
-      setError("An error occurred while saving your profile.");
+      setError(
+        typeof err === "string"
+          ? err
+          : err instanceof Error
+          ? err.message
+          : "An error occurred during edit"
+      );
     }
   };
 
@@ -102,7 +103,6 @@ const EditProfile: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        // 5MB limit
         setError("Image file is too large. Please choose an image under 5MB.");
         return;
       }
@@ -127,7 +127,6 @@ const EditProfile: React.FC = () => {
   }, [isSubmitSuccessful, navigate]);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-background">
@@ -156,9 +155,9 @@ const EditProfile: React.FC = () => {
                     src={
                       value instanceof File
                         ? URL.createObjectURL(value)
-                        : value
+                        : value && value.trim() !== ""
                         ? `http://localhost:3000/${value}`
-                        : "/default-avatar.png"
+                        : user
                     }
                     alt="Profile Avatar"
                     className="w-full h-full object-cover"
@@ -235,6 +234,7 @@ const EditProfile: React.FC = () => {
             >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
+            {error && <div className="text-red-500 mt-4 text-sm">{error}</div>}
           </div>
         </form>
       </div>

@@ -73,10 +73,9 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
       const userInfo = Cookies.get("userInfo");
       if (userInfo) {
         try {
-          const user = JSON.parse(userInfo); // Parse the JSON string
-          const userId = user._id; // Extract the user ID
+          const user = JSON.parse(userInfo);
+          const userId = user._id;
           if (userId) {
-            // Check if the user ID exists in the product's likes array
             setLiked(product.likes.includes(userId));
           }
         } catch (error) {
@@ -86,11 +85,10 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
     };
 
     initializeLikedStatus();
-  }, []);
+  }, [product.likes]);
 
   return (
     <div className="max-w-2xl mx-auto rounded-lg overflow-hidden">
-      {/* Picture with Like Button */}
       <div className="relative w-full">
         <img
           src={formatPictureUrl(product.picture)}

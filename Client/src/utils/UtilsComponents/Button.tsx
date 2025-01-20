@@ -18,8 +18,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const handleClick = () => {
     if (onClick) {
-      console.log("Button clicked"); // Log when button is clicked
-      onClick(); // Call the original onClick handler
+      console.log("Button clicked");
+      console.log(onClick());
     }
   };
   return (
