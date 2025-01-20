@@ -3,8 +3,6 @@ import { Search } from "lucide-react";
 import SearchBarBackground from "../../../assets/SearchBarBackground.jpg";
 import { useNavigate } from "react-router-dom";
 
-
-
 const SearchSection: React.FC = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");

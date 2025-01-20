@@ -3,6 +3,7 @@ import robotIcon from "../../../assets/robotIcon.png";
 export interface Chat {
   role: "user" | "model";
   text: string;
+  isError?: boolean;
 }
 
 interface ChatMessageProps {
@@ -20,7 +21,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ chat }) => {
         <img
           src={robotIcon || "/placeholder.svg"}
           alt="Robot Icon"
-          className="w-8 h-8 rounded-full bg-white p-1"
+          className={`w-8 h-8 rounded-full bg-white p-1 ${
+            chat.isError ? "text-red-600" : " "
+          }`}
         />
       )}
       <p

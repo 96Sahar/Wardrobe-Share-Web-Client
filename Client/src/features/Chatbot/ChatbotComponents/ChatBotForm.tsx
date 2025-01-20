@@ -58,8 +58,8 @@ const ChatBotForm: React.FC<ChatBotFormProps> = ({
         type="submit"
         className="p-2 rounded-full hover:bg-gray-100 transition-colors"
       >
-        <span className="w-10 h-10">
-          <img src={upArrow} alt="Up Arrow" />
+        <span>
+          <img className="w-6 h-6" src={upArrow} alt="Up Arrow" />
         </span>
       </button>
     </form>

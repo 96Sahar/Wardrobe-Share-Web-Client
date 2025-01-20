@@ -12,18 +12,26 @@ const ChatBot: React.FC = () => {
       text: `Hey! I am your Wardrobe Assistant bot 🤖`,
     },
   ]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const chatBodyRef = useRef<HTMLDivElement | null>(null);
 
+  const resetBot = () => {
+    setChatHistory([
+      {
+        role: "model",
+        text: `Hey! I am your Wardrobe Assistant bot 🤖`,
+      },
+    ]);
+  };
+
   const generateBotResponse = async (history: Chat[]): Promise<void> => {
-    const updateHistory = (text: string) => {
+    const updateHistory = (text: string, isError: boolean = false): void => {
       setChatHistory((prev) => [
         ...prev.filter((msg) => msg.text !== "Thinking..."),
-        { role: "model", text },
+        { role: "model", text, isError },
       ]);
     };
 
-    // Prepend the context-setting message as a "user" role
     const formattedHistory = [
       {
         role: "user",
@@ -59,8 +67,16 @@ const ChatBot: React.FC = () => {
         .replace(/\*\*(.*?)\*\*/g, "$1")
         .trim();
       updateHistory(apiResponseText);
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred.";
+      updateHistory(errorMessage, true);
+
+      // Reset the bot on error after a brief delay
+      setTimeout(() => {
+        updateHistory("Resetting bot...", true);
+        setTimeout(resetBot, 1000); // Add a delay for better UX
+      }, 2000);
     }
   };
 
@@ -76,47 +92,50 @@ const ChatBot: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">
       {!isOpen && (
-        <Button onClick={() => setIsOpen(true)} className="mb-2">
-          <img
-            className="w-5 h-5 items-center"
-            src={robotIcon}
-            alt="Robot Icon"
-          />
+        <Button
+          onClick={() => setIsOpen(true)}
+          className="mb-2 flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white font-medium rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition-all"
+        >
+          <img className="w-5 h-5" src={robotIcon} alt="Robot Icon" />
           <span>Need help from our bot?</span>
         </Button>
       )}
       {isOpen && (
-        <div className="w-80 rounded-lg shadow-xl border border-gray-200 bg-white overflow-hidden">
-          <div className="bg-[#4F7D6B] p-4 flex items-center justify-between">
+        <div className="w-80 rounded-lg shadow-2xl border border-gray-300 bg-white overflow-hidden">
+          <div className="bg-gradient-to-r from-green-700 via-green-600 to-green-500 p-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-3">
               <img
                 src={robotIcon || "/placeholder.svg"}
                 alt="Robot Icon"
-                className="w-8 h-8 rounded-full bg-white p-1"
+                className="w-10 h-10 rounded-full bg-white p-2 shadow"
               />
-              <h2 className="text-white font-medium">Wardrobe Assistant</h2>
+              <h2 className="text-white font-semibold text-lg">
+                Wardrobe Assistant
+              </h2>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white hover:opacity-75 transition-opacity"
+              className="text-white hover:text-gray-200 focus:outline-none transition-transform transform hover:scale-105"
+              aria-label="Close Chat"
             >
-              <span className="text-xl">
-                <img src={DownArrow || "/placeholder.svg"} alt="Down Arrow" />
-              </span>
+              <img
+                src={DownArrow || "/placeholder.svg"}
+                alt="Down Arrow"
+                className="w-6 h-6"
+              />
             </button>
           </div>
 
           <div
             ref={chatBodyRef}
-            className="h-72 overflow-y-auto p-4 space-y-4 bg-gray-50"
+            className="h-72 overflow-y-auto p-2 space-y-4 bg-gray-50 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-md"
           >
-            <div className="flex items-start gap-3"></div>
             {chatHistory.map((chat, index) => (
               <ChatMessage key={index} chat={chat} />
             ))}
           </div>
 
-          <div className="border-t border-gray-200 bg-white">
+          <div className="border-t border-gray-200 bg-gray-100">
             <ChatBotForm
               chatHistory={chatHistory}
               setChatHistory={setChatHistory}
