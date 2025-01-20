@@ -112,7 +112,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
           {products.map((product) => (
             <div
               key={product._id}
-              className="border-2 border-primary group bg-surface rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300"
+              className="border-2 border-primary group bg-surface rounded-2xl p-4 shadow-sm hover:shadow-md transition-all hover:bg-[#d3d7d5] duration-300 cursor-pointer"
               onClick={() => handleCardClick(product)}
             >
               <div className="relative">
@@ -138,7 +138,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                   </button>
                 </div>
               </div>
-              <h3 className="font-medium text-primary mb-1 group-hover:text-secondary transition-colors">
+              <h3 className="font-medium text-primary mb-1">
                 {product.title}
               </h3>
               <p className="text-primary/60 font-medium">{product.region}</p>

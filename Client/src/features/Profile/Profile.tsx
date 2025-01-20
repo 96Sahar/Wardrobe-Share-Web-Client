@@ -3,9 +3,8 @@ import Header from "../../utils/UtilsComponents/Header";
 import ProfilePosts from "./ProfileComponents/ProfilePosts";
 import Sidebar from "./ProfileComponents/SideBar";
 import { UserProfile } from "../../utils/types/profile";
-
 import { getUserByToken } from "../../services/userService";
-import { checkToken } from "../../services/httpClient";
+import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
 const Profile: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -15,7 +14,6 @@ const Profile: React.FC = () => {
     const fetchUserInfo = async () => {
       try {
         setIsLoading(true);
-        checkToken();
         const userData = await getUserByToken();
 
         setUserProfile({
@@ -37,7 +35,7 @@ const Profile: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {

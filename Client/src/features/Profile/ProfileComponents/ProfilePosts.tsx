@@ -6,6 +6,7 @@ import { UserData } from "../../../services/interfaceService";
 import Modal from "../../../utils/UtilsComponents/Modal";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../../utils/UtilsComponents/LoadingSpinner";
 
 const ProfilePosts: React.FC<UserData> = () => {
   const navigate = useNavigate();
@@ -66,10 +67,6 @@ const ProfilePosts: React.FC<UserData> = () => {
     fetchUserPosts();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   if (error) {
     return <p className="text-red-500">{error}</p>;
   }
@@ -78,12 +75,13 @@ const ProfilePosts: React.FC<UserData> = () => {
     <>
       <div className="flex-1">
         <h1 className="text-2xl font-bold text-primary mb-6">My Posts</h1>
+        {loading && <LoadingSpinner />}
         {userPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {userPosts.map((post) => (
               <div
                 key={post._id}
-                className="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border-2 border-primary hover:bg-[#d3d7d5] cursor-pointer"
                 onClick={() => handleCardClick(post)}
               >
                 <div className="aspect-video relative">
@@ -97,13 +95,19 @@ const ProfilePosts: React.FC<UserData> = () => {
                   <h3 className="font-medium text-primary mb-2">
                     {post.title}
                   </h3>
-                  <p className="text-sm text-primary/60">{post.description}</p>
+                  <p className="text-md text-primary/60">{post.description}</p>
 
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-sm text-primary/60">
-                      {post.likes.length}{" "}
-                      {post.likes.length === 1 ? "Like" : "Likes"}
-                    </span>
+                  <div className="flex items-center mt-2 text-sm text-black space-x-4">
+                    {/* Likes Counter */}
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">❤️</span>
+                      <span>{post.likes.length}</span>
+                    </div>
+                    {/* Comments Counter */}
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">💬</span>
+                      <span>{post.comments.length}</span>
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-end space-x-4 mt-4">

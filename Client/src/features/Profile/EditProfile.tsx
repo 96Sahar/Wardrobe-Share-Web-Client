@@ -9,6 +9,7 @@ import { getUserByToken, updateUserProfile } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
 import { toast } from "react-toastify";
 import userIcon from "../../assets/user.png";
+import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
 // Updated Zod schema to require picture
 const profileSchema = z.object({
@@ -26,7 +27,6 @@ const profileSchema = z.object({
   ),
 });
 
-console.log("userIcon: ", userIcon);
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const EditProfile: React.FC = () => {
@@ -169,7 +169,7 @@ const EditProfile: React.FC = () => {
     }
   }, [isSubmitSuccessful, navigate]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
