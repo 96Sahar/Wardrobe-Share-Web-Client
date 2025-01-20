@@ -72,7 +72,7 @@ const logout = async () => {
 const getUserByToken = async () => {
   try {
     const token = await checkToken();
-    const response = await client.get("/user/auth/settings", {
+    const response = await client.get(`/user/auth/settings`, {
       headers: { Authorization: `JWT ${token}` },
     });
     return response.data;

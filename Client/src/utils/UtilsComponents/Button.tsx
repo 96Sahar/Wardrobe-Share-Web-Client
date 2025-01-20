@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       type={buttonType}
       style={{ backgroundColor: color }}
       className={clsx(
-        "border border-black rounded-full px-14 py-2 bg-gradient-to-br from-primary to-secondary text-white",
+        "border border-black rounded-full px-6 lg:px-12 py-2 bg-gradient-to-br from-primary to-secondary text-white",
         className
       )}
       onClick={onClick}
