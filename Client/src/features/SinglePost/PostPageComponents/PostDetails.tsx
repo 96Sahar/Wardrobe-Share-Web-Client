@@ -32,16 +32,16 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
         return;
       }
 
-      const user = JSON.parse(userInfo); // Parse the JSON string
-      const userId = user._id; // Extract the user ID
+      const user = JSON.parse(userInfo);
+      const userId = user._id;
       if (!userId) {
         console.error("No user ID found in user info");
         return;
       }
 
-      await likePost(productId); // Trigger the API to toggle the like
-      setLiked((prev) => !prev); // Toggle the like state
-      setLikesCount((prev) => (liked ? prev - 1 : prev + 1)); // Adjust the like count
+      await likePost(productId);
+      setLiked((prev) => !prev);
+      setLikesCount((prev) => (liked ? prev - 1 : prev + 1));
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -104,30 +104,22 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
           {liked ? "❤️" : "🤍"}
         </button>
         <div className="absolute top-4 left-4 flex items-center space-x-6 text-white bg-black bg-opacity-50 p-2 rounded-full px-4">
-          {/* Likes Counter */}
           <div className="flex items-center space-x-2">
             <span className="text-lg">❤️</span>
             <span>{likesCount}</span>
           </div>
-          {/* Comments Counter */}
           <div className="flex items-center space-x-2">
             <span className="text-lg">💬</span>
             <span>{commentsCount}</span>
           </div>
         </div>
       </div>
-      {/* Content */}
       <div className="p-6">
-        {/* Title */}
         <h1 className="text-2xl font-bold text-gray-800 mb-6">
           {product.title}
         </h1>
-
-        {/* Description */}
         <p className="text-gray-600 font-bold text-lg mb-2">About the item:</p>
         <p className="text-gray-600 text-lg mb-6">{product.description}</p>
-
-        {/* Details */}
         <p className="text-gray-600 font-bold text-lg mb-2">Item details:</p>
         <div className="space-y-4 text-gray-700 text-base">
           <p>
@@ -146,8 +138,6 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
             <span className="font-bold">City:</span> {product.city}
           </p>
         </div>
-
-        {/* User Info */}
         <p className="text-gray-600 font-bold text-lg mt-6">The lister:</p>
         {lister ? (
           <div className="flex items-center mt-2">

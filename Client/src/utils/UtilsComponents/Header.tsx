@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
 import { getUserById as getUserByIdAPI } from "../../services/userService";
 import { logout } from "../../services/userService";
-import userPlaceholder from "../../assets/user.png"; // Renamed to avoid conflict with state
+import userPlaceholder from "../../assets/user.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -84,7 +84,6 @@ const Header = () => {
           onClick={() => navigate("/")}
         />
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-5">
           <Button
             onClick={() => {
@@ -146,7 +145,6 @@ const Header = () => {
           )}
         </div>
 
-        {/* Burger Menu Icon */}
         <button
           className="md:hidden p-2 focus:outline-none"
           onClick={toggleMenu}
@@ -159,11 +157,9 @@ const Header = () => {
           )}
         </button>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-gray-300 shadow-md z-40 md:hidden">
             <div className="flex flex-col items-center space-y-4 py-4">
-              {/* Profile Section */}
               <div
                 className="flex items-center cursor-pointer"
                 onClick={
@@ -186,7 +182,6 @@ const Header = () => {
                 </h2>
               </div>
 
-              {/* Dropdown in Mobile */}
               {dropdownOpen && user && (
                 <div className="mt-2 bg-white border rounded shadow-lg w-40">
                   <button

@@ -14,11 +14,10 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
-  const [noResults, setNoResults] = useState(false); // Track no results state
-  const [error, setError] = useState<string | null>(null); // Track error state
+  const [noResults, setNoResults] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset state on category or region change
     setProducts([]);
     setPage(1);
     setHasMore(true);
@@ -28,7 +27,7 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if(noResults) return; // Don't fetch if no results
+      if (noResults) return;
       setLoading(true);
       setError(null);
 
@@ -43,7 +42,6 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
         const newProducts = response.data;
 
         if (newProducts.length === 0 && page === 1) {
-          // No results on the first page
           setNoResults(true);
         } else if (newProducts.length > 0) {
           setProducts((prev) => {
@@ -52,10 +50,10 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
             );
             return [...prev, ...uniqueProducts];
           });
-          setNoResults(false); // Reset noResults if we get data
+          setNoResults(false);
         }
 
-        if (newProducts.length < 20) setHasMore(false); // No more pages
+        if (newProducts.length < 20) setHasMore(false);
       } catch (err) {
         setNoResults(true);
         console.error("Error fetching posts:", err);
@@ -73,13 +71,13 @@ const Grid = ({ category }: GridProps): React.ReactElement => {
       document.documentElement.offsetHeight - 100
     ) {
       if (!loading && hasMore && !noResults && !error) {
-        setPage((prevPage) => prevPage + 1); // Load the next page
+        setPage((prevPage) => prevPage + 1);
       }
     }
   };
 
   useEffect(() => {
-    if(noResults) return; 
+    if (noResults) return;
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, hasMore, noResults, error]);

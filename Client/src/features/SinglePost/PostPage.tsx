@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 import { postData } from "../../services/interfaceService";
 import { getPostById } from "../../services/postService";
 
-
 const PostPage: React.FC = () => {
   const location = useLocation();
   const url = location.pathname;
@@ -20,13 +19,13 @@ const PostPage: React.FC = () => {
   useEffect(() => {
     if (!postId) {
       setError("Post ID is undefined.");
-      setLoading(false); // Stop loading since we encountered an error
+      setLoading(false);
       return;
     }
 
     const fetchPost = async () => {
-      setLoading(true); // Ensure loading is set at the start of the fetch
-      setError(null); // Clear any previous errors
+      setLoading(true);
+      setError(null);
       try {
         const response = await getPostById(postId);
         setProduct(response);
@@ -35,10 +34,9 @@ const PostPage: React.FC = () => {
         console.error("Error fetching post:", error);
         setError("Post not found.");
       } finally {
-        setLoading(false); // Always stop loading at the end
+        setLoading(false);
       }
     };
-
     fetchPost();
   }, [postId]);
 
@@ -46,11 +44,11 @@ const PostPage: React.FC = () => {
     <div>
       <Header />
       <div className="flex flex-col md:flex-row gap-6 mt-4 p-6">
-        {loading && (
-          <LoadingSpinner />
-        )}
+        {loading && <LoadingSpinner />}
         {!loading && error && (
-          <div className="h-screen flex items-center justify-center mx-auto">{error}</div>
+          <div className="h-screen flex items-center justify-center mx-auto">
+            {error}
+          </div>
         )}
         {!loading && product && (
           <>

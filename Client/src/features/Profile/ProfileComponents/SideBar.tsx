@@ -15,9 +15,8 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    // Proceed to delete user when confirmed
     await deleteUser();
-    navigate("/"); // Navigate to homepage after deletion
+    navigate("/");
   };
 
   const formatPictureUrl = (picture: string) => {
@@ -68,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
 
               <div className="mt-4">
                 <button
-                  onClick={() => setIsModalOpen(true)} // Open the modal when the delete button is clicked
+                  onClick={() => setIsModalOpen(true)}
                   className="w-full flex items-center justify-center gap-2 bg-red-500 text-destructive-foreground rounded-lg px-4 py-2 hover:bg-red-600"
                 >
                   <Delete className="w-4 h-4" />
@@ -80,11 +79,10 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
         </div>
       </div>
 
-      {/* Modal Component */}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // Close the modal without deleting
-        onConfirm={handleDelete} // Confirm deletion by calling handleDelete directly
+        onClose={() => setIsModalOpen(false)} 
+        onConfirm={handleDelete}
         title="Are you sure?"
         description="This action will permanently delete this user!"
         confirmText="Delete User"

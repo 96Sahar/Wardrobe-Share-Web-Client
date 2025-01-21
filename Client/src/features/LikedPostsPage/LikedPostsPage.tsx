@@ -3,7 +3,7 @@ import Header from "../../utils/UtilsComponents/Header";
 import ProductGrid from "../Feed/FeedComponents/ProductGrid";
 import Cookies from "js-cookie";
 import { getUserByToken } from "../../services/userService";
-import { getPostById } from "../../services/postService"; // New function to fetch a post by ID
+import { getPostById } from "../../services/postService";
 import { postData } from "../../services/interfaceService";
 import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
@@ -53,7 +53,7 @@ const LikedPostsPage = () => {
             isCategoryPage={true}
           />
         ) : (
-          <p className="text-center text-primary/60 mt-6 text-lg"> 
+          <p className="text-center text-primary/60 mt-6 text-lg">
             You have no liked posts yet.
           </p>
         )}

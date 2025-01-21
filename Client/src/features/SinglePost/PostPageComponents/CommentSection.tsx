@@ -26,7 +26,10 @@ interface CommentSectionProps {
   setCommentsCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCount }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({
+  postId,
+  setCommentsCount,
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
@@ -59,7 +62,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCoun
     getUserInfo();
   }, []);
 
-  // Fetch comments on component mount
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -89,7 +91,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCoun
     return picture;
   };
 
-
   const handleAddComment = async () => {
     try {
       if (!newComment.trim()) {
@@ -103,24 +104,24 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCoun
 
       const response = await createComment(postId, newComment);
       console.log("New comment created:", response);
-  
+
       const newCommentData: Comment = {
-        _id: response._id, 
-        user: userData._id, 
-        post: postId, 
-        content: newComment, 
-        fullname: userData.fullname, 
-        picture: userData.picture, 
+        _id: response._id,
+        user: userData._id,
+        post: postId,
+        content: newComment,
+        fullname: userData.fullname,
+        picture: userData.picture,
       };
       setComments((prevComments) => [...prevComments, newCommentData]);
-      setNewComment(""); 
+      setNewComment("");
       setCommentsCount((prevCount) => prevCount + 1);
     } catch (error) {
       console.error("Error adding comment:", error);
       toast.error("Failed to add comment. Please try again.");
     }
   };
-  
+
   const handleEditComment = async () => {
     try {
       if (!editingText.trim()) {
@@ -144,46 +145,41 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, setCommentsCoun
       toast.error("Failed to edit comment. Please try again.");
     }
   };
-  
 
-const handleDeleteComment = async (commentId: string) => {
-  try {
-    console.log("Deleting comment:", commentId);
-    await deleteComment(commentId);
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment._id !== commentId)
-    );
-    if (editingCommentId === commentId) {
-      setEditingCommentId(null);
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      console.log("Deleting comment:", commentId);
+      await deleteComment(commentId);
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment._id !== commentId)
+      );
+      if (editingCommentId === commentId) {
+        setEditingCommentId(null);
+      }
+      setCommentsCount((prevCount) => prevCount - 1);
+      toast.success("Comment deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      toast.error("Failed to delete comment. Please try again.");
     }
-    setCommentsCount((prevCount) => prevCount - 1);
-    toast.success("Comment deleted successfully!");
-  } catch (error) {
-    console.error("Error deleting comment:", error);
-    toast.error("Failed to delete comment. Please try again.");
-  }
-};
-;
-
+  };
   return (
     <div className="flex flex-col w-full sm:w-1/2 mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Comments section:</h1>
       <div className="flex flex-col space-y-2">
-        {/* Show "No comments yet" message if comments are empty */}
         {comments.length === 0 && (
           <p className="text-center text-md text-primary/60 mb-10">
             No comments yet, be the first to comment!
           </p>
         )}
-  
-        {/* Render comments if available */}
+
         {comments.map((comment) => (
           <div
             key={comment._id}
             className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-10"
           >
             <img
-              src={formatPictureUrl(comment.picture || icon)} // Add default icon              
+              src={formatPictureUrl(comment.picture || icon)} // Add default icon
               alt={comment.fullname}
               className="w-10 h-10 rounded-full"
             />
@@ -239,8 +235,7 @@ const handleDeleteComment = async (commentId: string) => {
             )}
           </div>
         ))}
-  
-        {/* Add new comment */}
+
         {userData && (
           <div className="flex items-center space-x-4">
             <img
@@ -267,7 +262,5 @@ const handleDeleteComment = async (commentId: string) => {
       </div>
     </div>
   );
-  
 };
-
 export default CommentSection;

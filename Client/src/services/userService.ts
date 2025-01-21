@@ -31,7 +31,6 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const userInfo = getUserById(response.data._id);
 
     Cookies.set("userInfo", JSON.stringify(userInfo));
-    // 50 minutes
     const expiresIn = 50 * 60 * 1000;
     const expiration = new Date(Date.now() + expiresIn).toISOString();
     Cookies.set("AuthExpiration", expiration);
