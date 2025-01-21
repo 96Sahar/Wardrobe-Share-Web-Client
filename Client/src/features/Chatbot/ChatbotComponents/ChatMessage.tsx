@@ -21,16 +21,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ chat }) => {
         <img
           src={robotIcon || "/placeholder.svg"}
           alt="Robot Icon"
-          className={`w-8 h-8 rounded-full bg-white p-1 ${
-            chat.isError ? "text-red-600" : " "
+          className={`w-7 h-7 rounded-full bg-white/90 p-1 shadow-sm ${
+            chat.isError ? "text-red-500" : ""
           }`}
         />
       )}
       <p
-        className={`rounded-lg p-3 max-w-[80%] ${
+        className={`rounded-2xl px-4 py-2.5 max-w-[80%] text-sm ${
           chat.role === "model"
-            ? "bg-white shadow-sm"
-            : "bg-[#4F7D6B] text-white"
+            ? "bg-white shadow-sm border border-gray-100"
+            : "bg-green-600/90 text-white"
         }`}
       >
         {chat.text}
