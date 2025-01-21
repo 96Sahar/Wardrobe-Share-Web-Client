@@ -168,10 +168,10 @@ const handleDeleteComment = async (commentId: string) => {
   return (
     <div className="flex flex-col w-full sm:w-1/2 mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Comments section:</h1>
-      <div className="flex flex-col space-y-6 sm:space-y-10">
+      <div className="flex flex-col space-y-2">
         {/* Show "No comments yet" message if comments are empty */}
         {comments.length === 0 && (
-          <p className="text-center text-md text-primary/60">
+          <p className="text-center text-md text-primary/60 mb-10">
             No comments yet, be the first to comment!
           </p>
         )}
@@ -180,7 +180,7 @@ const handleDeleteComment = async (commentId: string) => {
         {comments.map((comment) => (
           <div
             key={comment._id}
-            className="flex items-start sm:items-center space-x-3 sm:space-x-4"
+            className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-10"
           >
             <img
               src={formatPictureUrl(comment.picture || icon)} // Add default icon              

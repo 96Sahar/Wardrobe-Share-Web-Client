@@ -7,10 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 import ScrollToTop from "./utils/UtilsComponents/ScrollToTop";
 
 const App = () => {
+  const CLIENT_ID = import.meta.env.VITE_CLIENT_ID as string;
   return (
     <>
       <ToastContainer theme="dark" />
-      <GoogleOAuthProvider clientId="576083536312-qit1tkuuf2r6qrt7mu6eresg94jmpisp.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={CLIENT_ID}>
         <BrowserRouter>
           <ScrollToTop />
           <Router />

@@ -120,6 +120,13 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  const formatPictureUrl = (picture: string) => {
+    if (picture.startsWith("uploads\\")) {
+      return `http://localhost:3000/${picture}`;
+    }
+    return picture;
+  };
+
   useEffect(() => {
     if (isSubmitSuccessful) {
       navigate("/Profile");
@@ -156,7 +163,7 @@ const EditProfile: React.FC = () => {
                       value instanceof File
                         ? URL.createObjectURL(value)
                         : value && value.trim() !== ""
-                        ? `http://localhost:3000/${value}`
+                        ? formatPictureUrl(value)
                         : user
                     }
                     alt="Profile Avatar"

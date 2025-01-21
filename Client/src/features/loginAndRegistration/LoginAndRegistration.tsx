@@ -27,7 +27,7 @@ const LoginAndRegistration = () => {
   const handleLoginSuccess = (userData: AuthResponse) => {
     setUser(userData);
     console.log(userData);
-    const expiresIn = 1000;
+    const expiresIn = 50 * 60 * 1000; 
     const expiration = new Date(Date.now() + expiresIn).toISOString();
     Cookies.set("AuthExpiration", expiration);
     Cookies.set("userInfo", JSON.stringify(userData));
