@@ -6,6 +6,7 @@ import ProductGrid from "./FeedComponents/ProductGrid";
 import { getFeedPosts } from "../../services/postService";
 import { postData } from "../../services/interfaceService";
 import ChatBot from "../Chatbot/ChatBot";
+import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 
 const Feed: React.FC = () => {
   const [groupedProducts, setGroupedProducts] = useState<
@@ -13,6 +14,18 @@ const Feed: React.FC = () => {
   >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const categoryOrder = [
+    "tops",
+    "bottoms",
+    "dresses",
+    "outerwear",
+    "activewear",
+    "sleepwear",
+    "swimwear",
+    "footwear",
+    "accessories",
+  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,20 +51,21 @@ const Feed: React.FC = () => {
       <SearchSection />
       <Categories />
       {loading ? (
-        <div className="text-center text-lg text-primary mt-5 p-3">
-          Loading posts...
-        </div>
+        <LoadingSpinner />
       ) : error ? (
         <div className="text-center text-red-500 mt-5 p-3">{error}</div>
       ) : (
-        Object.entries(groupedProducts).map(([category, products]) => (
-          <ProductGrid
-            key={category}
-            category={category}
-            products={products}
-            isCategoryPage={false}
-          />
-        ))
+        // Sort categories based on the predefined order
+        categoryOrder
+          .filter((category) => groupedProducts[category]) // Only include categories with products
+          .map((category) => (
+            <ProductGrid
+              key={category}
+              category={category}
+              products={groupedProducts[category]}
+              isCategoryPage={false}
+            />
+          ))
       )}
       <ChatBot />
     </div>
