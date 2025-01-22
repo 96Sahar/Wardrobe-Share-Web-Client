@@ -27,7 +27,6 @@ const ProfilePosts: React.FC<UserData> = () => {
       const response = await deletePost(postId);
       if (response) {
         toast.info("Post deleted successfully");
-        // Remove the deleted post from the state
         setUserPosts((prevPosts) =>
           prevPosts.filter((post) => post._id !== postId)
         );
@@ -98,12 +97,10 @@ const ProfilePosts: React.FC<UserData> = () => {
                   <p className="text-md text-primary/60">{post.description}</p>
 
                   <div className="flex items-center mt-2 text-sm text-black space-x-4">
-                    {/* Likes Counter */}
                     <div className="flex items-center space-x-2">
                       <span className="text-lg">❤️</span>
                       <span>{post.likes.length}</span>
                     </div>
-                    {/* Comments Counter */}
                     <div className="flex items-center space-x-2">
                       <span className="text-lg">💬</span>
                       <span>{post.comments.length}</span>

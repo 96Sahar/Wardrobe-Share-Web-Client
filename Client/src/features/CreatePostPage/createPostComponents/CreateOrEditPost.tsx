@@ -23,7 +23,7 @@ const schema = z.object({
   title: z.string().min(2, "Title is missing"),
   description: z.string().min(1, "Description is missing"),
   picture: z.union([
-    z.string(), // For existing image URL when editing
+    z.string(),
     z
       .any()
       .refine((files) => files?.length === 1, "Please upload a single image."),
@@ -37,13 +37,9 @@ const schema = z.object({
 type PostFormFields = z.infer<typeof schema>;
 
 const CreateOrEditPost = () => {
-  // Inside CreateOrEditPost
   const navigate = useNavigate();
-
-  // Inside CreateOrEditPost
   const { postId } = useParams();
   console.log(postId);
-
   const [city, setCity] = useState<string>("");
   const [suggestions, setSuggestions] = useState<City[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,7 +47,6 @@ const CreateOrEditPost = () => {
   const [isCitySelected, setIsCitySelected] = useState<boolean>(false);
   const [picture, setPicture] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const {
     register,
     handleSubmit,
@@ -60,7 +55,6 @@ const CreateOrEditPost = () => {
   } = useForm<PostFormFields>({
     resolver: zodResolver(schema),
   });
-
   useEffect(() => {
     const fetchPostData = async () => {
       console.log(postId);
@@ -78,7 +72,7 @@ const CreateOrEditPost = () => {
           setValue("city", postData.city);
           if (postData.picture) {
             setImagePreview("http://localhost:3000/" + postData.picture);
-            setValue("picture", postData.picture); // Keep this for internal use
+            setValue("picture", postData.picture);
           }
         } catch (error) {
           console.error("Error fetching post data:", error);

@@ -18,7 +18,7 @@ const Feed: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await getFeedPosts(); // Backend already returns grouped data
+        const response = await getFeedPosts();
         setGroupedProducts(response);
         setError(null);
       } catch (err) {
@@ -48,7 +48,7 @@ const Feed: React.FC = () => {
           <ProductGrid
             key={category}
             category={category}
-            products={products} // Backend already limits to 4 posts
+            products={products}
             isCategoryPage={false}
           />
         ))

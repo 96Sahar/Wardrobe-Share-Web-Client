@@ -37,10 +37,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       const userInfo = Cookies.get("userInfo");
       if (userInfo) {
         try {
-          const user = JSON.parse(userInfo); // Parse the JSON string
-          const userId = user._id; // Extract the user ID
+          const user = JSON.parse(userInfo);
+          const userId = user._id;
           if (userId) {
-            // Create a map of product IDs and like status
             const likedProductsMap = products.reduce(
               (acc: { [key: string]: boolean }, product) => {
                 acc[product._id] = product.likes.includes(userId);
@@ -69,8 +68,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         return;
       }
 
-      const user = JSON.parse(userInfo); // Parse the JSON string
-      const userId = user._id; // Extract the user ID
+      const user = JSON.parse(userInfo);
+      const userId = user._id;
       if (!userId) {
         console.error("No user ID found in user info");
         return;
@@ -82,10 +81,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         productLikes.push(userId);
       }
 
-      await likePost(productId); // Trigger the API to toggle the like
+      await likePost(productId);
       setLikedProducts((prev) => ({
         ...prev,
-        [productId]: !prev[productId], // Toggle the like status
+        [productId]: !prev[productId],
       }));
     } catch (error) {
       console.error("Error liking post:", error);
@@ -122,7 +121,6 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                     alt={product.title}
                     className="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                   />
-                  {/* Like Button */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -138,18 +136,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                   </button>
                 </div>
               </div>
-              <h3 className="font-medium text-primary mb-1">
-                {product.title}
-              </h3>
+              <h3 className="font-medium text-primary mb-1">{product.title}</h3>
               <p className="text-primary/60 font-medium">{product.region}</p>
-              {/* Counters */}
               <div className="flex justify-between items-center mt-2 text-sm text-black">
-                {/* Likes Counter */}
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">❤️</span>
                   <span>{product.likes.length}</span>
                 </div>
-                {/* Comments Counter */}
                 <div className="flex items-center space-x-2">
                   <span>{product.comments.length}</span>
                   <span className="text-lg">💬</span>

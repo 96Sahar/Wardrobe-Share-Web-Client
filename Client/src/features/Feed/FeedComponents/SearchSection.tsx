@@ -73,7 +73,7 @@ const SearchSection: React.FC = () => {
             <ul
               className="absolute left-0 top-full mt-2 w-full bg-white/95 rounded-lg shadow-lg max-h-60 overflow-y-auto"
               style={{
-                zIndex: 20, // Ensures dropdown covers the next component
+                zIndex: 20,
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               }}
             >
@@ -89,12 +89,6 @@ const SearchSection: React.FC = () => {
             </ul>
           )}
         </div>
-      </div>
-      {/* Dummy Next Component */}
-      <div className="relative z-0 bg-gray-100 h-[500px] flex items-center justify-center">
-        <p className="text-gray-700">
-          This is the next component below the search section.
-        </p>
       </div>
     </div>
   );

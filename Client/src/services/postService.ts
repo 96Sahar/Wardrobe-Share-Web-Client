@@ -21,14 +21,13 @@ const createPost = async (postData: FormData) => {
 };
 
 const likePost = async (postId: string) => {
-  // Ensure the token is retrieved properly
   try {
     const token = await checkToken();
     const response = await client.post(
       `/post/${postId}/like`,
-      {}, // No body needed for this request
+      {},
       {
-        headers: { Authorization: `JWT ${token}` }, // Correctly set headers here
+        headers: { Authorization: `JWT ${token}` },
       }
     );
     console.log("Like response:", response.data);
@@ -74,7 +73,7 @@ const getAllPost = async (
     }
 
     const response = await client.get(endpoint);
-    return response.data; // Adjust to match new response format
+    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data as string);
@@ -82,7 +81,6 @@ const getAllPost = async (
     throw new Error("Unknown error when trying to get a post");
   }
 };
-
 
 const getPostById = async (postId: string) => {
   try {
@@ -109,7 +107,7 @@ const updatePost = async (postId: string, postData: FormData) => {
     return response.data;
   } catch (error) {
     console.log("Failed to update post with the error of: ", error);
-    throw error; // Re-throw the error so it can be handled by the caller
+    throw error;
   }
 };
 const deletePost = async (postId: string) => {

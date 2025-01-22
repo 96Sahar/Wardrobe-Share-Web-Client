@@ -41,21 +41,21 @@ const refreshToken = async (refreshToken: string): Promise<string> => {
 
 const checkToken = async (): Promise<string> => {
   let token = Cookies.get("authToken");
-  const storedRefreshToken = Cookies.get("refreshToken"); // Renamed to avoid shadowing
+  const storedRefreshToken = Cookies.get("refreshToken");
   const expiration = Cookies.get("AuthExpiration");
 
   if (!token) {
     if (!storedRefreshToken) {
       throw new Error("User is not authenticated");
     }
-    token = await refreshToken(storedRefreshToken); // Use the refreshToken function here
+    token = await refreshToken(storedRefreshToken);
   }
 
   if (expiration && new Date(expiration) < new Date()) {
     if (!storedRefreshToken) {
       throw new Error("No refresh token");
     }
-    token = await refreshToken(storedRefreshToken); // Use the refreshToken function here
+    token = await refreshToken(storedRefreshToken);
   }
 
   return token;
