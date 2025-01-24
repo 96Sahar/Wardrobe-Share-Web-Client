@@ -29,7 +29,7 @@ const Categories: React.FC = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (categoryName: string = "") => {
-    navigate(`/categoryPage/${categoryName}`);
+    navigate(`/CategoryPage/${categoryName}`);
   };
 
   return (
@@ -39,7 +39,7 @@ const Categories: React.FC = () => {
           <h2 className="text-xl font-bold text-primary">Browse Categories</h2>
           <Button
             className="w-full sm:w-auto text-center"
-            onClick={() => navigate("/categoryPage")}
+            onClick={() => navigate("/CategoryPage")}
           >
             View All Items
           </Button>

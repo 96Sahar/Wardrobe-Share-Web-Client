@@ -23,11 +23,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   }>({});
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`/categoryPage/${categoryName}`);
+    navigate(`/CategoryPage/${categoryName}`);
   };
 
   const handleCardClick = (product: postData) => {
-    navigate(`/post/${product._id}`);
+    navigate(`/Post/${product._id}`);
   };
 
   category = category.charAt(0).toUpperCase() + category.slice(1);
@@ -64,7 +64,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       if (!userInfo) {
         console.error("No user info found");
         toast.error("Must be logged in to like a post!");
-        navigate("/loginAndRegistration");
+        navigate("/LoginAndRegistration");
         return;
       }
 

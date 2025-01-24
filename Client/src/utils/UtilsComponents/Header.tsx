@@ -34,10 +34,10 @@ const Header = () => {
     const checkToken = Cookies.get("authToken");
 
     if (!checkToken) {
-      if (navigation !== "loginAndRegistration") {
+      if (navigation !== "LoginAndRegistration") {
         toast.error(`Must be logged in for that action!`);
       }
-      navigate("/loginAndRegistration");
+      navigate("/LoginAndRegistration");
       return;
     }
 
@@ -87,14 +87,14 @@ const Header = () => {
         <div className="hidden md:flex space-x-5">
           <Button
             onClick={() => {
-              handleNavigation("createPost");
+              handleNavigation("CreatePost");
             }}
           >
             List your item
           </Button>
           <div
             className="items-center cursor-pointer"
-            onClick={() => handleNavigation("likedItems")}
+            onClick={() => handleNavigation("LikedItems")}
           >
             <Heart className="h-7 inline-flex m-1 color-red" />
             <h2 className="text-xl inline-flex m-1 items-center">
@@ -106,7 +106,7 @@ const Header = () => {
             onClick={
               user
                 ? toggleDropdown
-                : () => handleNavigation("loginAndRegistration")
+                : () => handleNavigation("LoginAndRegistration")
             }
           >
             {user ? (
@@ -165,7 +165,7 @@ const Header = () => {
                 onClick={
                   user
                     ? toggleDropdown
-                    : () => navigate("/loginAndRegistration")
+                    : () => navigate("/LoginAndRegistration")
                 }
               >
                 <img
@@ -207,7 +207,7 @@ const Header = () => {
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => {
-                  handleNavigation("likedItems");
+                  handleNavigation("LikedItems");
                   setIsMenuOpen(false);
                 }}
               >
@@ -218,7 +218,7 @@ const Header = () => {
               </div>
               <Button
                 onClick={() => {
-                  handleNavigation("createPost");
+                  handleNavigation("CreatePost");
                   setIsMenuOpen(false);
                 }}
               >
