@@ -28,7 +28,7 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
       if (!userInfo) {
         console.error("No user info found");
         toast.error("Must be logged in to like a post!");
-        navigate("/loginAndRegistration");
+        navigate("/LoginAndRegistration");
         return;
       }
 

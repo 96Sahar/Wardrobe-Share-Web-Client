@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
 
             <div className="w-full space-y-3">
               <button
-                onClick={() => navigate("/editProfile")}
+                onClick={() => navigate("/EditProfile")}
                 className="w-full flex items-center justify-center gap-2 bg-blue-500 text-primary-foreground rounded-lg px-4 py-2 hover:bg-blue-600 transition-colors"
               >
                 <Edit className="w-4 h-4" />
