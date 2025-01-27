@@ -43,7 +43,7 @@ const LoginAndRegistration = () => {
     if (authResult["code"]) {
       try {
         const response: Promise<AxiosResponse> = axios.post(
-          "http://localhost:3000/user/googleLogin",
+          "https://node92.cs.colman.ac.il/user/googleLogin",
           {
             code: authResult["code"],
           }
