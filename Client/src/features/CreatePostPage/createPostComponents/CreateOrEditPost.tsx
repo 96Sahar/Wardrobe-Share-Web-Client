@@ -71,7 +71,7 @@ const CreateOrEditPost = () => {
           setCity(postData.city);
           setValue("city", postData.city);
           if (postData.picture) {
-            setImagePreview("http://localhost:3000/" + postData.picture);
+            setImagePreview("https://node92.cs.colman.ac.il/" + postData.picture);
             setValue("picture", postData.picture);
           }
         } catch (error) {
