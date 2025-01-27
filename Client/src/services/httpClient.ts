@@ -7,7 +7,7 @@ export class ApiError extends Error {
   };
 }
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://node92.cs.colman.ac.il";
 
 const client = axios.create({
   baseURL: API_URL,

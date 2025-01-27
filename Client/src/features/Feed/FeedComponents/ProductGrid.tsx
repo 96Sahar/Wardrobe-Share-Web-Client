@@ -117,7 +117,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               <div className="relative">
                 <div className="aspect-square bg-background rounded-xl overflow-hidden mb-4">
                   <img
-                    src={`http://localhost:3000/${product.picture}`}
+                    src={`https://node92.cs.colman.ac.il/${product.picture}`}
                     alt={product.title}
                     className="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                   />

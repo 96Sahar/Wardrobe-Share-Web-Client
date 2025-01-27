@@ -11,7 +11,7 @@ import Feed from "../features/Feed/Feed";
 const Router = () => {
   return (
     <Routes>
-      <Route index element={<Feed />} />
+      <Route path="/" index element={<Feed />} />
       <Route path="/LoginAndRegistration" element={<LoginAndRegistration />} />
       <Route path="/LikedItems" element={<LikedPostsPage />} />
       <Route path="/CategoryPage/:category" element={<CategoryPage />} />

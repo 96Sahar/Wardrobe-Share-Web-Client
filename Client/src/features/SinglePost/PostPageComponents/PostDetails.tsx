@@ -49,7 +49,7 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
 
   const formatPictureUrl = (picture: string) => {
     if (picture.startsWith("uploads\\")) {
-      return `http://localhost:3000/${picture}`;
+      return `https://node92.cs.colman.ac.il/${picture}`;
     }
     return picture;
   };
