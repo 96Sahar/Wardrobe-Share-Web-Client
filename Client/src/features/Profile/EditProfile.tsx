@@ -6,10 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Header from "../../utils/UtilsComponents/Header";
 import { Camera, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getUserByToken, updateUserProfile } from "../../services/userService";
+import { updateUserProfile, getUserByToken } from "../../services/userService";
 import Button from "../../utils/UtilsComponents/Button";
 import LoadingSpinner from "../../utils/UtilsComponents/LoadingSpinner";
 import user from "../../assets/user.png";
+import { formatPictureUrl } from "../../services/httpClient";
+
 
 const profileSchema = z.object({
   username: z
@@ -118,13 +120,6 @@ const EditProfile: React.FC = () => {
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `https://node92.cs.colman.ac.il/${picture}`;
-    }
-    return picture;
   };
 
   useEffect(() => {

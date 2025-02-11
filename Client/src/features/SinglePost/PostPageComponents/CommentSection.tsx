@@ -10,6 +10,7 @@ import { getUserById } from "../../../services/userService";
 import icon from "../../../assets/user.png";
 import Button from "../../../utils/UtilsComponents/Button";
 import { toast } from "react-toastify";
+import { formatPictureUrl } from "../../../services/httpClient";
 
 interface Comment {
   _id: string;
@@ -83,13 +84,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     };
     fetchComments();
   }, [postId]);
-
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `https://node92.cs.colman.ac.il/${picture}`;
-    }
-    return picture;
-  };
 
   const handleAddComment = async () => {
     try {

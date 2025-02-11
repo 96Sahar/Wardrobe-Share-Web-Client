@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../utils/UtilsComponents/LoadingSpinner";
 import Modal from "../../../utils/UtilsComponents/Modal";
+import { formatPictureUrl } from "../../../services/httpClient";
 
 const ProfilePosts: React.FC = () => {
   const navigate = useNavigate();
@@ -35,39 +36,44 @@ const ProfilePosts: React.FC = () => {
   };
 
   const handleCardClick = (product: postData) => {
-    navigate(`/Post/${product._id}`, { state: { product } });
+    navigate(`/Item/${product._id}`, { state: { product } });
   };
 
   const fetchUserPosts = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-
+  
     try {
       const userInfo = Cookies.get("userInfo");
       const userId = userInfo ? JSON.parse(userInfo)._id : null;
-
+  
       if (!userId) {
         setError("User is not logged in.");
         setLoading(false);
         return;
       }
-
+  
       const response = await getAllPost(userId, "", "", page, 20);
       const newPosts = response.data;
-
+  
       if (newPosts.length > 0) {
-        setUserPosts((prev) => [...prev, ...newPosts]);
-        if (newPosts.length < 10) setHasMore(false); 
+        setUserPosts((prev) => {
+          const uniquePostsMap = new Map();
+          prev.forEach((post) => uniquePostsMap.set(post._id, post));
+          newPosts.forEach((post: any) => uniquePostsMap.set(post._id, post));
+          return Array.from(uniquePostsMap.values());
+        });
+  
+        if (newPosts.length < 10) setHasMore(false);
       } else {
         setHasMore(false);
       }
     } catch (error: unknown) {
       console.error("Fetch user posts error: ", error);
-      setError("Failed to fetch posts.");
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   useEffect(() => {
     fetchUserPosts();
@@ -107,7 +113,7 @@ const ProfilePosts: React.FC = () => {
               >
                 <div className="aspect-video relative">
                   <img
-                    src={`http://localhost:3000/${post.picture}`}
+                    src={formatPictureUrl(post.picture)}
                     alt={post.title}
                     className="w-full h-full object-cover"
                   />

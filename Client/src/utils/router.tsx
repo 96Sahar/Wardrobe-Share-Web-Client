@@ -7,6 +7,7 @@ import CreatePostPage from "../features/CreatePostPage/CreatePostPage";
 import LikedPostsPage from "../features/LikedPostsPage/LikedPostsPage";
 import PostPage from "../features/SinglePost/PostPage";
 import Feed from "../features/Feed/Feed";
+import Page404 from "../features/Page404/page404"
 
 const Router = () => {
   return (
@@ -19,7 +20,8 @@ const Router = () => {
       <Route path="/Profile" element={<Profile />} />
       <Route path="/EditProfile" element={<EditProfile />} />
       <Route path="/CreatePost/:postId?" element={<CreatePostPage />} />
-      <Route path="/Post/:postId" element={<PostPage />} />
+      <Route path="/Item/:postId" element={<PostPage />} />
+      <Route path="*" element={<Page404 />} />
     </Routes>
   );
 };

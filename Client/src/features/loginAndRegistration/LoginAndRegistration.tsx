@@ -11,8 +11,11 @@ import { Navigate } from "react-router-dom";
 import GoogleLogin from "./LoginAndRegistraionComponents/GoogleLogin";
 import { toast } from "react-toastify";
 import axios, { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
+import { getServerUrl } from "../../services/httpClient";
 
 const LoginAndRegistration = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [loginData, setLoginData] = useState<LoginCredentials>({
     username: "",
@@ -43,7 +46,7 @@ const LoginAndRegistration = () => {
     if (authResult["code"]) {
       try {
         const response: Promise<AxiosResponse> = axios.post(
-          "https://node92.cs.colman.ac.il/user/googleLogin",
+          `${getServerUrl()}user/googleLogin`,
           {
             code: authResult["code"],
           }
@@ -71,23 +74,25 @@ const LoginAndRegistration = () => {
       toast.error("Google login failed");
     }
   };
+  
 
   if (user) {
     return <Navigate to="/" replace />;
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center h-full">
-      <div className="flex flex-col items-center justify-center mt-4 md:flex-1 md:mb-0 md:mt-0">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen">
+      <div className={`flex flex-col items-center justify-center md:flex-1 md:mb-0 md:mt-0 ${ !isLogin ? "mt-8" : ""}`}>
         <img
           src={WardrobeLogo}
           alt="WardrobeLogo"
           className="h-16 md:h-32 w-auto"
+          onClick={() => navigate("/")}
         />
       </div>
-
+  
       <div className="hidden md:block w-[2px] h-screen bg-slate-700"></div>
-
+  
       <div className="flex flex-col items-center justify-center w-full px-6 md:flex-1">
         {isLogin ? (
           <>
@@ -109,15 +114,15 @@ const LoginAndRegistration = () => {
           </>
         )}
         <div className="flex">
-          <span className="flex flex-col items-center justify-center w-full px-6 md:flex-1 mt-1 text-lg text-bold">
+          <span className="flex flex-col items-center justify-center w-full px-6 md:flex-1 mt-1 text-lg font-bold">
             or
           </span>
         </div>
-
+  
         <GoogleLogin authResponse={loginWithGoogle} />
       </div>
     </div>
-  );
+  );  
 };
 
 export default LoginAndRegistration;

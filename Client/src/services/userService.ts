@@ -136,6 +136,10 @@ const deleteUser = async () => {
     const response = await client.delete("/user/delete", {
       headers: { Authorization: `JWT ${refreshToken}` },
     });
+    Cookies.remove("authToken");
+    Cookies.remove("refreshToken");
+    Cookies.remove("userInfo");
+    Cookies.remove("AuthExpiration");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -145,9 +149,9 @@ const deleteUser = async () => {
 export {
   register,
   login,
-  getUserById,
-  getUserByToken,
   logout,
+  getUserByToken,
+  getUserById,
   updateUserProfile,
   deleteUser,
 };
