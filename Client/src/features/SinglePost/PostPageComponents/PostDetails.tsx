@@ -5,6 +5,9 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../../../services/interfaceService";
+import icon from "../../../assets/user.png";
+import { formatPictureUrl } from "../../../services/httpClient";
+
 
 interface User {
   fullname: string;
@@ -28,7 +31,7 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
       if (!userInfo) {
         console.error("No user info found");
         toast.error("Must be logged in to like a post!");
-        navigate("/loginAndRegistration");
+        navigate("/LoginAndRegistration");
         return;
       }
 
@@ -47,18 +50,13 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
     }
   };
 
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `https://node92.cs.colman.ac.il/${picture}`;
-    }
-    return picture;
-  };
-
   useEffect(() => {
+    console.log("Product:", product.user);
     const fetchListerDetails = async () => {
       try {
         const response = await getUserById(product.user);
-        console.log(response);
+        console.log("here");
+        console.log("Lister details:", response);
         setLister(response);
       } catch (err) {
         console.error("Error fetching lister details:", err);
@@ -88,7 +86,7 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
   }, [product.likes]);
 
   return (
-    <div className="max-w-2xl mx-auto rounded-lg overflow-hidden">
+    <div className="md:max-w-2xl rounded-lg overflow-hidden">
       <div className="relative w-full">
         <img
           src={formatPictureUrl(product.picture)}
@@ -142,7 +140,7 @@ const PostDetails: React.FC<PostProps> = ({ product, commentsCount }) => {
         {lister ? (
           <div className="flex items-center mt-2">
             <img
-              src={formatPictureUrl(lister.picture)}
+              src={formatPictureUrl(lister.picture || icon)}
               alt={lister.fullname}
               className="w-12 h-12 rounded-full object-cover"
             />

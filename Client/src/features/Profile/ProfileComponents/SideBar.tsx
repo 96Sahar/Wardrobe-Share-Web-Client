@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../../services/userService";
 import Modal from "../../../utils/UtilsComponents/Modal";
 import icon from "../../../assets/user.png";
+import { formatPictureUrl } from "../../../services/httpClient";
 
 interface SidebarProps {
   profile?: UserProfile;
@@ -17,13 +18,6 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
   const handleDelete = async () => {
     await deleteUser();
     navigate("/");
-  };
-
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `http://localhost:3000/${picture}`;
-    }
-    return picture;
   };
 
   return (
@@ -58,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ profile }) => {
 
             <div className="w-full space-y-3">
               <button
-                onClick={() => navigate("/editProfile")}
+                onClick={() => navigate("/EditProfile")}
                 className="w-full flex items-center justify-center gap-2 bg-blue-500 text-primary-foreground rounded-lg px-4 py-2 hover:bg-blue-600 transition-colors"
               >
                 <Edit className="w-4 h-4" />

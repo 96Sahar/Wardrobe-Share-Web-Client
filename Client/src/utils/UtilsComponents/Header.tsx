@@ -6,9 +6,9 @@ import Button from "./Button";
 import WardrobeLogo from "../../assets/Wardrobe-Logo.png";
 import { toast } from "react-toastify";
 import { UserData } from "../../services/interfaceService";
-import { getUserById as getUserByIdAPI } from "../../services/userService";
-import { logout } from "../../services/userService";
+import { getUserById, logout } from "../../services/userService";
 import userPlaceholder from "../../assets/user.png";
+import { formatPictureUrl } from "../../services/httpClient";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,14 +20,6 @@ const Header = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
-  const formatPictureUrl = (picture: string) => {
-    if (picture.startsWith("uploads\\")) {
-      return `https://node92.cs.colman.ac.il/${picture}`;
-    }
-    return picture;
-  };
-
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleNavigation = (navigation: string) => {
@@ -64,7 +56,7 @@ const Header = () => {
     const id = Cookies.get("userInfo");
     if (id) {
       const parsedId = JSON.parse(id);
-      getUserByIdAPI(parsedId._id)
+      getUserById(parsedId._id)
         .then((userInfo) => {
           setUser(userInfo);
         })

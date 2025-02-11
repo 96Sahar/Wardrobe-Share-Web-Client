@@ -5,6 +5,7 @@ import { likePost } from "../../../services/postService";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { postData } from "../../../services/interfaceService";
+import { formatPictureUrl } from "../../../services/httpClient";
 
 interface ProductGridProps {
   category: string;
@@ -23,11 +24,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   }>({});
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`/categoryPage/${categoryName}`);
+    navigate(`/CategoryPage/${categoryName}`);
   };
 
   const handleCardClick = (product: postData) => {
-    navigate(`/post/${product._id}`);
+    navigate(`/Item/${product._id}`);
   };
 
   category = category.charAt(0).toUpperCase() + category.slice(1);
@@ -64,7 +65,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       if (!userInfo) {
         console.error("No user info found");
         toast.error("Must be logged in to like a post!");
-        navigate("/loginAndRegistration");
+        navigate("/LoginAndRegistration");
         return;
       }
 
@@ -117,7 +118,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               <div className="relative">
                 <div className="aspect-square bg-background rounded-xl overflow-hidden mb-4">
                   <img
-                    src={`https://node92.cs.colman.ac.il/${product.picture}`}
+                    src={formatPictureUrl(product.picture)}
                     alt={product.title}
                     className="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                   />

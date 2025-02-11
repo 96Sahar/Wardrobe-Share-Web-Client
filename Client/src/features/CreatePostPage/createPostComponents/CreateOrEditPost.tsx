@@ -13,6 +13,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { formatPictureUrl } from "../../../services/httpClient";
 
 interface City {
   objectId: string;
@@ -71,7 +72,7 @@ const CreateOrEditPost = () => {
           setCity(postData.city);
           setValue("city", postData.city);
           if (postData.picture) {
-            setImagePreview("https://node92.cs.colman.ac.il/" + postData.picture);
+            setImagePreview(formatPictureUrl(postData.picture));
             setValue("picture", postData.picture);
           }
         } catch (error) {

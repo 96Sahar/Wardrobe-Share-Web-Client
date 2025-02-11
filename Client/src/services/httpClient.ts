@@ -7,14 +7,26 @@ export class ApiError extends Error {
   };
 }
 
-const API_URL = "https://node92.cs.colman.ac.il";
+const URL = import.meta.env.VITE_URL as string;
 
 const client = axios.create({
-  baseURL: API_URL,
+  baseURL: URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+const getServerUrl = (): string => {
+  return URL;
+}
+
+const formatPictureUrl = (picture: string) => {
+  if (picture.startsWith("uploads")) {
+    return `${getServerUrl()}${picture}`;
+  }
+  return picture;
+};
+
 
 const setAuthToken = (token: string): void => {
   if (token) {
@@ -61,4 +73,4 @@ const checkToken = async (): Promise<string> => {
   return token;
 };
 
-export { client, setAuthToken, refreshToken, checkToken };
+export { client, setAuthToken, refreshToken, checkToken, getServerUrl , formatPictureUrl };
