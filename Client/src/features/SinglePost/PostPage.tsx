@@ -11,7 +11,6 @@ const PostPage: React.FC = () => {
   const location = useLocation();
   const url = location.pathname;
   const postId = url.split("/Item/")[1];
-  console.log(postId);
   const [product, setProduct] = useState<postData | null>(null);
   const [commentsCount, setCommentsCount] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);

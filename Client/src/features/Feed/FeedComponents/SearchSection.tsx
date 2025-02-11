@@ -39,7 +39,7 @@ const SearchSection: React.FC = () => {
   const handleOptionSelect = (option: string) => {
     const simplifiedCategory = option.split(" ")[0];
     simplifiedCategory.toLowerCase();
-    navigate(`/categoryPage/${simplifiedCategory}`);
+    navigate(`/CategoryPage/${simplifiedCategory}`);
   };
 
   return (
