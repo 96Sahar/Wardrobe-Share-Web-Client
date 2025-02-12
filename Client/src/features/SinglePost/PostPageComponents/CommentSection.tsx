@@ -170,7 +170,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         {comments.map((comment) => (
           <div
             key={comment._id}
-            className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-10"
+            className="flex items-start sm:items-center space-x-3 sm:space-x-4 space-y-4"
           >
             <img
               src={formatPictureUrl(comment.picture || icon)} // Add default icon
@@ -190,7 +190,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               )}
             </div>
             {userData && userData._id === comment.user && (
-              <div className="flex space-x-2 sm:space-x-4">
+              <div className="flex space-x-2 sm:space-x-4 ">
                 {editingCommentId === comment._id ? (
                   <>
                     <button
@@ -231,11 +231,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         ))}
 
         {userData && (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 space-y-6">
             <img
               src={formatPictureUrl(userData.picture || icon)}
               alt="User"
-              className="w-12 h-12 rounded-full"
+              className="w-12 h-12 rounded-full space-y-6"
             />
             <textarea
               className="w-full p-2 text-sm bg-surface rounded-lg"
